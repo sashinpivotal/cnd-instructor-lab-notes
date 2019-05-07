@@ -349,8 +349,9 @@ com.jayway.jsonpath.PathNotFoundException: No results for path: $['date']
     }
   ```
   
-- ??? Even if Gradle runner setting is done in IntelliJ, running the app
-  within the IDE still results in the following error
+- *Even if Gradle runner setting is done in IntelliJ, running the app
+  directly within the IDE still results in the following error
+  You should use "bootRun" task from the list of Gradle tasks.
   
   ```
   Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'welcome.message' in value "${welcome.message}"
@@ -360,6 +361,9 @@ com.jayway.jsonpath.PathNotFoundException: No results for path: $['date']
 
 - *Somehow all tests passed but Travis results in the following error
   I had to use different mockito version.
+  It is because Mockito version from spring-boot-starter-test is not
+  compatible with JDK 11.  Set the Mockito version as described
+  in the lab document.
 
  ```
  > Task :test
@@ -451,12 +455,22 @@ sudo snap install postman
 
 - ??? It takes more than 20 minutes to get the step 2 to get finished.
   What do we expect students do during this time?  
+  
+### Slack channel tips
+
+```
+A couple of CF plugins I would recommend to install: “open” and “mysql” from https://plugins.cloudfoundry.org/
+
+“open”plugin opens a browser for you with the right route by typing “cf open pal-tracker”
+“mysql” plugin lets you access the mysql database service in the same way you were able to access your local mysql database by “cf mysql tracker-database”.
+
+The installation instruction is right there in the website above. But they are as following:
+
+cf install-plugin -r CF-Community “open”
+cf install-plugin -r CF-Community “mysql-plugin”
+```
 
 ## JDBC 
-
-### Talking points
-
--  *One student experience experiencing a problem starting the app from the IDE while things work at the command line
 
 ### Trouble-shooting
 
@@ -490,13 +504,6 @@ sudo snap install postman
 ## Actuator
 
 ### Tips
-
--  We need to provide instruction on how to use curl, httpie, or postman
--  Install HTTPie using the following command to Meerkat
-
-   ```
-   sudo apt install httpie
-   ```
    
 - The META-INF/build-info.properties is under build/resources/main directory
 
