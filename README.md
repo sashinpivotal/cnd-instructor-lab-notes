@@ -119,20 +119,19 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 
 ## Deployment Pipelines
 
-### Talking poijnts
+### Talking poijnts (used by Mike G.)
 
-- why we do this before we write complete code 
+- Why we do this lab before we write complete code 
    - dpeloyment is hard, we want minimum complication
-   - get process done earlier
-   - cant solve process with techn
-- what ci mean to you?
+   - get deployment process taken care of earlier
+   - cant solve process issues with technology
+- What CI mean to you?
    - humana uses azure devops
-- trvais
-   - concept is important, we dn't care which ci tool to use
-- wgat cd mean to you?
-   - deploument to production is bs decision not eng decision?
+- Travis
+   - concept is important, we dn't care which CI tool you use
+- What CD mean to you?
+   - deploument to production is business decision not Eng decision
    - dep to prod is risky, user segregation
-   - push button prod
    - github example, users, cost vs risk, regulartory constraint
 
 ### Tips
@@ -258,7 +257,9 @@ failed to deploy
 - `timeEntryMap.replace(id, timeEntry)` returns an old value not new value
 
 - Even when `equals` and `hashCode` are provided, if 
-  the test results in the following, it's time to debug
+  the test results in the following, it's time to debug.
+  Add `toString()` to display where the two instances
+  are different.
   
   ```
   Expected :io.pivotal.pal.tracker.TimeEntry@a007329
