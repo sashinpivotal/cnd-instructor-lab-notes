@@ -742,4 +742,4 @@ The service broker rejected the request to https://spring-cloud-broker.apps.evan
 -   ?? Is this lab dependent on security lab?
 -   ?? When to use branch?
 -   Fault tolerance
--   Confguration draft
+-   Confguration drift
