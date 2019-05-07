@@ -284,13 +284,6 @@ failed to deploy
                              .body(timeEntry);
     }
  ```
-
-- Creating an ResponseEntity object in the TimeEntryController
-
-  ```
-  return new ResponseEntity(timeEntryRepository.create(timeEntryToCreate),   
-                            HttpStatus.CREATED);
-  ```
   
 - Make sure @RequestBody and @PathVariable are used appropriately
 
