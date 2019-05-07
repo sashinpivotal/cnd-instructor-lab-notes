@@ -234,7 +234,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   CF_USERNAME sashin@pivotal.io
   CF_PASSWORD blue42dragon
   GITHUB_USERNAME sashinpivotal
-  GITHUB_OAUTH_TOKEN 636b1fabe74fd5facde093f8c788029a0dc778cb
+  GITHUB_OAUTH_TOKEN 
 
   (when using pws pcf endpoint)
   CF_API_URL https://api.run.pivotal.io
@@ -243,7 +243,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   CF_USERNAME sashin@pivotal.io
   CF_PASSWORD xxxxxxxx
   GITHUB_USERNAME sashinpivotal
-  GITHUB_OAUTH_TOKEN 8a5373cbba24e068b45bd34befbe09b43c0bda80
+  GITHUB_OAUTH_TOKEN 
   
   (what gets displayed in the travis log)
   $ export CF_API_URL=https://api.run.pivotal.io
@@ -252,7 +252,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   $ export CF_USERNAME=sashin@pivotal.io
   $ export CF_PASSWORD=[secure]
   $ export GITHUB_USERNAME=sashinpivotal
-  $ export GITHUB_OAUTH_TOKEN=c90c5341527a812b7f152639c45b4366364a1a09
+  $ export GITHUB_OAUTH_TOKEN=
   ```
      
 - Travis supports running the job a specific branch by specifying it 
