@@ -2,9 +2,9 @@
 
 ## General
 
-### Demo steps
+### Demo steps for a particular topic
 
--   If you want to start actuator lab from "topic-start", 
+-   If you want to start "topic" lab from "topic-start", 
     follow the steps mentioned below 
     
     -   git checkout master (if current branch is not master)
@@ -14,6 +14,8 @@
     -   git push origin master -f (to sync the remote master with local master)
     -   Do the lab
     -   git push
+
+### Save "in progress" work in a personal branch
 
 -   If you want to save your "work-in-progress" to a new branch, do the 
     following (as documented in the pairing guide)
@@ -48,14 +50,12 @@
 
 ### Talking points
 
+- Talk about dependency injection - what it is and why
 - Mention that the `pal-tracker` directory is under `workspace` directory
 
 ### Trouble-shootings
 
 #### Project structure
-
-- Some students did `git clone ..`, which wipes out the git history of
-  local repository
   
 - Steps to follow
   - Create a personal GitHub account (if you don't have one yet)
@@ -65,35 +65,13 @@
   - Execute `git remote add origin <url>`
   - Execute `git push origin master --tags`
 
-#### Bootstrap the application
-
-- ??? It says to select JVM 11, yet the setup guide still points to JDK 8
-
-- After installation of JDK, IntellJ still does not list JDK 11 as one of the JDK options
-  - After I set the JAVA_HOME to JDK 11 and restarted the IDE,
-    then it worked.
-    
-- ??? When importing the project into the IntelliJ, I get the following error from IntelliJ
-
-  ```
-  Use JDK instead of JRE for Gradle Importer. Open Gradle Settings.
-  ```
-  
-  - I had to choose JDK 8 in order to proceed
-
-- ??? When refreshing Gradle within IntelliJ, I get the following error
-
-  ```
-  No such property: GradleVersion for class: JetGradlePlugin
-  ```
-
 ### Trouble-shooting
 
 - If the test works at the command line but fails within 
-  IntelliJ, make sure you 
+  IntelliJ using bootRun task, make sure you 
   set the Gradle Test Runner under setting
 
-- If you are using STS, try to verify your yml file 
+- If you are using STS, try to verify your yml file syntax
   with `http://www.yamllint.com/`
 
 - *The following code will faile because Spring looks for
@@ -120,12 +98,6 @@
   ```
   
 ## Configuring an App
-
-### Tips
-
-- If use @Value annotation at the field level, it did not work
-
-### Trouble-shooting
   
 ### Challenge questions
 
