@@ -1,26 +1,3 @@
-## Before Cohort
-
-### Message to send to trainees
-
-```
-Cohort ID: 349802932
-
-PCF Foundation API: api.sys.evans.pal.pivotal.io
-PCF Org: sashin.pivotal.io
-PCF Username: sashin@pivotal.io
-PCF Password: blue42dragon
-```
-
-```
-Pair #1: Dane - SMith
-Pair #2: Chris B. - Heellage (Apsara)
-Pair #3: Scott - Rich
-Pair #4: Chris W. - Anup
-Pair #5: Rajen - Joseph
-Pair #6: Avneesh - Sanjay
-
-```
-
 
 
 ## General
