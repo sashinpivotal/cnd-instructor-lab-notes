@@ -396,10 +396,19 @@ If you want to start actuator lab from “actuator-start”, follow the steps me
 
 -   git checkout master (if current branch is not master)
 -   git reset --hard actuator-start (to force local master to sync with actuator-start - NO need to do “cherry-pick”)
--   (change manifest file to reflect correct route)
+-   (change manifest file to reflect the correct route)
 -   git push origin master -f (to sync the remote master with local master)
 -   Do the lab
 -   git push 
+```
+
+```
+If you want to go to a solution project while maintaining
+your code (??? Is this correct?)
+
+- git checkout master
+- git cherry-pick abort
+- git cherry-pick <topic-solution-tag> and handle merge conflict
 ```
 
 - Install of postman on meerkat
