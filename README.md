@@ -218,6 +218,14 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 
 ## Deployment Pipelines
 
+### Talking poijnts
+
+- why we do this before we write complete code 
+   - dpeloyment is hard, we want minimum complication
+   - get process done earlier
+   - cant solve process with techn
+- what ci mean to you?
+
 ### Tips
 
 - Show how to set the environment variable in `travis-ci.org`
