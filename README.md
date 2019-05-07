@@ -542,17 +542,7 @@ cf install-plugin -r CF-Community “mysql-plugin”
 
 ## Distributed System
 
-### Tips
-
--  Services I need in PWS
-
-   ```
-   tracker-allocations-database    ...
-   tracker-backlog-database        ...                   
-   tracker-database               
-   tracker-registration-database   
-   tracker-timesheets-database
-   ```       
+### Tips     
    
 - siege -c255 urls.txt
 
@@ -574,11 +564,6 @@ https://timesheets-pal-sangshin.apps.evans.pal.pivotal.io/time-entries?userId=1
     endpoint is something you configure in the manifest.yml file 
     of the registration server
 -   Demo how to use httpie or postMan
-    
-### Trouble-shooting
-
--   ?? Some students were having a problem with "get push" key issue
-    when they use new key even after they added ssh-add
     
 
 ## Service Discovery
@@ -637,29 +622,6 @@ springCloudServicesClientLibrariesVersion = SPRING_CLOUD_SERVICES_CLIENT_LIBRARI
   ```
   curl https://spring-cloud-broker.apps.evans.pal.pivotal.io/actuator/info
   ```
-  
-- Adding @EnableEurekaClient takes time to get rid of compile errors
-
-### Trouble-shooting
-
-- * local testing was successful but the travis fails on me
-  during deployment (it was because I did not set CF_SPACE)
-  
-  ```
-  0.01s$ cp manifest-allocations.yml manifest.yml
-before_deploy.2
-0.01s$ echo "Deploying allocations server $RELEASE_TAG"
-Deploying allocations server release-3
-dpl_0
-1.78s$ rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install dpl
-Successfully installed dpl-1.10.8
-Parsing documentation for dpl-1.10.8
-Installing ri documentation for dpl-1.10.8
-Done installing documentation for dpl after 0 seconds
-1 gem installed
-invalid option "--space="
-failed to deploy
-  ```
 
 
 ## Circuit breaker
@@ -715,7 +677,7 @@ https://backlog-pal-sang-shin.apps.evans.pal.pivotal.io/stories?projectId=1
 https://timesheets-pal-sang-shin.apps.evans.pal.pivotal.io/time-entries?userId=1
   ```
 
-- How to start and stop mysql
+- How to start and stop mysql on Mac
 
   ```
   brew services start mysql
@@ -729,7 +691,6 @@ https://timesheets-pal-sang-shin.apps.evans.pal.pivotal.io/time-entries?userId=1
 -   The @Hystrix command needs to be duplicated in 3 different places -
     there is a reason for this  
     
-      
     
 ## Securing Distributed Application
 
@@ -768,6 +729,11 @@ Mapping routes...
 Binding services...
 The service broker rejected the request to https://spring-cloud-broker.apps.evans.pal.pivotal.io/v2/service_instances/d4eca7bf-9532-43bd-b79a-5326e6b8be86/service_bindings/3c73ba10-defc-4873-bad6-47f4937dc053. Status Code: 404 Not Found, Body: 404 Not Found: Requested route ('spring-cloud-broker.apps.evans.pal.pivotal.io') does not exist.
    ```
+   
+### Useful presentations on OAuth2
+
+  -  [OAuth2 overview presentation](https://www.slideshare.net/SangShin1/spring4-security-oauth2?qid=2163e6e6-ae99-48b0-afcc-88380b8724d8&v=&b=&from_search=1)
+  -  [OAuth2 in cloud native environment presentation (slides 7 to 37)](https://www.slideshare.net/WillTran1/enabling-cloud-native-security-with-oauth2-and-multitenant-uaa?qid=2c77ae8e-b2d5-4319-baad-1cd1eb8fec42&v=&b=&from_search=1)
 
 ## Config Server
 
