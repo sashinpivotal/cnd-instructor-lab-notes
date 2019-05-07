@@ -172,14 +172,14 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 - Example Travis environment variables
 
   ```
-  (when using pal pcf endpoint)
+  (when using PAL pcf endpoint)
   CF_API_URL https://api.sys.evans.pal.pivotal.io
   CF_ORG sashin.pivotal.io
-  CF_SPACE sandbox
+  CF_SPACE review
   CF_USERNAME sashin@pivotal.io
-  CF_PASSWORD blue42dragon
+  CF_PASSWORD xxxx
   GITHUB_USERNAME sashinpivotal
-  GITHUB_OAUTH_TOKEN 
+  GITHUB_OAUTH_TOKEN xxxx
 
   (when using pws pcf endpoint)
   CF_API_URL https://api.run.pivotal.io
@@ -188,7 +188,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   CF_USERNAME sashin@pivotal.io
   CF_PASSWORD xxxxxxxx
   GITHUB_USERNAME sashinpivotal
-  GITHUB_OAUTH_TOKEN 
+  GITHUB_OAUTH_TOKEN xxxx
   
   (what gets displayed in the travis log)
   $ export CF_API_URL=https://api.run.pivotal.io
@@ -209,22 +209,6 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   ```
      
 ### Trouble-shooting
-
-- *When I ran it (even after setting up Travis environment variables),
-  I get the following error in the 1st phase. And I cannot see the report. (application
-  error like this should be detected during local testing)
-  
-  ```
-  test.pivotal.pal.trackerapi.WelcomeApiTest > exampleTest FAILED
-    org.junit.ComparisonFailure at WelcomeApiTest.java:24
-2019-04-24 19:11:22.725  INFO 3884 --- [       Thread-5] ConfigServletWebServerApplicationContext : Closing org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@84181cf: startup date [Wed Apr 24 19:11:18 UTC 2019]; root of context hierarchy
-3 tests completed, 1 failed
-> Task :test FAILED
-FAILURE: Build failed with an exception.
-* What went wrong:
-Execution failed for task ':test'.
-> There were failing tests. See the report at: file:///home/travis/build/sashinpivotal/pal-tracker/build/reports/tests/test/index.html
-  ```
 
 - *I got a failure when I started the 2nd phase - it was because
   I did not do the first phase.  When I check in a new change, 
