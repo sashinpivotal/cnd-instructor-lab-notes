@@ -25,26 +25,6 @@
 
 ## Meerkat
 
-### JDK version issues
-
-- Pushing jar that is created with JDK 10 to PCF will fail. So you
-  will have to recreate the jar file with JDK 8 
-- Use `sudo update-alternatives --config java` to list the versions
-  availale in the machine - choose JDK 8
-
-### Software
-
--   No Chrome? (Only Firefox?)
--   Postman
-
-- Students might have to set Gradle to 4.7 using the following command
-
-   ```
-   gradle wrapper --gradle-version 4.7
-   ```
-   
--   Make sure mysql is installed
-
 ### Meerkat keyboard shortcuts
 
 - [default keymap](https://resources.jetbrains.com/storage/products/intellij-idea/docs/IntelliJIDEA_ReferenceCard.pdf)
@@ -63,33 +43,6 @@
 
 - CND students should ignore `waveland` section
 
-## Pairing Guide
-
-### Tips
-
-- Mention that the following statement is general guideline since 
-  `pal-tracker` repository has not been created yet.
-
- ```
- Add the public key as a deploy key to your current  
- repository.
- ```
-- Quotes from text file
-
- ```
-(ssh-keygen is described in the pair rotation guide)
-?some students experienced "key is already used" problem
- - he missed the steps of "ssh-add -K ~/.ssh/id_rsa 
-?sarah goes through the steps of recreating ssh key with different name
-https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
-
-? once you have done ssh-genkey, you have to do ssh-add ~/.ssh/ia_rsa  (this is to add your private key to the system) ?? maybe if you are the only person using the system, you might not have to do it? Or if you are using the one under ~/.ssh directory, you don't have to?
-
--pick the person who owns the infrastructure use the usb to save the info
--and go through the procedure of https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
-
--use the default name if you can, when you use ssh-add, you have to enter the directory name otherwise
- ``` 
   
 ## Building a Spring Boot App (lab #1)
 
@@ -105,16 +58,16 @@ https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-s
   local repository
   
 - Steps to follow
+  - Create a personal GitHub account (if you don't have one yet)
+  - Create "pal-tracker" repository 
   - Make sure you have unzipped the `pal-tracker.zip` under `workspace` directory
-  - You have to have a GitHub account
-  - Create `pal-tracker` repository
   - Go to `pal-tracker` directory
   - Execute `git remote add origin <url>`
   - Execute `git push origin master --tags`
 
 #### Bootstrap the application
 
-- ?? It says to select JVM 11, yet the setup guide still points to JDK 8
+- ??? It says to select JVM 11, yet the setup guide still points to JDK 8
 
 - After installation of JDK, IntellJ still does not list JDK 11 as one of the JDK options
   - After I set the JAVA_HOME to JDK 11 and restarted the IDE,
@@ -133,30 +86,6 @@ https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-s
   ```
   No such property: GradleVersion for class: JetGradlePlugin
   ```
-
-#### Deploy
-
-- We should add a warning that pushing the app (before setting
-  JDK to 11) will fail with the following error message:
-  
-  ```
-  2019-04-24T12:02:26.82-0400 [APP/PROC/WEB/0] ERR Exception in thread "main" java.lang.UnsupportedClassVersionError: io/pivotal/pal/tracker/PalTrackerApplication has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0
-   2019-04-24T12:02:26.82-0400 [APP/PROC/WEB/0] ERR 	at java.lang.ClassLoader.defineClass1(Native Method)
-   2019-04-24T12:02:26.82-0400 [APP/PROC/WEB/0] ERR 	at java.lang.ClassLoader.defineClass(ClassLoader.java:763)
-   2019-04-24T12:02:26.82-0400 [APP/PROC/WEB/0] ERR 	at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:142)
-   ```
-   
-   ```
-   Java SE 13 = 57,
-Java SE 12 = 56,
-Java SE 11 = 55,
-Java SE 10 = 54,
-Java SE 9 = 53,
-Java SE 8 = 52,
-Java SE 7 = 51,
-Java SE 6.0 = 50,
-Java SE 5.0 = 49,
-   ```
 
 ### Trouble-shooting
 
@@ -225,6 +154,14 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
    - get process done earlier
    - cant solve process with techn
 - what ci mean to you?
+   - humana uses azure devops
+- trvais
+   - concept is important, we dn't care which ci tool to use
+- wgat cd mean to you?
+   - deploument to production is bs decision not eng decision?
+   - dep to prod is risky, user segregation
+   - push button prod
+   - github example, users, cost vs risk, regulartory constraint
 
 ### Tips
 
