@@ -231,7 +231,7 @@ failed to deploy
   we want to simulate the repository behavior where id gets generated 
   by the persistence layer
   
-- Bill mentioned how to create an interface from code??
+- You can create an interface from a class 
   
 #### InMemoryRepositoryTest
 
@@ -407,6 +407,12 @@ If you want to start actuator lab from “actuator-start”, follow the steps me
 ```
 sudo snap install postman
 ```
+
+### Wrap-up discusson
+
+- Discuss pros and cons of @Bean vs component scan
+- Discuss pros and cons of using @Bean vs @Repository
+
   
 ## Database Migration
 
