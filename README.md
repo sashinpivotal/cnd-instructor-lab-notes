@@ -11,7 +11,8 @@
     -   git reset --hard topic-start (to force local master to sync with remote master)
     -   change manifest files to reflect correct domain and route in manifest file
         - route: pal-tracker-sang-shin.apps.evans.pal.pivotal.io
-    -   git push origin master -f (to sync the remote master with local master)
+    -   git add-commit -m "manifest file changed"
+    -   git push origin master -f (to sync the remote master with local master - do not to this in production!)
     -   Do the lab
     -   git push
 
@@ -368,7 +369,7 @@ test.pivotal.pal.tracker.TimeEntryControllerTest > testList FAILED
 ```
 The following is the “curl” command to create a time-entry:
 
-curl -i -XPOST -H”Content-Type: application/json” localhost:8080/time-entries/ -d”{\“projectId\“: 1, \“userId\“: 1, \“date\“: \“2015-05-17\“, \“hours\“: 6}”
+curl -i -XPOST -H"Content-Type: application/json" localhost:8080/time-entries/ -d"{\"projectId\": 1, \"userId\": 1, \"date\": \"2015-05-17\", \"hours\": 6}"
 
 Actually HTTPie is a lot easier to use than curl.  In order to install HTTPie, you can do the following:
 
@@ -432,11 +433,6 @@ sudo snap install postman
 - When executing flyway command, username and password will be asked.
   Enter tracker and no password
   
-### Trouble-shooting
-
-- ??? It takes more than 20 minutes to get the step 2 to get finished.
-  What do we expect students do during this time?  
-  
 ### Slack channel tips
 
 ```
@@ -452,6 +448,28 @@ cf install-plugin -r CF-Community “mysql-plugin”
 ```
 
 ## JDBC 
+
+### Misc
+
+-   Regarding the usage of `useTimezone`
+
+    [stackoverflow](https://stackoverflow.com/questions/7605953/how-to-change-mysql-timezone-in-a-database-connection-using-java)
+    
+    useTimezone is an older workaround. MySQL team rewrote the setTimestamp/getTimestamp code fairly recently, but it will only be enabled if you set the connection parameter useLegacyDatetimeCode=false and you're using the latest version of mysql JDBC connector. So for example:
+
+   ```
+   "SPRING_DATASOURCE_URL": "jdbc:mysql://localhost:3306/tracker_dev?user=tracker&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false",
+   ```
+
+### Tips
+
+```
+curl -i -XPOST -H"Content-Type: application/json" pal-tracker-sang-shin.cfapps.io/time-entries/ -d"{\"projectId\": 1, \"userId\": 1, \"date\": \"2015-05-17\", \"hours\": 6}"
+```
+
+```
+http post pal-tracker-sang-shin.cfapps.io/time-entries projectId=1 userId=1 date=2018-01-01  hours=20
+```
 
 ### Trouble-shooting
 
