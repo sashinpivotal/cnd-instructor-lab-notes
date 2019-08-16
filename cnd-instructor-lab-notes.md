@@ -32,10 +32,11 @@
 
 - [default keymap](https://resources.jetbrains.com/storage/products/intellij-idea/docs/IntelliJIDEA_ReferenceCard.pdf)
 
+- Alt+Enter what is quick fix combination
 - Alt+Insert for "generate" (CMD+N for Mac)
 - Ctrl+N for "opening a class" (CMD+O for Mac)
 - Ctrl+Shift+N for "open a file" 
-- Alt+Enter what is quick fix combination
+
  
 ## Assignment Submission
    
@@ -53,8 +54,6 @@
 
 - Talk about dependency injection - what it is and why
 - Mention that the `pal-tracker` directory is under `workspace` directory
-
-### Trouble-shootings
 
 #### Project structure
   
@@ -75,7 +74,62 @@
 - If you are using STS, try to verify your yml file syntax
   with `http://www.yamllint.com/`
 
-- *The following code will faile because Spring looks for
+- In step 10, if `create package` option is not available, it 
+  is because the Gradle project was not refreshed (as mentioned
+  in step 8)
+  
+- *Somehow, I could not find "bootRun", which means spring
+  boot plugin did not work - it is because I missed the
+  following:
+  
+  ```
+  apply plugin: 'org.springframework.boot'
+  ```
+  
+-  *Somehow, I get the following error when deploying to the PCF:
+  it was because I pushed a wrong jar (gradle-wrapper.jar)
+
+  ```
+  None of the buildpacks detected a compatible application
+  ```
+- ?? When a repository is created with README file on, performing
+  `git pull` results in the following error:
+  
+  ```
+  < workspace/pal-tracker-distributed - master > git pull
+  fatal: refusing to merge unrelated histories
+  ```
+  
+  You can do the following:
+  
+  ```
+  git pull --allow-unrelated-histories
+  ```
+  
+## Configuring an App
+  
+### Challenge questions
+
+- Do we have to do “cf restage <app-name>” when we set a new environment variable?
+- What are the examples of PCF log types? (Google “PCF log types”)
+
+- What could be use cases where you will have to do “cf restage” (as opposed 
+  to “cf restart”)?
+- Try to use “create-app-manifest” command to capture the metadata of your running app into a file and try to use that file to deploy the application
+
+
+### Slack channel tips
+
+```
+Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factors-for-building-cloud-native-software
+```
+
+### Trouble-shootings
+
+- The document does not include instruction to remove compile
+  errors on EnvController before it says to run the app
+
+- *The following code will fail because Spring looks for
   a bean that is a type of String but it is not there.
   
   ```
@@ -97,41 +151,31 @@
     }
   }
   ```
+
+### Misc
+
+- *Is there a way to set environment variables to an application
+  through App manager?
+  Yes, there is. Click "Settings" link on the left in the application
+  page.
   
-## Configuring an App
+- ?? practice explaining PCF architecture (15 minutes)
+
   
-### Challenge questions
-
-- Do we have to do “cf restage <app-name>” when we set a new environment variable?
-- Can a route be assigned to multiple applications?
-- Anybody knows what “blue-green-deployment” is?
-- What are the examples of PCF log types? (Google “PCF log types”)
-- Speaking “blue-green deployment”, anybody can think of conceptual steps you 
-  will take in PCF environment?
-- What could be use cases where you will have to do “cf restage” (as opposed 
-  to “cf restart”)?
-- Try to use “create-app-manifest” command to capture the metadata of your running app into a file and try to use that file to deploy the application
-
-### Slack channel tips
-
-```
-Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factors-for-building-cloud-native-software
-```
-
 ## Deployment Pipelines
 
 ### Talking poijnts (used by Mike G.)
 
 - Why we do this lab before we write complete code 
-   - dpeloyment is hard, we want minimum complication
-   - get deployment process taken care of earlier
+   - deloyment is hard, we want minimum complication
+   - get deployment process taken care of earlier 
    - cant solve process issues with technology
-- What CI mean to you?
-   - humana uses azure devops
+   
 - Travis
    - concept is important, we dn't care which CI tool you use
+
 - What CD mean to you?
-   - deploument to production is business decision not Eng decision
+   - deployment to production is business decision not Eng decision
    - dep to prod is risky, user segregation
    - github example, users, cost vs risk, regulartory constraint
 
@@ -147,9 +191,9 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   (when using PAL pcf endpoint)
   CF_API_URL https://api.sys.evans.pal.pivotal.io
   CF_ORG sashin.pivotal.io
-  CF_SPACE review
+  CF_SPACE sandbox
   CF_USERNAME sashin@pivotal.io
-  CF_PASSWORD xxxx
+  CF_PASSWORD blue42dragon
   GITHUB_USERNAME sashinpivotal
   GITHUB_OAUTH_TOKEN xxxx
 
@@ -215,14 +259,54 @@ OK
 Failed to push app
 failed to deploy
    ```
-     
+
+### Challenge questions
+
+- We know multiple routes can be assigned to an applicationh.
+  Now can a route be assigned to multiple applications?
+- Anybody knows what “blue-green-deployment” is?
+- Speaking “blue-green deployment”, anybody can think of conceptual 
+  steps you will take in PCF environment?
+-   How can we control the ratio of the traffic between V1.0.1 (blue) 
+    vs. V1.0.2 (green)?
+-   Can a route exist without an application associated with it? 
+    (See “cf routes” and “cf create-route” commands.)
+-   What could be the use case of "cf create-route"?
+-   When mapping or unmapping routes, do you have to restart
+    or restage an application?
+-   How can you delete all routes that are not associated with
+    any apps?
+-   Can you describe which PCF components are responsible for
+    updating the routing table whenever a new instance is created
+    or old instance gets destroyed?
+    
+### Challenges in the blud-green deployment
+    
+-   Is blue-green deployment suitable for major feature change?
+-   What are the challenges for doing blue-green deployment?
+    - Brad thinks blue-green deployment is possible for most cases
+    - What about table change - don't delete field, don't delete tables
+    
+### Steps for blue-green deployment
+
+- V1 - R1 is currently running
+- Create V2 with R2 and make sure it is working
+  (cf push pal-tracker-v2 -p ./build/libs/pal-tracker-v2.jar -n pal-tracker-r2)
+- Add R1 to V2 - now V2 handles both R1 and R2
+  (cf map-route pal-tracker-v2 apps.evans.pal.pivotal.io -n pal-tracker-r1)
+- Remove R1 from V1 - now V2 handles 100% of R1
+  (cf unmap-route pal-tracker-v1 apps.evans.pal.pivotal.io -n pal-tracker-r1)
+- Remove R2 from V2 - now V2 handles only R1
+  (cf unmap-route pal-tracker-v2 apps.evans.pal.pivotal.io -n pal-tracker-r2)
+      
 ## Spring MVC with REST endpoints
 
 ### Talking points
 
 - Don't change the test code - that is the contract
 
-- Show how to create remove compile errors also when there two compile 
+- Show how to remove compile errors also show how to do
+  when there two compile 
   errors in a single line, you have to fix the one inside first
      
 - Make sure TimeEntry constructor with the correct naming - 
@@ -232,11 +316,12 @@ failed to deploy
   we want to simulate the repository behavior where id gets generated 
   by the persistence layer
   
-- You can create an interface from a class 
+- You can create an interface from a class - refactor->extract
   
 #### InMemoryRepositoryTest
 
-- How to set the `id` field of `TimeEntry` when it gets created with without `id` argument?
+- How to set the `id` field of `TimeEntry` when it gets created 
+  with without `id` argument?
 
   - You can create currentId field
 
@@ -249,7 +334,9 @@ failed to deploy
   
 - Object comparison with `equals` and `hashCode`  
   - leverage IDE support on this
-  - Do you want to include id field?
+  - Do you want to include id field?  It should not. Otherwise,
+    the update() test will fail.  ?? Verify with the solution
+    with GitHub.  ??? Hmm The solution includes id field.
 
 - Creating `List` object from `timeEntryMap.values()`
 
@@ -274,10 +361,11 @@ failed to deploy
  (sent a feedback)
  
  ```
-    public ResponseEntity<TimeEntry> create(TimeEntry timeEntryToCreate) {
+    @PostMapping("/time-entries")
+    public ResponseEntity<TimeEntry> create(@RequestBody TimeEntry timeEntryToCreate) {
         TimeEntry timeEntry = timeEntryRepository.create(timeEntryToCreate);
 //        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
-//                                             .path("id")
+//                                             .path("/{id}")
 //                                             .buildAndExpand(timeEntry.getId())
 //                                             .toUri();
 //        return ResponseEntity.created(uri).build();
@@ -285,10 +373,45 @@ failed to deploy
                              .body(timeEntry);
     }
  ```
-  
-- Make sure @RequestBody and @PathVariable are used appropriately
+ 
+ - Make sure @RequestBody and @PathVariable are used appropriately
 
-### Trouble shooting
+### Trouble-shooting
+ 
+ - ?? Somehow adding the code above results in the following error
+ 
+ ```
+         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                                             .path("/{id}")
+                                             .buildAndExpand(timeEntry.getId())
+                                             .toUri();
+        return ResponseEntity.created(uri).build();
+ ```
+
+ ```
+ No current ServletRequestAttributes
+ java.lang.IllegalStateException: No current ServletRequestAttributes
+ ```
+  
+- Deploying the app to the pcf still shows that it is using
+  random route instead of the route we define in the `manifest.yml`
+  
+  ```
+  < workspace/pal-tracker - master > cf apps
+Getting apps in org sashin-org / space sang-space as sashin@pivotal.io...
+OK
+
+name          requested state   instances   memory   disk   urls
+pal-tracker   started           1/1         1G       1G     pal-tracker-overacute-subphosphate.cfapps.io
+  ```
+  
+  It was because there was a mistake in the routes setting in
+  the manifest.yml file
+  
+  ```
+  route:
+  - route: pal-tracker-sang-shin.cfapps.io
+  ```
 
 #### Local testing
 
@@ -324,8 +447,6 @@ com.jayway.jsonpath.PathNotFoundException: No results for path: $['date']
   Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'welcome.message' in value "${welcome.message}"
   ```
 
-#### Travis
-
 - *Somehow all tests passed but Travis results in the following error
   I had to use different mockito version.
   It is because Mockito version from spring-boot-starter-test is not
@@ -358,6 +479,7 @@ test.pivotal.pal.tracker.TimeEntryControllerTest > testList FAILED
 - What is the another way of creating InMemoryTimeEntryRepository bean 
   other than using @Bean in the configuration class? What 
   would be pros and cons of each approach?
+  
 - What does SOLID (design principles) stand for?
 - What are the examples of “Open for extension Closed for 
   modification” design principle in the “pal-tracker” project?
@@ -423,6 +545,9 @@ sudo snap install postman
 - Discuss pros and cons of @Bean vs component scan
 - Discuss pros and cons of using @Bean vs @Repository
 
+- *Brad went over the 12 factors - we covered 8 of
+  12 factors so far
+
   
 ## Database Migration
 
@@ -447,7 +572,43 @@ cf install-plugin -r CF-Community “open”
 cf install-plugin -r CF-Community “mysql-plugin”
 ```
 
-## JDBC 
+### Student questions
+
+- Can ssh enabled per space basis?
+
+### Trouble-shooting
+
+- *Somehow I could not display the shell output in the job #2 in
+  in Travis.  It just showed the following with (3) on-going.
+  
+  ```
+  (1) Job received (2) Queued (3) Booting virtual machine
+  ```
+  
+  You just have to wait a bit.
+  
+- *Triggering a build resulted in a failure in the #2 with 
+  the following error:
+  
+  ```
+  The command "wget -P build/libs https://github.com/$GITHUB_USERNAME/pal-tracker/releases/download/$RELEASE_TAG/pal-tracker.jar" exited with 8.
+  ```
+  
+  Try `git commit --allow-empty -m "Trigger notification"`
+  
+- *Then I get the following error
+
+  ```
+  Creating service key, if necessary ...
+Service instance tracker-database not found
+Closing tunnel
+kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]
+The command "scripts/migrate-databases.sh pal-tracker ." failed and exited with 2 during .
+  ```
+  
+  It was because there was no 'tracker-database" service instance.
+
+## Spring JdbcTemplate
 
 ### Misc
 
@@ -459,6 +620,32 @@ cf install-plugin -r CF-Community “mysql-plugin”
 
    ```
    "SPRING_DATASOURCE_URL": "jdbc:mysql://localhost:3306/tracker_dev?user=tracker&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false",
+   ```
+   
+- The `create(..)` method
+
+   ```
+    @Override
+    public TimeEntry create(TimeEntry timeEntry) {
+        KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO time_entries (project_id, user_id, date, hours) " +
+                            "VALUES (?, ?, ?, ?)",
+                    RETURN_GENERATED_KEYS
+            );
+
+            statement.setLong(1, timeEntry.getProjectId());
+            statement.setLong(2, timeEntry.getUserId());
+            statement.setDate(3, Date.valueOf(timeEntry.getDate()));
+            statement.setInt(4, timeEntry.getHours());
+
+            return statement;
+        }, generatedKeyHolder);
+
+        return find(generatedKeyHolder.getKey().longValue());
+    }
    ```
 
 ### Tips
@@ -499,6 +686,36 @@ http post pal-tracker-sang-shin.cfapps.io/time-entries projectId=1 userId=1 date
     id "org.flywaydb.flyway" version "5.0.5"
    }
    ```
+   
+### Challenge questions
+
+-   What are the two conditions that need to be met before
+    Spring Boot's auto-configuration create DataSource bean
+    that represents MySQL?
+
+-   So when we are running our pal-tracker app locally and in Travis 
+    with database, we have to provide database credentials (as 
+    environment variables in our lab but could be from property
+    file) but we did not have to do that when we are running
+    the same application in PCF.  How is it done?  (Hunter
+    talked about this.)
+    
+-   We know that when we are running pal-tracker app locally, Spring Boot
+    creates a `DataSource` bean from the environment-variable provided
+    database credentials, which is then used to create `JdbcTemplate`
+    bean.  Now when we deploy the same application to PCF, 
+    somehow different `DataSource`
+    bean gets created from database credentials from the VCAP_SERVICES.
+    How does PCF do this?
+    
+    ?? Spring cloud connector
+
+### Wrap-up talking points
+
+-   Self-service
+-   No need to set up database credentials
+-   Correct DataSource bean automatically created 
+    depending on where the application gets deployed
 
 ## Actuator
 
@@ -506,10 +723,11 @@ http post pal-tracker-sang-shin.cfapps.io/time-entries projectId=1 userId=1 date
    
 - The META-INF/build-info.properties is under build/resources/main directory
 
-- The code in the HealthApiTest below is not needed
+- The code in the HealthApiTest below is not needed - you will
+  need @Autowired TestRestTemplate, then.
 
   ```
-      @Before
+    @Before
     public void setUp() throws Exception {
         RestTemplateBuilder builder = new RestTemplateBuilder()
                 .rootUri("http://localhost:" + port)
@@ -527,7 +745,7 @@ http post pal-tracker-sang-shin.cfapps.io/time-entries projectId=1 userId=1 date
 
 - * HealthApiTest fails due the following reason even though 
   accessing the endpoint from a browser works fine. Why?
-  It was because I reserved the up() and down() logic.
+  It was because I reversed the up() and down() logic.
 
   ```
   org.junit.ComparisonFailure: expected:<[200]> but was:<[503]>
@@ -535,11 +753,40 @@ http post pal-tracker-sang-shin.cfapps.io/time-entries projectId=1 userId=1 date
   
 - * Besides the test checks if the db status is UP but the result
   is down when accessed from a browser. Why?
-  It was because I reserved the up() and down() logic.
+  It was because I reversed the up() and down() logic.
+  
+## Scaling lab
 
+- Auto-scaling lab, in the Recent History, you will see something
 
+  ```
+  Scaled up from 2 to 3 instances. Current HTTP Latency of 35.92ms is above upper threshold of 3.00ms.
+  ```
+
+- ?? When applying auto-scaling, what is is "Percent of traffic to apply - 95% or 99%"?
+
+## App Continnum
+
+### Talking points
+
+- Delay architectural decision to as latest point as possible (Mike)
+- Use a single repository for multiple applications as long as possible
+  - It is easy to move around domains between applications
+  
 
 ## Distributed System
+
+### Talking points
+
+-   Pair rotation, new key - we no longer use ssh instead use https
+    - Use "git add remote origin <https-link>"
+-   Explain what the `${USER_ID}` and `${PROJECT_ID}` variables for 
+-   Describe the relationship among the 4 apps
+-   Describe how to change the http://FILL_ME_IN - registration server
+    endpoint is something you configure in the manifest.yml file 
+    of the registration server
+-   Demo how to use httpie or postMan
+
 
 ### Tips     
    
@@ -553,38 +800,65 @@ https://allocations-pal-sangshin.apps.evans.pal.pivotal.io/allocations?projectId
 https://backlog-pal-sangshin.apps.evans.pal.pivotal.io/stories?projectId=1
 https://timesheets-pal-sangshin.apps.evans.pal.pivotal.io/time-entries?userId=1
   ```
+  
+### Trouble-shooting
 
-### Talking points
+- *The travis fails with the following message:
 
--   Pair rotation, new key
--   Explain what the `${USER_ID}` and `${PROJECT_ID}` variables for 
--   Describe the relationship among the 4 apps
--   Describe how to change the http://FILL_ME_IN - registration server
-    endpoint is something you configure in the manifest.yml file 
-    of the registration server
--   Demo how to use httpie or postMan
-    
+  ```
+  The command "wget -P applications/allocations-server/build/libs https://github.com/$GITHUB_USERNAME/pal-tracker-distributed/releases/download/$RELEASE_TAG/allocations-server.jar" exited with 0.
+before_deploy.1
+0.01s$ cp manifest-allocations.yml manifest.yml
+before_deploy.2
+0.00s$ echo "Deploying allocations server $RELEASE_TAG"
+dpl_0
+1.80s$ rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install dpl
+dpl.1
+Installing deploy dependencies
+dpl.2
+Preparing deploy
+dpl.3
+Deploying application
+failed to deploy
+  ```
+  
+  It was because I was using chicken
+  
+  ```
+  route: allocations-pal-sang-shin.apps.chicken.pal.pivotal.io
+  ```
+  
+  instead of
+  
+  ```
+  route: allocations-pal-sang-shin.apps.evans.pal.pivotal.io
+  ```
 
 ## Service Discovery
 
 ### Talking points
 
--   Dependency management (using Spring cloud dependency slides)
--   Draw picture of SCS tile, 
--   Service discovery picture
--   Eureka diagram from Spring cloud dev
--   Client side Load balancer diagram
--   Relationship between service discovery and client 
-    side load balancer
+-   Service discovery
+	-   Explain why service discovery and registation could be useful
+	    in cloud
+	    - you don't want use hard-coded address of target service
+	    - in the cloud environment, services come and go
+	-   Use service discovery picture
 
--   Go through the codebase
-    
--   Let stundent to start service registry service before doing the lab
--   The terminology of spring cloud services in the code needs to be explained
+-   Dependency management (using Spring cloud dependency slides)
+    - Neil's slide is a good one
+    - Draw picture of SCS tile SCS client library
+
+-   Client side Load balancer diagram
+	-   Relationship between service discovery and client 
+    	side load balancer
+
+-   The terminology of spring cloud services in the code 
+    needs to be explained
 
 ### Tips
 
--  PWS uses the following
+-  PWS uses the following - see `build/version`
 
    ```
     > curl https://spring-cloud-service-broker.cfapps.io/actuator/info |json_pp
@@ -612,18 +886,63 @@ springCloudServicesClientLibrariesVersion = SPRING_CLOUD_SERVICES_CLIENT_LIBRARI
    
    ```
    springCloudVersion = "Finchley.RELEASE"
-   springCloudServicesClientLibrariesVersion = "2.0.2.RELEASE"
+   springCloudServicesClientLibrariesVersion = "2.0.3.RELEASE"
    ```
    
+- In order to fund out the latest versions of the above two,
+  either use mvnrepository.com or google
+  
+  `spring cloud services starter service registry maven`
+  
+  and see [maven repository for Spring cloud services starter service registry](https://mvnrepository.com/artifact/io.pivotal.spring.cloud/spring-cloud-services-starter-service-registry)
    
 - apps.evans.pal.pivotal.io is using the following
 
   ```
   curl https://spring-cloud-broker.apps.evans.pal.pivotal.io/actuator/info
   ```
+  
+  ```
+  {
+   "git" : {
+      "commit" : {
+         "id" : "fd850cb",
+         "time" : "2019-04-26T15:15:37Z"
+      },
+      "branch" : "HEAD"
+   },
+   "build" : {
+      "time" : "2019-05-03T15:52:33.869Z",
+      "artifact" : "spring-cloud-service-broker",
+      "group" : "io.pivotal.spring.cloud",
+      "version" : "2.0.8-build.5",
+      "name" : "service-broker"
+   }
+  }
+  ```
+
+### Challenge exercise
+
+-  Retrieve the list of apps using rest call
+
+   ```
+   Challenge exercise on Discovery lab:
+   Use curl command to get the list of apps in the Eureka server.
+   Use the info from the following website:
+   https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
+   ```
 
 
 ## Circuit breaker
+
+### Talking points
+
+-   The @Hystrix command needs to be duplicated in 3 different places -
+    there is a reason for this  
+    
+### Tips
+
+-   The console for the evans is "login.sys.evans.pal.pivotal.io"
 
 ### Misc
 
@@ -645,7 +964,7 @@ curl -i -XPOST -H"Content-Type: application/json" localhost:8081/allocations/ -d
 curl -i -XPOST -H"Content-Type: application/json" localhost:8081/allocations/ -d"{\"projectId\": \"4\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
 
 ```
-- commands at PCF
+- commands at PCF with PWS
 
 ```
 // create account
@@ -659,10 +978,32 @@ curl -i -XPOST -H"Content-Type: application/json" registration-pal-sang-shin.cfa
 // create allocation assuming projectId is 12 and userid is 2
 curl -i -XPOST -H"Content-Type: application/json" allocations-pal-sang-shin.cfapps.io/allocations/ -d"{\"projectId\": \"12\", \"userId\": \"2\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
 
-// create allocation assuming projectId is 4
-curl -i -XPOST -H"Content-Type: application/json" allocations-pal-sang-shin.cfapps.io/allocations/ -d"{\"projectId\": \"2\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+while true; sleep .3; do curl -i -XPOST -H"Content-Type: application/json" allocations-pal-sang-shin.cfapps.io/allocations/ -d"{\"projectId\": \"12\", \"userId\": \"2\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}";  done;
+```
+
+- commands at PCF with evans
 
 ```
+// create account
+curl -i -XPOST -H"Content-Type: application/json" registration-pal-sang-shin.apps.evans.pal.pivotal.io/registration -d'{"name": "Pete"}'
+curl -i registration-pal-sang-shin.apps.evans.pal.pivotal.io/accounts?ownerId=1
+
+// create 2 projects
+curl -i -XPOST -H"Content-Type: application/json" registration-pal-sang-shin.apps.evans.pal.pivotal.io/projects -d"{\"name\": \"Project A\", \"accountId\": \"1\"}"
+
+curl -i -XPOST -H"Content-Type: application/json" registration-pal-sang-shin.apps.evans.pal.pivotal.io/projects -d"{\"name\": \"Project B\", \"accountId\": \"1\"}"
+
+// create allocation assuming projectId is 1 and userid is 1
+curl -i -XPOST -H"Content-Type: application/json" allocations-pal-sang-shin.apps.evans.pal.pivotal.io/allocations/ -d"{\"projectId\": \"1\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+
+// create backlog assuming projectId is 1 and userid is 1
+curl -i -XPOST -H"Content-Type: application/json" backlog-pal-sang-shin.apps.evans.pal.pivotal.io/stories -d"{\"projectId\": 1, \"name\": \"Find some reeds\"}"
+
+
+// keep creating allocation assuming projectId is 1 and userid is 1
+while true; sleep .3; do curl -i -XPOST -H"Content-Type: application/json" allocations-pal-sang-shin.apps.evans.pal.pivotal.io/allocations/ -d"{\"projectId\": \"1\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}";  done;
+```
+
 
 - siege -c255 -f urls.txt
 
@@ -685,11 +1026,6 @@ https://timesheets-pal-sang-shin.apps.evans.pal.pivotal.io/time-entries?userId=1
   brew services cleanup
   ```
 
-### Talking points
-
--   The @Hystrix command needs to be duplicated in 3 different places -
-    there is a reason for this  
-    
     
 ## Securing Distributed Application
 
@@ -720,13 +1056,44 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
    application.oauth-enabled=false
    ```
    
--  ???I get the following error
+- I see p-identity with both uaa and p-identity plan. Which should
+  we use?  I used uaa and it worked fine.  
+  ?? When a student used `System` paln within the `App manager`, 
+  then it did not work.
 
    ```
-   Updating app tracker-allocations...
-Mapping routes...
-Binding services...
-The service broker rejected the request to https://spring-cloud-broker.apps.evans.pal.pivotal.io/v2/service_instances/d4eca7bf-9532-43bd-b79a-5326e6b8be86/service_bindings/3c73ba10-defc-4873-bad6-47f4937dc053. Status Code: 404 Not Found, Body: 404 Not Found: Requested route ('spring-cloud-broker.apps.evans.pal.pivotal.io') does not exist.
+   p-identity                    uaa, p-identity   Provides identity capabilities via UAA as a Service
+   ```
+   
+- When running integration testing via `./gradlew clean build`, 
+  tell students to ignore the following 
+  
+  ```
+  com.sun.jersey.api.client.ClientHandlerException: java.net.ConnectException: Connection refused (Connection refused)
+  ...
+  
+  com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
+  ```
+   
+### Tips
+
+-  Getting token from local authorization server
+
+   ```
+   curl 'http://localhost:8999/oauth/token' -i -u 'tracker-client:supersecret' -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token&token_format=opaque'
+   ``` 
+
+-  Getting token from UAA
+
+   ```
+   cf env tracker-registration
+   curl -k https://login.sys.evans.pal.pivotal.io/oauth/token -i -u ea47b39b-06ab-4c01-a961-d3cec5c6be8f:7ffbc342-d529-42fc-8868-17b897509f1b -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
+   ```
+
+-  How to access your allocation server with security in PCF
+
+   ```
+   curl -i -XPOST -H"Content-Type: application/json" registration-pal-sang-shin.apps.evans.pal.pivotal.io/registration -H"Authorization: Bearer <token>" -d'{"name": "Pete"}'
    ```
    
 ### Useful presentations on OAuth2
@@ -742,3 +1109,45 @@ The service broker rejected the request to https://spring-cloud-broker.apps.evan
 -   ?? When to use branch?
 -   Fault tolerance
 -   Confguration drift
+
+### Trouble-shooting
+
+- Setting the management include thing in the manifest file
+  with just * fails - use "*" not just *
+
+### Tips
+
+- Creating `tracker-config-server` service instance in PCF
+
+  ```
+  cf create-service p-config-server standard tracker-config-server -c "{\"git\": {\"uri\": \"https://github.com/sashinpivotal/tracker-config.git\", \"label\": \"master\"}}"
+  ```
+  
+-  Getting token from local authorization server
+
+   ```
+   curl 'http://localhost:8999/oauth/token' -i -u 'tracker-client:supersecret' -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token&token_format=opaque'
+   ``` 
+  
+- Perform operations locally using locally acquired token
+
+	```
+	// create account
+	curl -i -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer 82e595e2-62c2-4581-92d1-fe104acbc5b2" localhost:8083/registration -d'{"name": "Pete"}'
+	curl -i -H"Authorization: Bearer 82e595e2-62c2-4581-92d1-fe104acbc5b2" localhost:8083/accounts?ownerId=1
+	
+	// create projects
+	curl -i -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer 82e595e2-62c2-4581-92d1-fe104acbc5b2" localhost:8083/projects -d"{\"name\": \"Project A\", \"accountId\": \"1\"}"
+	curl -i -XPOST -H"Content-Type: application/json" localhost:8083/projects -d"{\"name\": \"Project B\", \"accountId\": \"1\"}"
+	
+	// create allocation assuming projectId is 2
+	curl -i -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer 82e595e2-62c2-4581-92d1-fe104acbc5b2" localhost:8081/allocations/ -d"{\"projectId\": \"2\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+	```
+	
+- Perform operations in PCF using remotely acquired token
+
+   ```
+   // get a token from UAA
+   cf env tracker-allocation
+   curl -k https://login.sys.evans.pal.pivotal.io/oauth/token -i -u ea47b39b-06ab-4c01-a961-d3cec5c6be8f:7ffbc342-d529-42fc-8868-17b897509f1b -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
+   ```
