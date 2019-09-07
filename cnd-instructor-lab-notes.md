@@ -1,4 +1,34 @@
+## Getting started (logistics)
 
+- Each student receive slack channel message which contains
+  PCF account and AWS account information
+
+- A student can access their slack channel message by
+  opening slack or go to `palexternal.slack.com` 
+
+- Does each student receive an email regarding how to
+  access CNA course contents?
+  
+- Brad send out the following information to the class channel
+
+  ```
+  Cohort Information:
+  Cohort Id: 349803240
+  Course Content: https://courses.education.pivotal.io/c/349803240
+  MeerKats password: keepitsimple
+  Parrit: https://parrit.cfapps.io/bostonma-aug-2019-cnd (password:  keepitsimple)
+  ```
+  
+  ```
+  @here Do not worry about your pair setting up a github today.... we will deal with that tomorrow before we do a pair rotation
+  ```
+  
+  ```
+  @here please make sure you are pairing effectively....
+  The easiest way is to use a timebox where you switch driving every 20  minutes.
+  if you are interested in more pairing information:
+  https://stackify.com/pair-programming-styles/
+  ```
 
 ## General
 
@@ -18,13 +48,35 @@
 
 ### Save "in progress" work in a personal branch
 
--   If you want to save your "work-in-progress" to a new branch, do the 
-    following (as documented in the pairing guide)
-    
-    -   git checkout -b my-mvc-branch
-    -   git add .
-    -   git commit -m "work in progress in mvc lab"
-    -   git push origin my-mvc-branch --tags 
+```
+By the way, before you do the above step, if you need to save your current unfinished work into “work in progress” branch, you do the following:
+-   git checkout -b wip-branch
+-   git add .
+-   git commit -m “work in progress in my lab”
+-   git push origin wip-branch --tags
+```
+
+```
+If you want to start actuator lab from “actuator-start”, 
+follow the steps mentioned below:
+
+-   git checkout master (if current branch is not master)
+-   git reset --hard actuator-start (to force local master to 
+    sync with actuator-start - NO need to do “cherry-pick”)
+-   (change manifest file to reflect the correct route)
+-   git push origin master -f (to sync the remote master with local master)
+-   Do the lab
+-   git push 
+```
+
+```
+If you want to go to a solution project while maintaining
+your code (??? Is this correct?)
+
+- git checkout master
+- git cherry-pick abort
+- git cherry-pick <topic-solution-tag> and handle merge conflict
+```
 
 ## Meerkat
 
@@ -92,7 +144,8 @@
   ```
   None of the buildpacks detected a compatible application
   ```
-- ?? When a repository is created with README file on, performing
+  
+- *When a repository is created with README file on, performing
   `git pull` results in the following error:
   
   ```
@@ -169,14 +222,14 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 - Why we do this lab before we write complete code 
    - deloyment is hard, we want minimum complication
    - get deployment process taken care of earlier 
-   - cant solve process issues with technology
+   - cannot solve process issues with technology
    
 - Travis
    - concept is important, we dn't care which CI tool you use
 
 - What CD mean to you?
    - deployment to production is business decision not Eng decision
-   - dep to prod is risky, user segregation
+   - dep to prod is risky, user segregation??
    - github example, users, cost vs risk, regulartory constraint
 
 ### Tips
@@ -193,7 +246,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   CF_ORG sashin.pivotal.io
   CF_SPACE sandbox
   CF_USERNAME sashin@pivotal.io
-  CF_PASSWORD blue42dragon
+  CF_PASSWORD xxxxx
   GITHUB_USERNAME sashinpivotal
   GITHUB_OAUTH_TOKEN xxxx
 
@@ -223,6 +276,15 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   on:
     branch: my-own-branch
   ```
+  
+- In order to trigger Travis job without making code change, you can
+
+  ```
+  git commit --allow-empty -m "start a new job"
+  git push
+  ```
+  
+  A student also says clicking "retry job" option also worked.
      
 ### Trouble-shooting
 
@@ -242,8 +304,8 @@ HTTP request sent, awaiting response... 404 Not Found
    ```
    
 -  *I got pcf deployment failure - you have to expand the arrow to
-   see the failure - it was because the manifest file has wrong
-   domain
+   see the failure - it was because the manifest file has a wrong
+   domain (i.e. chicken vs evans)
 
    ```
    Installing deploy dependencies
@@ -305,7 +367,7 @@ failed to deploy
 
 - Don't change the test code - that is the contract
 
-- Show how to remove compile errors also show how to do
+- Demo how to remove compile errors also show how to do
   when there two compile 
   errors in a single line, you have to fix the one inside first
      
@@ -321,7 +383,7 @@ failed to deploy
 #### InMemoryRepositoryTest
 
 - How to set the `id` field of `TimeEntry` when it gets created 
-  with without `id` argument?
+  without `id` argument?
 
   - You can create currentId field
 
@@ -486,7 +548,7 @@ test.pivotal.pal.tracker.TimeEntryControllerTest > testList FAILED
   
 ### Slack channel tips
 
-- Use of httpie
+- Use of `httpie`
 
 ```
 The following is the “curl” command to create a time-entry:
@@ -502,36 +564,6 @@ Then you can run the following command to add an TimeEntry like following:
 http post localhost:8080/time-entries projectId=1 userId=1 date=2018-01-01  hours=20
 
 Of course, if you like GUI REST client, you can use PostMan
-```
-
-- Saving work and then change to a tag
-
-```
-By the way, before you do the above step, if you need to save your current unfinished work into “work in progress” branch, you do the following:
--   git checkout -b wip-branch
--   git add .
--   git commit -m “work in progress in my lab”
--   git push origin wip-branch
-```
-
-```
-If you want to start actuator lab from “actuator-start”, follow the steps mentioned below:
-
--   git checkout master (if current branch is not master)
--   git reset --hard actuator-start (to force local master to sync with actuator-start - NO need to do “cherry-pick”)
--   (change manifest file to reflect the correct route)
--   git push origin master -f (to sync the remote master with local master)
--   Do the lab
--   git push 
-```
-
-```
-If you want to go to a solution project while maintaining
-your code (??? Is this correct?)
-
-- git checkout master
-- git cherry-pick abort
-- git cherry-pick <topic-solution-tag> and handle merge conflict
 ```
 
 - Install of postman on meerkat
@@ -554,9 +586,9 @@ sudo snap install postman
 ### Tips
 
 - Make sure to use double underscore when creating migration files
-- * How do you see the list of services using brew?  brew services list
+- *How do you see the list of services using brew?  `brew services list`
 - When executing flyway command, username and password will be asked.
-  Enter tracker and no password
+  Enter `tracker` and no password
   
 ### Slack channel tips
 
@@ -607,6 +639,10 @@ The command "scripts/migrate-databases.sh pal-tracker ." failed and exited with 
   ```
   
   It was because there was no 'tracker-database" service instance.
+  
+### References
+
+- [Migration stratgies](https://github.com/pivotal-bill-kable/spring-cloud-flyway-migration-demo)
 
 ## Spring JdbcTemplate
 
