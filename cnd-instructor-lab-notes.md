@@ -1,7 +1,20 @@
 ## Getting started (logistics)
 
 - Each student receive slack channel message which contains
-  PCF account and AWS account information
+  PCF account and AWS account information from `PAL-Cloud-OPS`
+  
+  ```
+  Hi Sang Shin, welcome to EMEA - ATOS. The below information will be useful  throughout the course to access materials and infrastructure. View discussion about your course in #bordeaux-sep-2019-cna.
+Cohort ID: 349803278
+PCF Foundation API: api.sys.evans.pal.pivotal.io
+PCF Org: sashin.pivotal.io
+PCF Username: sashin@pivotal.io
+PCF Password: xxxx
+AWS Credentials:
+* AWS Access Key: xxxx
+* AWS Secret Key: xxxx
+* AWS Bucket Name: sashin.pivotal.io
+  ```
 
 - A student can access their slack channel message by
   opening slack or go to `palexternal.slack.com` 
@@ -10,11 +23,12 @@
   access CNA course contents?
   
 - Brad send out the following information to the class channel
+  (Make sure to set the Cohort Id and course Id)
 
   ```
   Cohort Information:
-  Cohort Id: 349803240
-  Course Content: https://courses.education.pivotal.io/c/349803240
+  Cohort Id: xxxxxxx
+  Course Content: https://courses.education.pivotal.io/c/xxxxxxx
   MeerKats password: keepitsimple
   Parrit: https://parrit.cfapps.io/bostonma-aug-2019-cnd (password:  keepitsimple)
   ```
@@ -30,7 +44,7 @@
   https://stackify.com/pair-programming-styles/
   ```
 
-## General
+## Git related
 
 ### Demo steps for a particular topic
 
@@ -78,6 +92,19 @@ your code (??? Is this correct?)
 - git cherry-pick <topic-solution-tag> and handle merge conflict
 ```
 
+### Pair rotation. 
+
+- Mention this after `pal-tracker` lab and just before 
+  `pal-tracker-distributed`
+
+```
+@here This morning before we rotate pairs:
+1. The other pair should create a Github repository for `pal-tracker`
+2. git remote add other-origin <github repo url> 
+3. git push --tags -f  -u other-origin master
+4. git remote remove other-origin
+```
+
 ## Meerkat
 
 ### Meerkat keyboard shortcuts
@@ -89,7 +116,6 @@ your code (??? Is this correct?)
 - Ctrl+N for "opening a class" (CMD+O for Mac)
 - Ctrl+Shift+N for "open a file" 
 
- 
 ## Assignment Submission
    
 ### Talking points
@@ -107,7 +133,7 @@ your code (??? Is this correct?)
 - Talk about dependency injection - what it is and why
 - Mention that the `pal-tracker` directory is under `workspace` directory
 
-#### Project structure
+### Project structure
   
 - Steps to follow
   - Create a personal GitHub account (if you don't have one yet)
@@ -686,12 +712,48 @@ The command "scripts/migrate-databases.sh pal-tracker ." failed and exited with 
 
 ### Tips
 
+1. Using curl and httpie for creating time-entry
+
 ```
 curl -i -XPOST -H"Content-Type: application/json" pal-tracker-sang-shin.cfapps.io/time-entries/ -d"{\"projectId\": 1, \"userId\": 1, \"date\": \"2015-05-17\", \"hours\": 6}"
 ```
 
 ```
 http post pal-tracker-sang-shin.cfapps.io/time-entries projectId=1 userId=1 date=2018-01-01  hours=20
+```
+
+1. Using CUPS for an external database (from Brad)
+
+```
+@here Using CUPS for an external Database
+Create the CUPS
+create the cups json from the information in the env output
+
+cf cups cups-db -p '{"jdbcUrl":"jdbc:mysql://p-mysql-proxy.run.pivotal.io:3306/cf_3b945260_b32e_4912", "name": "cf_3b945260_b32e_4912", "password": "0haBVrHbzeu2hyFd"}'
+
+Configure the application
+Notice: that we are using the service name and the properties name from the cups command.
+
+application.yml
+spring:
+  datasource:
+    url: ${vcap.services.cups-db.credentials.jdbcUrl}
+    username: ${vcap.services.cups-db.credentials.username}
+    password: ${vcap.services.cups-db.credentials.password}
+    
+NOTICE: application.properties does not work
+
+Push your app
+
+cf push cups-example -p build/libs/datasource-cups-0.0.1-SNAPSHOT.jar --no-start
+
+bind the cups
+
+cf bs cups-example cups-db
+
+Restart the apps
+
+cf restart cups-example 
 ```
 
 ### Trouble-shooting
@@ -814,8 +876,6 @@ http post pal-tracker-sang-shin.cfapps.io/time-entries projectId=1 userId=1 date
 
 ### Talking points
 
--   Pair rotation, new key - we no longer use ssh instead use https
-    - Use "git add remote origin <https-link>"
 -   Explain what the `${USER_ID}` and `${PROJECT_ID}` variables for 
 -   Describe the relationship among the 4 apps
 -   Describe how to change the http://FILL_ME_IN - registration server
