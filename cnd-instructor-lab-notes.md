@@ -39,11 +39,11 @@ AWS Credentials:
   ```
   
   ```
-  @here Do not worry about your pair setting up a github today.... we will deal with that tomorrow before we do a pair rotation
+  @here Do not worry about your pair setting up a github today. we will deal with that tomorrow before we do a pair rotation
   ```
   
   ```
-  @here please make sure you are pairing effectively....
+  @here please make sure you are pairing effectively.
   The easiest way is to use a timebox where you switch driving every 20  minutes.
   if you are interested in more pairing information:
   https://stackify.com/pair-programming-styles/
@@ -99,7 +99,7 @@ To https://github.com/sashinpivotal/movie-fun
 error: failed to push some refs to 'https://github.com/sashinpivotal/movie-fun'
 hint: Updates were rejected because the tip of your current branch is behind
 hint: its remote counterpart. Integrate the remote changes (e.g.
-hint: 'git pull ...') before pushing again.
+hint: 'git pull ') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 ```
 
@@ -377,7 +377,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 
    The route allocations-pal-sang-shin.cfapps.io did not match any existing domains.
    FAILED
-   Logging out sashin@pivotal.io...
+   Logging out sashin@pivotal.io
    OK
    Failed to push app
    failed to deploy
@@ -541,11 +541,11 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   
   ```
   < workspace/pal-tracker - master > cf apps
-Getting apps in org sashin-org / space sang-space as sashin@pivotal.io...
-OK
+  Getting apps in org sashin-org / space sang-space as sashin@pivotal.io
+  OK
 
-name          requested state   instances   memory   disk   urls
-pal-tracker   started           1/1         1G       1G     pal-tracker-overacute-subphosphate.cfapps.io
+  name          requested state   instances   memory   disk   urls
+  pal-tracker   started           1/1         1G       1G     pal-tracker-overacute-xx
   ```
   
   It was because there was a mistake in the routes setting in
@@ -712,10 +712,10 @@ cf install-plugin -r CF-Community “mysql-plugin”
 - *Then I get the following error
 
   ```
-  Creating service key, if necessary ...
+  Creating service key, if necessary 
 Service instance tracker-database not found
 Closing tunnel
-kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]
+kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec or kill -l [sigspec]
 The command "scripts/migrate-databases.sh pal-tracker ." failed and exited with 2 during .
   ```
   
@@ -1221,7 +1221,7 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
   
   ```
   com.sun.jersey.api.client.ClientHandlerException: java.net.ConnectException: Connection refused (Connection refused)
-  ...
+  
   
   com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
   ```
