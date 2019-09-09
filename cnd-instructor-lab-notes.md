@@ -912,45 +912,15 @@ cf restart cups-example
 
   ```
   https://registration-pal-sangshin.apps.evans.pal.pivotal.io/users/1
-https://registration-pal-sangshin.apps.evans.pal.pivotal.io/accounts?ownerId=1
-https://registration-pal-sangshin.apps.evans.pal.pivotal.io/projects?accountId=1
-https://allocations-pal-sangshin.apps.evans.pal.pivotal.io/allocations?projectId=1
-https://backlog-pal-sangshin.apps.evans.pal.pivotal.io/stories?projectId=1
-https://timesheets-pal-sangshin.apps.evans.pal.pivotal.io/time-entries?userId=1
+  https://registration-pal-sangshin.apps.evans.pal.pivotal.io/accounts?ownerId=1
+  https://registration-pal-sangshin.apps.evans.pal.pivotal.io/projects?accountId=1
+  https://allocations-pal-sangshin.apps.evans.pal.pivotal.io/allocations?projectId=1
+  https://backlog-pal-sangshin.apps.evans.pal.pivotal.io/stories?projectId=1
+  https://timesheets-pal-sangshin.apps.evans.pal.pivotal.io/time-entries?userId=1
   ```
   
 ### Trouble-shooting
 
-- *The travis fails with the following message:
-
-  ```
-  The command "wget -P applications/allocations-server/build/libs https://github.com/$GITHUB_USERNAME/pal-tracker-distributed/releases/download/$RELEASE_TAG/allocations-server.jar" exited with 0.
-before_deploy.1
-0.01s$ cp manifest-allocations.yml manifest.yml
-before_deploy.2
-0.00s$ echo "Deploying allocations server $RELEASE_TAG"
-dpl_0
-1.80s$ rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install dpl
-dpl.1
-Installing deploy dependencies
-dpl.2
-Preparing deploy
-dpl.3
-Deploying application
-failed to deploy
-  ```
-  
-  It was because I was using chicken
-  
-  ```
-  route: allocations-pal-sang-shin.apps.chicken.pal.pivotal.io
-  ```
-  
-  instead of
-  
-  ```
-  route: allocations-pal-sang-shin.apps.evans.pal.pivotal.io
-  ```
 
 ## Service Discovery
 
@@ -979,8 +949,8 @@ failed to deploy
 -  PWS uses the following - see `build/version`
 
    ```
-    > curl https://spring-cloud-service-broker.cfapps.io/actuator/info |json_pp
-{
+   > curl https://spring-cloud-service-broker.cfapps.io/actuator/info |json_pp
+   {
    "git" : {
       "branch" : "HEAD",
       "commit" : {
@@ -999,7 +969,7 @@ failed to deploy
 
    ```
    springCloudVersion = SPRING_CLOUD_VERSION
-springCloudServicesClientLibrariesVersion = SPRING_CLOUD_SERVICES_CLIENT_LIBRARIES_VERSION
+   springCloudServicesClientLibrariesVersion =   SPRING_CLOUD_SERVICES_CLIENT_LIBRARIES_VERSION
    ```
    
    ```
@@ -1123,18 +1093,6 @@ while true; sleep .3; do curl -i -XPOST -H"Content-Type: application/json" alloc
 ```
 
 
-- siege -c255 -f urls.txt
-
-  ```
-  -urls.txt
-https://registration-pal-sang-shin.apps.evans.pal.pivotal.io/users/1
-https://registration-pal-sang-shin.apps.evans.pal.pivotal.io/accounts?ownerId=1
-https://registration-pal-sang-shin.apps.evans.pal.pivotal.io/projects?accountId=1
-https://allocations-pal-sang-shin.apps.evans.pal.pivotal.io/allocations?projectId=1
-https://backlog-pal-sang-shin.apps.evans.pal.pivotal.io/stories?projectId=1
-https://timesheets-pal-sang-shin.apps.evans.pal.pivotal.io/time-entries?userId=1
-  ```
-
 - How to start and stop mysql on Mac
 
   ```
@@ -1180,7 +1138,7 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
   then it did not work.
 
    ```
-   p-identity                    uaa, p-identity   Provides identity capabilities via UAA as a Service
+   p-identity        uaa, p-identity   Provides identity capabilities via UAA as a Service
    ```
    
 - When running integration testing via `./gradlew clean build`, 
