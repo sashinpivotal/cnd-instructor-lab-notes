@@ -563,7 +563,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 
   ```bash
   No results for path: date
-com.jayway.jsonpath.PathNotFoundException: No results for path: date
+  com.jayway.jsonpath.PathNotFoundException: No results for path: date
   ```
   
   It was because I set the field name to local
@@ -587,23 +587,10 @@ com.jayway.jsonpath.PathNotFoundException: No results for path: date
   You should use "bootRun" task from the list of Gradle tasks.
   
   ```
-  Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'welcome.message' in value "${welcome.message}"
+  Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder    
+  'welcome.message' in value welcome.message"
   ```
 
-- *Somehow all tests passed but Travis results in the following error
-  I had to use different mockito version.
-  It is because Mockito version from spring-boot-starter-test is not
-  compatible with JDK 11.  Set the Mockito version as described
-  in the lab document.
-
- ```
- > Task :test
-test.pivotal.pal.tracker.TimeEntryControllerTest > testList FAILED
-    org.mockito.exceptions.base.MockitoException at TimeEntryControllerTest.java:26
-        Caused by: java.lang.UnsupportedOperationException at TimeEntryControllerTest.java:26
-            Caused by: java.lang.IllegalStateException at TimeEntryControllerTest.java:26
-                Caused by: java.lang.NoSuchMethodException at TimeEntryControllerTest.java:26
- ```
 
 ### Challenge Questions
 
@@ -700,26 +687,6 @@ cf install-plugin -r CF-Community “mysql-plugin”
   
   You just have to wait a bit.
   
-- *Triggering a build resulted in a failure in the #2 with 
-  the following error:
-  
-  ```
-  The command "wget -P build/libs https://github.com/$GITHUB_USERNAME/pal-tracker/releases/download/$RELEASE_TAG/pal-tracker.jar" exited with 8.
-  ```
-  
-  Try `git commit --allow-empty -m "Trigger notification"`
-  
-- *Then I get the following error
-
-  ```
-  Creating service key, if necessary 
-Service instance tracker-database not found
-Closing tunnel
-kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec or kill -l [sigspec]
-The command "scripts/migrate-databases.sh pal-tracker ." failed and exited with 2 during .
-  ```
-  
-  It was because there was no 'tracker-database" service instance.
   
 ### References
 
