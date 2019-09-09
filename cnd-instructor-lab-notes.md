@@ -561,7 +561,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 - *experience the following problem when testing TimeEntryApiTest's
   create and read tests
 
-  ```
+  ```bash
   No results for path: $['date']
 com.jayway.jsonpath.PathNotFoundException: No results for path: $['date']
   ```
