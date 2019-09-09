@@ -562,7 +562,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   create and read tests
 
   ```bash
-  No results for path: $['date']
+  No results for path: date
 com.jayway.jsonpath.PathNotFoundException: No results for path: $['date']
   ```
   
