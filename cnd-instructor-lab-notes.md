@@ -20,15 +20,20 @@ AWS Credentials:
   opening slack or go to `palexternal.slack.com` 
 
 - Does each student receive an email regarding how to
-  access CNA course contents?
+  access CNA course contents? No. They just receive
+  slack channel messege that contains PCF and AWS
+  credentials
+  
+- In order to see the self-evaluation, please go to
+  [https://registration.education.pivotal.io/admin/cohorts](https://registration.education.pivotal.io/admin/cohorts)
   
 - Brad send out the following information to the class channel
   (Make sure to set the Cohort Id and course Id)
 
   ```
   Cohort Information:
-  Cohort Id: xxxxxxx
-  Course Content: https://courses.education.pivotal.io/c/xxxxxxx
+  Cohort Id: 349803278
+  Course Content: https://courses.education.pivotal.io/c/349803278
   MeerKats password: keepitsimple
   Parrit: https://parrit.cfapps.io/bostonma-aug-2019-cnd (password:  keepitsimple)
   ```
@@ -70,10 +75,10 @@ By the way, before you do the above step, if you need to save your current unfin
 -   git push origin wip-branch --tags
 ```
 
-```
-If you want to start actuator lab from “actuator-start”, 
+-   If you want to start actuator lab from “actuator-start”, 
 follow the steps mentioned below:
 
+```
 -   git checkout master (if current branch is not master)
 -   git reset --hard actuator-start (to force local master to 
     sync with actuator-start - NO need to do “cherry-pick”)
@@ -83,19 +88,49 @@ follow the steps mentioned below:
 -   git push 
 ```
 
-```
-If you want to go to a solution project while maintaining
-your code (??? Is this correct?)
+-   If you have created github repository with README.md, you
+    will experience the following problem when you do `git push`.
+    An easy way out is `git push origin master -f`
 
+```
+< workspace/movie-fun - master > git push
+To https://github.com/sashinpivotal/movie-fun
+ ! [rejected]        master -> master (non-fast-forward)
+error: failed to push some refs to 'https://github.com/sashinpivotal/movie-fun'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+```
+
+-   If you want to go to a solution project while maintaining
+    your code (??? Is this correct?)
+
+```
 - git checkout master
 - git cherry-pick abort
 - git cherry-pick <topic-solution-tag> and handle merge conflict
 ```
 
+- *When a repository is created with README file on, performing
+  `git pull` results in the following error:
+  
+  ```
+  < workspace/pal-tracker-distributed - master > git pull
+  fatal: refusing to merge unrelated histories
+  ```
+  
+  You can do the following to move forward.
+  
+  ```
+  git pull --allow-unrelated-histories
+  ```
+
+
 ### Pair rotation. 
 
 - Mention this after `pal-tracker` lab and just before 
-  `pal-tracker-distributed`
+  `pal-tracker-distributed` (This is what Brad sent out)
 
 ```
 @here This morning before we rotate pairs:
@@ -105,6 +140,7 @@ your code (??? Is this correct?)
 4. git remote remove other-origin
 ```
 
+-
 ## Meerkat
 
 ### Meerkat keyboard shortcuts
@@ -120,8 +156,8 @@ your code (??? Is this correct?)
    
 ### Talking points
 
-- Note that whenever student submit the lab result, they always have to go 
-  to the `assigment-submission` directory
+- Note that whenever student submit the lab result, 
+  they always have to go to the `assigment-submission` directory
 
 - CND students should ignore `waveland` section
 
@@ -143,7 +179,13 @@ your code (??? Is this correct?)
   - Execute `git remote add origin <url>`
   - Execute `git push origin master --tags`
 
-### Trouble-shooting
+### Bootstrap the application
+
+- Why do we say the following?
+
+  ```
+  Make sure to use File > Open to open your Gradle project rather than using the import feature.
+  ```
 
 - If the test works at the command line but fails within 
   IntelliJ using bootRun task, make sure you 
@@ -151,6 +193,21 @@ your code (??? Is this correct?)
 
 - If you are using STS, try to verify your yml file syntax
   with `http://www.yamllint.com/`
+  
+- ?? I don't find refresh menu option, and I don't
+  see Gradle menu bar option either - I had to
+  close and re-import the project to see Gradle menu 
+  bar
+  
+- *What is `buildscript` closure for?
+
+  ```
+  The buildScript block determines which plugins, task classes, and  
+  other classes are available for use in the rest of the build script.   
+  Without a buildScript block, you can use everything that ships with Gradle out-of-the-box. 
+  
+  If you additionally want to use third-party plugins, task classes, or other classes (in the build script!), you have to specify the corresponding dependencies in the buildScript block.
+  ```
 
 - In step 10, if `create package` option is not available, it 
   is because the Gradle project was not refreshed (as mentioned
@@ -164,6 +221,8 @@ your code (??? Is this correct?)
   apply plugin: 'org.springframework.boot'
   ```
   
+### Deploy
+  
 -  *Somehow, I get the following error when deploying to the PCF:
   it was because I pushed a wrong jar (gradle-wrapper.jar)
 
@@ -171,19 +230,6 @@ your code (??? Is this correct?)
   None of the buildpacks detected a compatible application
   ```
   
-- *When a repository is created with README file on, performing
-  `git pull` results in the following error:
-  
-  ```
-  < workspace/pal-tracker-distributed - master > git pull
-  fatal: refusing to merge unrelated histories
-  ```
-  
-  You can do the following:
-  
-  ```
-  git pull --allow-unrelated-histories
-  ```
   
 ## Configuring an App
   
@@ -238,7 +284,6 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   Yes, there is. Click "Settings" link on the left in the application
   page.
   
-- ?? practice explaining PCF architecture (15 minutes)
 
   
 ## Deployment Pipelines
@@ -347,6 +392,26 @@ OK
 Failed to push app
 failed to deploy
    ```
+   
+- *If everything worked fine in the 2nd phase but deployment
+  tails.
+  Manually pusing the app works. ?? accessing ./env results in 404
+  It was because I was using wrong target
+  
+  ```
+  The command "wget -P build/libs https://github.com/$GITHUB_USERNAME/pal-tracker/releases/download/$RELEASE_TAG/pal-tracker.jar" exited with 0.
+  before_deploy
+  0.00s$ echo "Deploying $RELEASE_TAG to Cloud Foundry"
+  dpl_0
+  1.74s$ rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install dpl
+  dpl.1
+  Installing deploy dependencies
+  dpl.2
+  Preparing deploy
+  pl.3
+  Deploying application
+  failed to deploy
+  ```
 
 ### Challenge questions
 
