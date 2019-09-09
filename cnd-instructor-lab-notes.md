@@ -563,7 +563,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 
   ```bash
   No results for path: date
-com.jayway.jsonpath.PathNotFoundException: No results for path: $['date']
+com.jayway.jsonpath.PathNotFoundException: No results for path: date
   ```
   
   It was because I set the field name to local
