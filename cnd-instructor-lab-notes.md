@@ -315,6 +315,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
      
 - Example Travis environment variables
 
+
   ```
   (when using PAL pcf endpoint)
   CF_API_URL https://api.sys.evans.pal.pivotal.io
@@ -362,21 +363,6 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   A student also says clicking "retry job" option also worked.
      
 ### Trouble-shooting
-
-- *I got a failure when I started the 2nd phase - it was because
-  I did not do the first phase.  When I check in a new change, 
-  the complete phase 1 and 2 are done, which eliminate the problem.
-  I think it was because the jar file was not published in the
-  1st job.
-
-   ```
-   $ wget -P applications/timesheets-server/build/libs https://github.com/$GITHUB_USERNAME/pal-tracker-distributed/releases/download/$RELEASE_TAG/timesheets-server.jar
---2019-05-03 14:13:22--  https://github.com/sashinpivotal/pal-tracker-distributed/releases/download/release-6/timesheets-server.jar
-Resolving github.com (github.com)... 192.30.253.112
-Connecting to github.com (github.com)|192.30.253.112|:443... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2019-05-03 14:13:22 ERROR 404: Not Found.
-   ```
    
 -  *I got pcf deployment failure - you have to expand the arrow to
    see the failure - it was because the manifest file has a wrong
@@ -384,17 +370,17 @@ HTTP request sent, awaiting response... 404 Not Found
 
    ```
    Installing deploy dependencies
-Successfully installed dpl-cloud_foundry-1.10.8
-Parsing documentation for dpl-cloud_foundry-1.10.8
-Installing ri documentation for dpl-cloud_foundry-1.10.8
-Deploying application
-...
-The route allocations-pal-sang-shin.cfapps.io did not match any existing domains.
-FAILED
-Logging out sashin@pivotal.io...
-OK
-Failed to push app
-failed to deploy
+   Successfully installed dpl-cloud_foundry-1.10.8
+   Parsing documentation for dpl-cloud_foundry-1.10.8
+   Installing ri documentation for dpl-cloud_foundry-1.10.8
+   Deploying application
+
+   The route allocations-pal-sang-shin.cfapps.io did not match any existing domains.
+   FAILED
+   Logging out sashin@pivotal.io...
+   OK
+   Failed to push app
+   failed to deploy
    ```
    
 - *If everything worked fine in the 2nd phase but deployment
