@@ -140,7 +140,9 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 4. git remote remove other-origin
 ```
 
--
+- Sarah used post-it tag to designate a `driver` of the pair
+  (ownder of GitHub and PCF account)
+
 ## Meerkat
 
 ### Meerkat keyboard shortcuts
@@ -240,6 +242,8 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
 - What could be use cases where you will have to do “cf restage” (as opposed 
   to “cf restart”)?
+- (Related question to the above) What are the differences among 3 different 
+  ways of deploying the application on PCF - "pushing", "restaging", and "restart"?
 - Try to use “create-app-manifest” command to capture the metadata of your running app into a file and try to use that file to deploy the application
 
 
