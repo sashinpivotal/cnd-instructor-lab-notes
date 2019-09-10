@@ -448,14 +448,14 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 
 - Don't change the test code - that is the contract
 
-- Demo how to remove compile errors also show how to do
+- Demo how to remove compile errors also show what to do
   when there two compile 
-  errors in a single line, you have to fix the one inside first
+  errors in a single line - you have to fix the one inside first
      
 - Make sure TimeEntry constructor with the correct naming - 
-  otherwise you will have hardtime reading test code
+  otherwise you will have hard time reading test code
   
-- The reason we have a constructor that does not set id is because
+- The reason we have a TimeEntry constructor that does not set id is because
   we want to simulate the repository behavior where id gets generated 
   by the persistence layer
   
@@ -466,7 +466,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 - How to set the `id` field of `TimeEntry` when it gets created 
   without `id` argument?
 
-  - You can create currentId field
+  - You can create `currentId` field
 
 - When creating a code for `list` method, IDE uses boolean   
   instead of `List<TimeEntry>` - `isEmpty()` method will cause
@@ -499,7 +499,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   
 #### TimeEntryController test
 
-- *We are not testing the create operation sets the location 
+- *We are not testing that the create operation sets the location 
  response field - verify the solution is something like following:
  (sent a feedback)
  
