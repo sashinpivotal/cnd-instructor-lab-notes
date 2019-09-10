@@ -460,6 +460,9 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   by the persistence layer
   
 - You can create an interface from a class - refactor->extract
+
+- Make sure to add correct mockito version as described in the
+  lab document
   
 #### InMemoryRepositoryTest
 
@@ -536,7 +539,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
  java.lang.IllegalStateException: No current ServletRequestAttributes
  ```
   
-- Deploying the app to the pcf still shows that it is using
+- *Deploying the app to the pcf still shows that it is using
   random route instead of the route we define in the `manifest.yml`
   
   ```
@@ -566,7 +569,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   com.jayway.jsonpath.PathNotFoundException: No results for path: date
   ```
   
-  It was because I set the field name to local
+  It was because fieldname and method name mismatch like following
   
   ```
     public LocalDate getLocalDate() {
@@ -613,6 +616,20 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 - What does SOLID (design principles) stand for?
 - What are the examples of “Open for extension Closed for 
   modification” design principle in the “pal-tracker” project?
+  
+### Answers to challenge questions
+
+- (How does verification work?)
+  Mockito.verify(MockedObject).someMethodOnTheObject(someParametersToTheMethod);
+  verifies that the methods you called on your mocked object are indeed called. 
+  If they weren't called, or called with the wrong parameters, or called the 
+  wrong number of times, they would fail your test.
+
+- (Why you want to use verify method?)
+  The correctness of the unit test of the target class is based on the
+  fact that the mock object is called and returns the prescribed 
+  value.  So if the mock object is not called, the correctness of
+  the unit test is not guaranteed.  
   
 ### Slack channel tips
 
