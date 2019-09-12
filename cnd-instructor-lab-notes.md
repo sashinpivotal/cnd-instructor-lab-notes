@@ -4,16 +4,16 @@
   PCF account and AWS account information from `PAL-Cloud-OPS`
   
   ```
-  Hi Sang Shin, welcome to EMEA - ATOS. The below information will be useful  throughout the course to access materials and infrastructure. View discussion about your course in #bordeaux-sep-2019-cna.
-Cohort ID: 349803278
-PCF Foundation API: api.sys.evans.pal.pivotal.io
-PCF Org: sashin.pivotal.io
-PCF Username: sashin@pivotal.io
-PCF Password: xxxx
-AWS Credentials:
-* AWS Access Key: xxxx
-* AWS Secret Key: xxxx
-* AWS Bucket Name: sashin.pivotal.io
+  Hi Sang Shin, welcome to EMEA - ATOS. The below information will be useful  throughout the  course to access materials and infrastructure. View discussion about your course in #bordeaux-sep-2019-cna.
+  Cohort ID: 349803278
+  PCF Foundation API: api.sys.evans.pal.pivotal.io
+  PCF Org: sashin.pivotal.io
+  PCF Username: sashin@pivotal.io
+  PCF Password: xxxx
+  AWS Credentials:
+   * AWS Access Key: xxxx
+   * AWS Secret Key: xxxx
+   * AWS Bucket Name: sashin.pivotal.io
   ```
 
 - A student can access their slack channel message by
@@ -142,6 +142,14 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
 - Sarah used post-it tag to designate a `driver` of the pair
   (ownder of GitHub and PCF account)
+  
+- For each pair rotation, the following need to be changed to
+  the pink post-it person (driver)
+  - Slack
+  - PCF
+  - GIT
+  - Assignment Submission
+  - Travis CI (edited) 
 
 ## Meerkat
 
@@ -613,6 +621,20 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   other than using @Bean in the configuration class? What 
   would be pros and cons of each approach?
   
+- In the case of testing respository's delete(..), why there is
+  no training method? it is because respository's delete method
+  returns void.
+
+  ```
+    @Test
+    public void testDelete() {
+        long timeEntryId = 1L;
+        ResponseEntity response = controller.delete(timeEntryId);
+        verify(timeEntryRepository).delete(timeEntryId);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+  ```
+  
 - What does SOLID (design principles) stand for?
 - What are the examples of “Open for extension Closed for 
   modification” design principle in the “pal-tracker” project?
@@ -633,20 +655,18 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   
 ### Slack channel tips
 
-- Use of `httpie`
+- `httpie` is easier to use than `curl` especially for posting.
 
 ```
-The following is the “curl” command to create a time-entry:
+The following shows the “curl” and "httpie" examples to create a time-entry:
 
 curl -i -XPOST -H"Content-Type: application/json" localhost:8080/time-entries/ -d"{\"projectId\": 1, \"userId\": 1, \"date\": \"2015-05-17\", \"hours\": 6}"
 
-Actually HTTPie is a lot easier to use than curl.  In order to install HTTPie, you can do the following:
-
-sudo apt install httpie
-
-Then you can run the following command to add an TimeEntry like following:
-
 http post localhost:8080/time-entries projectId=1 userId=1 date=2018-01-01  hours=20
+
+In order to install Httpie, please do
+
+  sudo apt-get install httpie (Ubuntu)
 
 Of course, if you like GUI REST client, you can use PostMan
 ```
@@ -661,6 +681,8 @@ sudo snap install postman
 
 - Discuss pros and cons of @Bean vs component scan
 - Discuss pros and cons of using @Bean vs @Repository
+- What is extra behavior of @Repository annotation provides
+  to your code?
 
 - *Brad went over the 12 factors - we covered 8 of
   12 factors so far
@@ -808,7 +830,6 @@ cf restart cups-example
    > Could not find method flyway() for arguments 
    [build_87xx1m7rxvlos7m38s5n54g4k$_run_closure3@2f59647a] on root
     project  'pal-tracker' of type org.gradle.api.Project.
-* Try:
    ```
    
    It was because I did not add the following to the build.gradle
@@ -887,10 +908,7 @@ cf restart cups-example
   ```
   org.junit.ComparisonFailure: expected:<[200]> but was:<[503]>
   ```
-  
-- * Besides the test checks if the db status is UP but the result
-  is down when accessed from a browser. Why?
-  It was because I reversed the up() and down() logic.
+
   
 ## Scaling lab
 
@@ -936,7 +954,55 @@ cf restart cups-example
   https://timesheets-pal-sangshin.apps.evans.pal.pivotal.io/time-entries?userId=1
   ```
   
-### Trouble-shooting
+- [Postman collection](https://github.com/pivotal-bill-kable/cnd-postman-collections)
+  
+### Challenge questions
+
+- What is the relationship among the 4 applications in the
+  `pal-tracker-distributed`?
+  
+  - Whenever a new backlog, allocation, timesheet needs to be created,
+    backlog, allocation, and timesheet application has to know if
+    a corresponding Project is already enabled or not. 
+
+- Why are we using a single repository for all 4 microservices?  
+  Isn't it a violation of the first rule of 12 factor app? 
+
+- Why are there variations of a domain class, for example,
+  why are there TimeEntryForm, TimeEntryInfo, TimeEntryRecord, TimeEntryFields classes?
+  Where are they used?
+  
+- In the "pal-tracker-distributed", we use 4 different databases, one for
+  each application. 
+  - Is it a recommended practice?  Should we have a single database instead?
+  - Is it possible to have database inconsistency among the databases if
+    there are multiple databases? If it is, how do we solve it?
+    (For example, a user is deleted in User database, how does other
+    databases reflect that change?)
+  - Is it OK to have duplication among the multiple databases?
+    (In 'pal-tracker-distributed", we don't have any duplcate data.)
+
+- Application code should be insulated from data access logic?
+  How do we achieve that in the "pal-tracker-distributed"? 
+  
+### Issues to be discussed
+
+- Variation of domian class
+  - TimeEntryForm (under .timesheets package)
+  - TimeEntryInfo (under .timesheets package)
+  - TimeEntryRecord (under .timesheets.data package)
+  - TimeEntryFields (under .timesheets.data package)
+  
+- 4 different databases vs a single database
+  - take a look at schema files under `databases`
+
+- Data access abstraction
+  - TimeEntryDataGateway 
+  - AllocationDataGateway
+  - ProjectDataGateway
+  - AccountDataGateway
+  - UserDataGateway
+  - StoryDataGateway
 
 
 ## Service Discovery
@@ -951,11 +1017,11 @@ cf restart cups-example
 	-   Use service discovery picture
 
 -   Dependency management (using Spring cloud dependency slides)
-    - Neil's slide is a good one
+    - [Neil's slide](https://docs.google.com/presentation/d/1sY6mz_SRfRO-KFonJDjfEujgTFNmDkddit5l090PEZM/edit?ts=5d5a5860#slide=id.p) is a good one
     - Draw picture of SCS tile SCS client library
 
 -   Client side Load balancer diagram
-	-   Relationship between service discovery and client 
+	-  Relationship between service discovery and client 
     	side load balancer
 
 -   The terminology of spring cloud services in the code 
@@ -1026,17 +1092,55 @@ cf restart cups-example
   }
   ```
 
-### Challenge exercise
+### Challenge questions
 
+-  Can discovery service and client-side loadbalancing be used
+   independently from each other?
+   
+-  What are the differences between client-side loadbalancing and
+   server-side loadbalancing?  When do we want to use one
+   over the other?  
+   
+-  One of the benefits of client-side loadbalancing is being
+   able to choose different load-balancing schemes at runtime.
+   What are the example client-side loadbalancing schemes?
+   
+-  What does @LoadBalanced annotation used over RestTemplate
+   do for the application?
+   
+-  In the early presentation, we talked about one of the 
+   benefits of using Spring Boot is its dependency management.
+   But somehow in this lab (Dicovery lab), we were asked to do 
+   manual dependency management such as finding out the version
+   of spring-cloud-commons and add it to the rest-support's
+   build.gradle.  Is this recommended practice? 
+   
+### Challenge exercise
+   
 -  Retrieve the list of apps using rest call
 
    ```
    Challenge exercise on Discovery lab:
-   Use curl command to get the list of apps in the Eureka server.
-   Use the info from the following website:
+   Use curl command to get the list of apps registered to the Eureka server.
+   Use the info from the following website: (but remove the "v2" from the url)
    https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
    ```
 
+### Container to Container networking
+
+- Add network policy
+
+  ```
+  cf add-network-policy SOURCE_APP --destination-app DESTINATION_APP -s DESTINATION_SPACE_NAME -o DESTINATION_ORG_NAME --protocol (tcp | udp) --port RANGE
+  ```
+  
+- [Configuring Cross Cloud Foundry Service Registy (route mode)](http://docs.pivotal.io/spring-cloud-services/1-4/common/service-registry/enabling-peer-replication.html)
+- [GoRouter does honor Ribbon load balancing algorithm](http://docs.pivotal.io/spring-cloud-services/1-4/common/service-registry/connectors.html#instance-specific-routing-in-ribbon)
+- [Configuring PCF Container-to-Container Networking, Service Registry and Client Load Balancing (SpringOne 2017)](https://www.youtube.com/watch?v=1WJhFhBr-0Q)
+
+### Client side load balancing
+
+- [Ribbon](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html)
 
 ## Circuit breaker
 
@@ -1048,6 +1152,11 @@ cf restart cups-example
 ### Tips
 
 -   The console for the evans is "login.sys.evans.pal.pivotal.io"
+
+### References
+
+-   [Circuit breaker diagrams](https://github.com/Netflix/Hystrix/wiki)
+-   [Hystrix dashboard](https://github.com/Netflix-Skunkworks/hystrix-dashboard/wiki)
 
 ### Misc
 
@@ -1118,6 +1227,11 @@ while true; sleep .3; do curl -i -XPOST -H"Content-Type: application/json" alloc
   brew services stop --all
   brew services cleanup
   ```
+  
+### Challenge questions (Circuit breaker lab)
+
+- Can @Hystrix command can be chained?
+- When is the suitable usecase where circuit breaker can be used?
 
     
 ## Securing Distributed Application
