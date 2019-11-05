@@ -1,3 +1,37 @@
+# CND
+
+## Before the cohort
+
+- We can send the following message before cohort gets started
+
+  ```
+  By now, I assume everyone can access the course contents
+  from the following site
+  
+   http://course.education.pivotal.io 
+  
+  Please make sure you receive slack channel message from
+  PAL-Cloud-OPS team which provides your own PCF credentials 
+  like following:
+  
+    Hi <Your name>, welcome to Accenture. The below information 
+    will be useful throughout the course to access materials and 
+    infrastructure. View discussion about your course in 
+    #torontoc-nov-2019-cnd.
+    Cohort ID: 349803372
+    PCF Foundation API: api.sys.evans.pal.pivotal.io
+    PCF Org: <your PCF org>
+    PCF Username: <your email address>
+    PCF Password: <password>
+  
+  From tomorrow morning, all our communication will be 
+  through our #torontoc-nov-2019-cnd slack channel.
+  
+  BTW, if this is your first time accessing Slack channel, 
+  please create an account via http://palexternal.slack.com
+  using your Accenture email address.
+  ```
+
 ## Getting started (logistics)
 
 - Each student receive slack channel message which contains
@@ -14,6 +48,18 @@
    * AWS Access Key: xxxx
    * AWS Secret Key: xxxx
    * AWS Bucket Name: sashin.pivotal.io
+  ```
+  
+  ```
+  Hi <Your name>, welcome to Accenture. The below information will
+  be useful throughout the course to access materials and 
+  infrastructure. View discussion about your course in 
+  #torontoc-nov-2019-cnd.
+  Cohort ID: 349803372
+  PCF Foundation API: api.sys.evans.pal.pivotal.io
+  PCF Org: <your PCF org>
+  PCF Username: <your email address>
+  PCF Password: <password>
   ```
 
 - A student can access their slack channel message by
@@ -36,6 +82,17 @@
   Course Content: https://courses.education.pivotal.io/c/349803278
   MeerKats password: keepitsimple
   Parrit: https://parrit.cfapps.io/bostonma-aug-2019-cnd (password:  keepitsimple)
+  ```
+  
+- Mike G sent out the following
+
+  ```
+  Cohort Information:
+  Machine username/password: pivotaluser/keepitsimple
+  Cohort Id: 349803372
+  Course URL: https://courses.education.pivotal.io
+  PCF API endpoint: https://api.sys.evans.pal.pivotal.io
+  PCF web UI: https://login.sys.evans.pal.pivotal.io
   ```
   
   ```
@@ -75,21 +132,9 @@ By the way, before you do the above step, if you need to save your current unfin
 -   git push origin wip-branch --tags
 ```
 
--   If you want to start actuator lab from “actuator-start”, 
-follow the steps mentioned below:
-
-```
--   git checkout master (if current branch is not master)
--   git reset --hard actuator-start (to force local master to 
-    sync with actuator-start - NO need to do “cherry-pick”)
--   (change manifest file to reflect the correct route)
--   git push origin master -f (to sync the remote master with local master)
--   Do the lab
--   git push 
-```
-
 -   If you have created github repository with README.md, you
-    will experience the following problem when you do `git push`.
+    will experience the following problem when you do 
+    `git push origin master`.
     An easy way out is `git push origin master -f`
 
 ```
@@ -151,6 +196,12 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
   - Assignment Submission
   - Travis CI (edited) 
 
+- Steps of new pairing
+	- Ensure both pairs have code on their github
+	- Sticky person stays
+	- Find a new pair
+	- Upadte assignment submission emails in build.gradle
+
 ## Meerkat
 
 ### Meerkat keyboard shortcuts
@@ -199,15 +250,17 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
 - If the test works at the command line but fails within 
   IntelliJ using bootRun task, make sure you 
-  set the Gradle Test Runner under setting
+  set the Gradle Test Runner under setting (?? With
+  Spring Boot 2.2, this could cause a problem)
 
 - If you are using STS, try to verify your yml file syntax
   with `http://www.yamllint.com/`
   
-- ?? I don't find refresh menu option, and I don't
+- *IntelliJ - I don't find refresh menu option, and I don't
   see Gradle menu bar option either - I had to
   close and re-import the project to see Gradle menu 
-  bar
+  bar. - this is to use refresh icon from the Gradle bar
+  menu on the right.
   
 - *What is `buildscript` closure for?
 
@@ -217,6 +270,15 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
   Without a buildScript block, you can use everything that ships with Gradle out-of-the-box. 
   
   If you additionally want to use third-party plugins, task classes, or other classes (in the build script!), you have to specify the corresponding dependencies in the buildScript block.
+  ```
+  
+- ?? Why do we have the following in both buildscript 
+  section and regular section of the build.gradle?
+  
+  ```groovy
+  repositories {
+    mavenCentral()
+  }
   ```
 
 - In step 10, if `create package` option is not available, it 
@@ -239,7 +301,11 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
   ```
   None of the buildpacks detected a compatible application
   ```
-  
+ 
+### Challenge questions
+
+-  What the purpose of "gradle wrapper"?
+
   
 ## Configuring an App
   
@@ -304,7 +370,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 
 - Why we do this lab before we write complete code 
    - deloyment is hard, we want minimum complication
-   - get deployment process taken care of earlier 
+   - get deployment process taken care of in the earlier stage 
    - cannot solve process issues with technology
    
 - Travis
@@ -312,7 +378,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 
 - What CD mean to you?
    - deployment to production is business decision not Eng decision
-   - dep to prod is risky, user segregation??
+   - ??dep to prod is risky, user segregation??
    - github example, users, cost vs risk, regulartory constraint
 
 ### Tips
@@ -532,20 +598,34 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 
 ### Trouble-shooting
  
- - ?? Somehow adding the code above results in the following error
+- *Somehow adding the code above results in the following error
+
  
- ```
+  ```
          URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
                                              .path("/{id}")
                                              .buildAndExpand(timeEntry.getId())
                                              .toUri();
         return ResponseEntity.created(uri).build();
- ```
+  ```
 
- ```
- No current ServletRequestAttributes
- java.lang.IllegalStateException: No current ServletRequestAttributes
- ```
+  ```
+  No current ServletRequestAttributes
+  java.lang.IllegalStateException: No current ServletRequestAttributes
+  ```
+ 
+  It is because testing did not set the context right. 
+  See https://stackoverflow.com/questions/9419606/unit-testing-a-method-dependent-to-the-request-context
+  
+  ```
+    @Before
+    public void setUp() {
+        timeEntryRepository = mock(TimeEntryRepository.class);
+        controller = new TimeEntryController(timeEntryRepository);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+    }
+  ```
   
 - *Deploying the app to the pcf still shows that it is using
   random route instead of the route we define in the `manifest.yml`
@@ -559,7 +639,8 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   pal-tracker   started           1/1         1G       1G     pal-tracker-overacute-xx
   ```
   
-  It was because there was a mistake in the routes setting in
+  It was because there was a typo (route instead of routes) 
+  in the routes setting in
   the manifest.yml file
   
   ```
@@ -1232,6 +1313,10 @@ while true; sleep .3; do curl -i -XPOST -H"Content-Type: application/json" alloc
 
 - Can @Hystrix command can be chained?
 - When is the suitable usecase where circuit breaker can be used?
+  Can it be used for non-idempotent operations?
+- How would you handle a case where dependency service simply
+  timed out and the calling service's threads get depleted
+  (as shown in the 3rd figure in the https://github.com/Netflix/Hystrix/wiki)?
 
     
 ## Securing Distributed Application
@@ -1316,6 +1401,16 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 -   ?? When to use branch?
 -   Fault tolerance
 -   Confguration drift
+
+### Challenge questions
+
+-   It is a good practice to save security-sensitive data such as
+    passwords in the config server? If not, what can we do?
+    
+-   What happens when a config server is not available?
+    
+-   Is it a good practice to maintain configuration data in a
+    single repository for multiple environments?
 
 ### Trouble-shooting
 
