@@ -1,6 +1,6 @@
-# CND
 
-## Before the cohort
+
+# Before the cohort
 
 - We can send the following message before cohort gets started
 
@@ -32,7 +32,7 @@
   using your Accenture email address.
   ```
 
-## Getting started (logistics)
+# Getting started (logistics)
 
 - Each student receive slack channel message which contains
   PCF account and AWS account information from `PAL-Cloud-OPS`
@@ -106,9 +106,9 @@
   https://stackify.com/pair-programming-styles/
   ```
 
-## Git related
+# Git related
 
-### Demo steps for a particular topic
+## Demo steps for a particular topic
 
 -   If you want to start "topic" lab from "topic-start", 
     follow the steps mentioned below 
@@ -122,7 +122,7 @@
     -   Do the lab
     -   git push
 
-### Save "in progress" work in a personal branch
+## Save "in progress" work in a personal branch
 
 ```
 By the way, before you do the above step, if you need to save your current unfinished work into “work in progress” branch, you do the following:
@@ -172,7 +172,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
   ```
 
 
-### Pair rotation. 
+# Pair rotation
 
 - Mention this after `pal-tracker` lab and just before 
   `pal-tracker-distributed` (This is what Brad sent out)
@@ -202,9 +202,9 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 	- Find a new pair
 	- Upadte assignment submission emails in build.gradle
 
-## Meerkat
+# Meerkat
 
-### Meerkat keyboard shortcuts
+## Meerkat keyboard shortcuts
 
 - [default keymap](https://resources.jetbrains.com/storage/products/intellij-idea/docs/IntelliJIDEA_ReferenceCard.pdf)
 
@@ -213,9 +213,9 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 - Ctrl+N for "opening a class" (CMD+O for Mac)
 - Ctrl+Shift+N for "open a file" 
 
-## Assignment Submission
+# Assignment Submission
    
-### Talking points
+## Talking points
 
 - Note that whenever student submit the lab result, 
   they always have to go to the `assigment-submission` directory
@@ -223,14 +223,14 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 - CND students should ignore `waveland` section
 
   
-## Building a Spring Boot App (lab #1)
+# Building a Spring Boot App (lab #1)
 
-### Talking points
+## Talking points
 
 - Talk about dependency injection - what it is and why
 - Mention that the `pal-tracker` directory is under `workspace` directory
 
-### Project structure
+## Project structure
   
 - Steps to follow
   - Create a personal GitHub account (if you don't have one yet)
@@ -240,7 +240,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
   - Execute `git remote add origin <url>`
   - Execute `git push origin master --tags`
 
-### Bootstrap the application
+## Bootstrap the application
 
 - Why do we say the following?
 
@@ -293,7 +293,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
   apply plugin: 'org.springframework.boot'
   ```
   
-### Deploy
+## Deploy
   
 -  *Somehow, I get the following error when deploying to the PCF:
   it was because I pushed a wrong jar (gradle-wrapper.jar)
@@ -302,14 +302,14 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
   None of the buildpacks detected a compatible application
   ```
  
-### Challenge questions
+## Challenge questions
 
 -  What the purpose of "gradle wrapper"?
 
   
-## Configuring an App
+# Configuring an App
   
-### Challenge questions
+## Challenge questions
 
 - Do we have to do “cf restage <app-name>” when we set a new environment variable?
 - What are the examples of PCF log types? (Google “PCF log types”)
@@ -321,13 +321,13 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 - Try to use “create-app-manifest” command to capture the metadata of your running app into a file and try to use that file to deploy the application
 
 
-### Slack channel tips
+## Slack channel tips
 
 ```
-Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factors-for-building-cloud-native-software
+Great (concise yet to the point) presentation on 12 factors:  https://content.pivotal.io/slides/the-12-factors-for-building-cloud-native-software
 ```
 
-### Trouble-shootings
+## Trouble-shootings
 
 - The document does not include instruction to remove compile
   errors on EnvController before it says to run the app
@@ -355,7 +355,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   }
   ```
 
-### Misc
+## Misc
 
 - *Is there a way to set environment variables to an application
   through App manager?
@@ -364,9 +364,9 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   
 
   
-## Deployment Pipelines
+# Deployment Pipelines
 
-### Talking poijnts (used by Mike G.)
+## Talking poijnts (used by Mike G.)
 
 - Why we do this lab before we write complete code 
    - deloyment is hard, we want minimum complication
@@ -381,7 +381,53 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
    - ??dep to prod is risky, user segregation??
    - github example, users, cost vs risk, regulartory constraint
 
-### Tips
+- Explain the following travis.yml 
+
+  ```
+  dist: trusty
+  sudo: false
+  notifications:
+    email: false
+  env:
+    - RELEASE_TAG="release-$TRAVIS_BUILD_NUMBER"
+  if: tag IS blank
+
+
+  jobs:
+    include:
+      - stage: build and publish.  // create jar and publish to gihub
+        language: java
+        jdk: openjdk11
+        install: skip
+        script: ./gradlew clean build // command to create jar file
+        before_deploy:
+          - git config --local user.name "Travis CI"
+          - git config --local user.email "travis@example.com"
+          - git tag -f $RELEASE_TAG
+        deploy:                       // publish to github
+          provider: releases
+          api_key: $GITHUB_OAUTH_TOKEN
+          file: "build/libs/pal-tracker.jar"
+          skip_cleanup: true
+      - stage: deploy to cf       // deploy the jar to the PCF
+        language: bash
+        script:
+          - echo "Downloading $RELEASE_TAG"
+          - wget -P build/libs https://github.com/$GITHUB_USERNAME/pal-tracker/releases/download/$RELEASE_TAG/pal-tracker.jar // get the jar file from github
+        before_deploy:
+          - echo "Deploying $RELEASE_TAG to Cloud Foundry"
+        deploy:                   // deploy to PCF
+          provider: cloudfoundry
+          api: $CF_API_URL
+          username: $CF_USERNAME
+          password: $CF_PASSWORD
+          organization: $CF_ORG
+          space: $CF_SPACE
+
+  ```
+
+
+## Tips
 
 - Show how to set the environment variable in `travis-ci.org`
    - Recommend to select `Display value in build log` when
@@ -436,7 +482,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   
   A student also says clicking "retry job" option also worked.
      
-### Trouble-shooting
+## Trouble-shooting
    
 -  *I got pcf deployment failure - you have to expand the arrow to
    see the failure - it was because the manifest file has a wrong
@@ -477,7 +523,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   failed to deploy
   ```
 
-### Challenge questions
+## Challenge questions
 
 - We know multiple routes can be assigned to an applicationh.
   Now can a route be assigned to multiple applications?
@@ -497,14 +543,14 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
     updating the routing table whenever a new instance is created
     or old instance gets destroyed?
     
-### Challenges in the blud-green deployment
+## Challenges in the blud-green deployment
     
 -   Is blue-green deployment suitable for major feature change?
 -   What are the challenges for doing blue-green deployment?
     - Brad thinks blue-green deployment is possible for most cases
     - What about table change - don't delete field, don't delete tables
     
-### Steps for blue-green deployment
+## Steps for blue-green deployment
 
 - V1 - R1 is currently running
 - Create V2 with R2 and make sure it is working
@@ -516,9 +562,9 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 - Remove R2 from V2 - now V2 handles only R1
   (cf unmap-route pal-tracker-v2 apps.evans.pal.pivotal.io -n pal-tracker-r2)
       
-## Spring MVC with REST endpoints
+# Spring MVC with REST endpoints
 
-### Talking points
+## Talking points
 
 - Don't change the test code - that is the contract
 
@@ -538,43 +584,66 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 - Make sure to add correct mockito version as described in the
   lab document
   
-#### InMemoryRepositoryTest
+### InMemoryRepositoryTest
 
 - How to set the `id` field of `TimeEntry` when it gets created 
   without `id` argument?
 
   - You can create `currentId` field
 
-- When creating a code for `list` method, IDE uses boolean   
-  instead of `List<TimeEntry>` - `isEmpty()` method will cause
-  compile error in this case
-  
+- When creating a code for `list` method, IDE generates 
+  `boolean` return type   
+  instead of `List<TimeEntry>` - you need to manually
+  change `boolean` to `List<TimeEntry>`
+    
 - In the list() test, IntelliJ gets confused when there are 5 constructor
   arguments and there is already a constructor that takes 4 arguments.
   
 - Object comparison with `equals` and `hashCode`  
   - leverage IDE support on this
-  - Do you want to include id field?  It should not. Otherwise,
-    the update() test will fail.  ?? Verify with the solution
-    with GitHub.  ??? Hmm The solution includes id field.
+  - Do you want to include id field?  Sure.
 
 - Creating `List` object from `timeEntryMap.values()`
 
   - new ArrayList<>(timeEntryMap.values())
 
 - `timeEntryMap.replace(id, timeEntry)` returns an old value not new value
+  You can use one of the following two schemes.
 
-- Even when `equals` and `hashCode` are provided, if 
-  the test results in the following, it's time to debug.
-  Add `toString()` to display where the two instances
-  are different.
+  ```
+    @Override
+    public TimeEntry update(Long id, TimeEntry timeEntry) {
+        if (find(id) == null) return null;
+
+        TimeEntry updatedEntry = new TimeEntry(
+            id,
+            timeEntry.getProjectId(),
+            timeEntry.getUserId(),
+            timeEntry.getDate(),
+            timeEntry.getHours()
+        );
+
+        timeEntries.replace(id, updatedEntry);
+        return updatedEntry;
+    }
+  ```
   
   ```
-  Expected :io.pivotal.pal.tracker.TimeEntry@a007329
-  Actual   :io.pivotal.pal.tracker.TimeEntry@9f25ba8
+    public TimeEntry update(long id, TimeEntry timeEntry) {
+        TimeEntry oldTimeEntry = timeEntryRepositoryMap.get(id);
+        if (oldTimeEntry == null) return  null;
+        oldTimeEntry.setHours(timeEntry.getHours());
+        oldTimeEntry.setDate(timeEntry.getDate());
+        oldTimeEntry.setUserId(timeEntry.getUserId());
+        oldTimeEntry.setProjectId(timeEntry.getProjectId());
+        timeEntryRepositoryMap.put(id, oldTimeEntry);
+        return oldTimeEntry;
+    }
   ```
+
+- Show them how to compare code within IntelliJ
   
-#### TimeEntryController test
+### TimeEntryController test
 
 - *We are not testing that the create operation sets the location 
  response field - verify the solution is something like following:
@@ -596,7 +665,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
  
  - Make sure @RequestBody and @PathVariable are used appropriately
 
-### Trouble-shooting
+## Trouble-shooting
  
 - *Somehow adding the code above results in the following error
 
@@ -616,6 +685,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
  
   It is because testing did not set the context right. 
   See https://stackoverflow.com/questions/9419606/unit-testing-a-method-dependent-to-the-request-context
+  Chaning the setUp() method as following works.
   
   ```
     @Before
@@ -627,28 +697,16 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
     }
   ```
   
-- *Deploying the app to the pcf still shows that it is using
-  random route instead of the route we define in the `manifest.yml`
-  
-  ```
-  < workspace/pal-tracker - master > cf apps
-  Getting apps in org sashin-org / space sang-space as sashin@pivotal.io
-  OK
 
-  name          requested state   instances   memory   disk   urls
-  pal-tracker   started           1/1         1G       1G     pal-tracker-overacute-xx
-  ```
-  
-  It was because there was a typo (route instead of routes) 
-  in the routes setting in
-  the manifest.yml file
-  
-  ```
-  route:
-  - route: pal-tracker-sang-shin.cfapps.io
-  ```
+## Local testing
 
-#### Local testing
+- ??Running the application within the IDE even though my 2019.1
+  is set to use Gradle Test Runner -  ?? need to try with 2019.2
+
+  ```
+  Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'welcome.message' in value "${welcome.message}"
+
+  ```
 
 - *experience the following problem when testing TimeEntryApiTest's
   create and read tests
@@ -684,10 +742,16 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   ```
 
 
-### Challenge Questions
+## Challenge Questions
 
-- What are the differences between unit testing vs integration testing? 
-  In “pal-tracker” project, which tests are integrating testing?
+- What are the differences between unit testing vs integration testing vs end-to-end testing? 
+  In “pal-tracker” project, which tests are unit testing?
+  integrating testing or end-to-end testing?
+- Can you do "integration" or "end-to-end" testing as part of
+  CI/CD pipeline?
+- What are differences between `RestTemplate` vs `TestRestTemplate`?
+- When do you want to use `@SpringBootTest` vs `@ContextConfiguration`
+  for your testing?
 - Why TimeEntryControllerTest code needs mocking while 
   InMemoryTimeEntryRepositoryTesting code doesn’t?
 - What is the difference between stubbing and mocking? When
@@ -701,6 +765,9 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
 - What is the another way of creating InMemoryTimeEntryRepository bean 
   other than using @Bean in the configuration class? What 
   would be pros and cons of each approach?
+- What does SOLID (design principles) stand for?
+- What are the examples of “Open for extension Closed for 
+  modification” design principle in the “pal-tracker” project?
   
 - In the case of testing respository's delete(..), why there is
   no training method? it is because respository's delete method
@@ -716,11 +783,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
     }
   ```
   
-- What does SOLID (design principles) stand for?
-- What are the examples of “Open for extension Closed for 
-  modification” design principle in the “pal-tracker” project?
-  
-### Answers to challenge questions
+## Answers to challenge questions
 
 - (How does verification work?)
   Mockito.verify(MockedObject).someMethodOnTheObject(someParametersToTheMethod);
@@ -734,7 +797,7 @@ Great presentation on 12 factors https://content.pivotal.io/slides/the-12-factor
   value.  So if the mock object is not called, the correctness of
   the unit test is not guaranteed.  
   
-### Slack channel tips
+## Slack channel tips
 
 - `httpie` is easier to use than `curl` especially for posting.
 
@@ -758,7 +821,9 @@ Of course, if you like GUI REST client, you can use PostMan
 sudo snap install postman
 ```
 
-### Wrap-up discusson
+- TDD presentation - https://www.youtube.com/watch?v=s9vt6UJiHg4
+
+## Wrap-up discusson
 
 - Discuss pros and cons of @Bean vs component scan
 - Discuss pros and cons of using @Bean vs @Repository
@@ -767,24 +832,30 @@ sudo snap install postman
 
 - *Brad went over the 12 factors - we covered 8 of
   12 factors so far
+  
 
   
-## Database Migration
+# Database Migration
 
-### Tips
+## Talking points
+
+- Talk about the need of migration
+- Talk about service in PAS
+
+## Tips
 
 - Make sure to use double underscore when creating migration files
 - *How do you see the list of services using brew?  `brew services list`
 - When executing flyway command, username and password will be asked.
   Enter `tracker` and no password
   
-### Slack channel tips
+## Slack channel tips
 
 ```
 A couple of CF plugins I would recommend to install: “open” and “mysql” from https://plugins.cloudfoundry.org/
 
-“open”plugin opens a browser for you with the right route by typing “cf open pal-tracker”
-“mysql” plugin lets you access the mysql database service in the same way you were able to access your local mysql database by “cf mysql tracker-database”.
+- “open”plugin opens a browser for you with the right route by typing “cf open pal-tracker”
+- “mysql” plugin lets you access the mysql database service in the same way you were able to access your local mysql database by “cf mysql tracker-database”.
 
 The installation instruction is right there in the website above. But they are as following:
 
@@ -792,11 +863,11 @@ cf install-plugin -r CF-Community “open”
 cf install-plugin -r CF-Community “mysql-plugin”
 ```
 
-### Student questions
+## Student questions
 
 - Can ssh enabled per space basis?
 
-### Trouble-shooting
+## Trouble-shooting
 
 - *Somehow I could not display the shell output in the job #2 in
   in Travis.  It just showed the following with (3) on-going.
@@ -808,13 +879,14 @@ cf install-plugin -r CF-Community “mysql-plugin”
   You just have to wait a bit.
   
   
-### References
+## References
 
 - [Migration stratgies](https://github.com/pivotal-bill-kable/spring-cloud-flyway-migration-demo)
+- [Migration stratgies and best practices](https://www.talend.com/resources/understanding-data-migration-strategies-best-practices/)
 
-## Spring JdbcTemplate
+# Spring JdbcTemplate
 
-### Misc
+## Misc
 
 -   Regarding the usage of `useTimezone`
 
@@ -852,7 +924,7 @@ cf install-plugin -r CF-Community “mysql-plugin”
     }
    ```
 
-### Tips
+## Tips
 
 1. Using curl and httpie for creating time-entry
 
@@ -898,7 +970,7 @@ Restart the apps
 cf restart cups-example 
 ```
 
-### Trouble-shooting
+## Trouble-shooting
 
 1. *When running a test, I get a flyway problem in the build.gradle
 
@@ -949,16 +1021,16 @@ cf restart cups-example
     
     ?? Spring cloud connector
 
-### Wrap-up talking points
+## Wrap-up talking points
 
 -   Self-service
 -   No need to set up database credentials
 -   Correct DataSource bean automatically created 
     depending on where the application gets deployed
 
-## Actuator
+# Actuator
 
-### Tips
+## Tips
    
 - The META-INF/build-info.properties is under build/resources/main directory
 
@@ -976,11 +1048,11 @@ cf restart cups-example
     }
   ```
    
-### Talking points
+## Talking points
 
 - For /health value proposition, talk about the case "applicatio hang" - GC hang - CF does just port health check
 
-### Trouble-shooting
+## Trouble-shooting
 
 - * HealthApiTest fails due the following reason even though 
   accessing the endpoint from a browser works fine. Why?
@@ -991,7 +1063,7 @@ cf restart cups-example
   ```
 
   
-## Scaling lab
+# Scaling lab
 
 - Auto-scaling lab, in the Recent History, you will see something
 
@@ -1001,18 +1073,18 @@ cf restart cups-example
 
 - ?? When applying auto-scaling, what is is "Percent of traffic to apply - 95% or 99%"?
 
-## App Continnum
+# App Continnum
 
-### Talking points
+## Talking points
 
 - Delay architectural decision to as latest point as possible (Mike)
 - Use a single repository for multiple applications as long as possible
   - It is easy to move around domains between applications
   
 
-## Distributed System
+# Distributed System
 
-### Talking points
+## Talking points
 
 -   Explain what the `${USER_ID}` and `${PROJECT_ID}` variables for 
 -   Describe the relationship among the 4 apps
@@ -1021,52 +1093,53 @@ cf restart cups-example
     of the registration server
 -   Demo how to use httpie or postMan
 
+## Code review
 
-### Tips     
-   
-- siege -c255 urls.txt
+-   Whenever a new `backlog`, `allocation`, `timesheet` needs to 
+    be created, backlog, allocation, and timesheet application has 
+    to know if a corresponding `Project` is already enabled or not. 
+    
+-   Each of these components (backlog, allocation, timesheet) has
+    controller class in which it uses `projectIsActive` method
+    
+    ```
+    @PostMapping
+    public ResponseEntity<AllocationInfo> create(@RequestBody AllocationForm form) {
 
-  ```
-  https://registration-pal-sangshin.apps.evans.pal.pivotal.io/users/1
-  https://registration-pal-sangshin.apps.evans.pal.pivotal.io/accounts?ownerId=1
-  https://registration-pal-sangshin.apps.evans.pal.pivotal.io/projects?accountId=1
-  https://allocations-pal-sangshin.apps.evans.pal.pivotal.io/allocations?projectId=1
-  https://backlog-pal-sangshin.apps.evans.pal.pivotal.io/stories?projectId=1
-  https://timesheets-pal-sangshin.apps.evans.pal.pivotal.io/time-entries?userId=1
-  ```
-  
-- [Postman collection](https://github.com/pivotal-bill-kable/cnd-postman-collections)
-  
-### Challenge questions
+        if (projectIsActive(form.projectId)) {
+            AllocationRecord record = gateway.create(formToFields(form));
+            return new ResponseEntity<>(present(record), HttpStatus.CREATED);
+        }
 
-- What is the relationship among the 4 applications in the
-  `pal-tracker-distributed`?
-  
-  - Whenever a new backlog, allocation, timesheet needs to be created,
-    backlog, allocation, and timesheet application has to know if
-    a corresponding Project is already enabled or not. 
+        return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+    }
+    
+    private boolean projectIsActive(long projectId) {
+        ProjectInfo project = client.getProject(projectId);
 
-- Why are we using a single repository for all 4 microservices?  
-  Isn't it a violation of the first rule of 12 factor app? 
+        return project != null && project.active;
+    }
+    ```
+    
+-  Each of these component has `ProjectClient` class, in
+   which `getProject(..)` method is provided
 
-- Why are there variations of a domain class, for example,
-  why are there TimeEntryForm, TimeEntryInfo, TimeEntryRecord, TimeEntryFields classes?
-  Where are they used?
-  
-- In the "pal-tracker-distributed", we use 4 different databases, one for
-  each application. 
-  - Is it a recommended practice?  Should we have a single database instead?
-  - Is it possible to have database inconsistency among the databases if
-    there are multiple databases? If it is, how do we solve it?
-    (For example, a user is deleted in User database, how does other
-    databases reflect that change?)
-  - Is it OK to have duplication among the multiple databases?
-    (In 'pal-tracker-distributed", we don't have any duplcate data.)
+   ```
+   public class ProjectClient {
 
-- Application code should be insulated from data access logic?
-  How do we achieve that in the "pal-tracker-distributed"? 
-  
-### Issues to be discussed
+    private final RestOperations restOperations;
+    private final String registrationServerEndpoint;
+
+    public ProjectClient(RestOperations restOperations, String registrationServerEndpoint) {
+        this.restOperations= restOperations;
+        this.registrationServerEndpoint = registrationServerEndpoint;
+    }
+
+    public ProjectInfo getProject(long projectId) {
+        return restOperations.getForObject(registrationServerEndpoint + "/projects/" + projectId, ProjectInfo.class);
+    }
+   }
+   ```
 
 - Variation of domian class
   - TimeEntryForm (under .timesheets package)
@@ -1084,14 +1157,97 @@ cf restart cups-example
   - AccountDataGateway
   - UserDataGateway
   - StoryDataGateway
+  
+## Tips     
+   
+- siege -c255 urls.txt
+
+  ```
+  https://registration-pal-sangshin.apps.evans.pal.pivotal.io/users/1
+  https://registration-pal-sangshin.apps.evans.pal.pivotal.io/accounts?ownerId=1
+  https://registration-pal-sangshin.apps.evans.pal.pivotal.io/projects?accountId=1
+  https://allocations-pal-sangshin.apps.evans.pal.pivotal.io/allocations?projectId=1
+  https://backlog-pal-sangshin.apps.evans.pal.pivotal.io/stories?projectId=1
+  https://timesheets-pal-sangshin.apps.evans.pal.pivotal.io/time-entries?userId=1
+  ```
+  
+- [Postman collection](https://github.com/pivotal-bill-kable/cnd-postman-collections)
+  
+## Challenge questions
+  
+- Why are we using a single repository for all 4 microservices?  
+  Isn't it a violation of the first rule of 12 factor app? 
+
+- Why are there variations of a domain class, for example,
+  why are there `TimeEntryForm`, `TimeEntryInfo`, `TimeEntryRecord`, `TimeEntryFields` classes?
+  Where are they used?
+  
+- In the "pal-tracker-distributed", we use 4 different databases, one for
+  each application. 
+  - Is it a recommended practice?  Should we have a single database instead?
+  - Is it possible to have database inconsistency among the databases if
+    there are multiple databases? 
+    If it is not possible, what is our alternative?
+    (For example, a user is deleted in User database, how does other
+    databases reflect that change?)
+  - Is it OK to have duplication among the multiple databases?
+    (In 'pal-tracker-distributed", we don't have any duplcate data.)
+
+- Application code should be insulated from data access logic?
+  How do we achieve that in the "pal-tracker-distributed"? 
+  
+## Trouble-shooting
+
+- *Somehow `Travis` deployment fails 
+
+  ```
+  The command "wget -P  ... exited with 0.
 
 
-## Service Discovery
+  Deploying application
+  failed to deploy
+  ```
+  
+  It was because I was using wrong domain `chicken` instead of `evans`.
+  Expand the downward arrow to see what is being used:
+  
+  ```
+  Deploying application
+  Pushing from manifest to org sashin.pivotal.io / space sandbox as sashin@pivotal.io...
+  Using manifest file /home/travis/build/sashinpivotal/pal-tracker-distributed/manifest.yml
+  Getting app info...
+  The route backlog-pal-sang-shin.apps.chicken.pal.pivotal.io did not match any existing domains.
+  FAILED
+  Logging out sashin@pivotal.io...
+  OK
+  Failed to push app
+  ailed to deploy
+  ```
+  
+  You have to change both route and registration server address
+  
+  ```
+  applications:
+- name: tracker-timesheets
+  path: ./applications/timesheets-server/build/libs/timesheets-server.jar
+  routes:
+  - route: timesheets-pal-sang-shin.apps.evans.pal.pivotal.io
+  memory: 1G
+  instances: 1
+  env:
+    REGISTRATION_SERVER_ENDPOINT: http://registration-pal-sang-shin.apps.evans.pal.pivotal.io
+    JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
+  services:
+  - tracker-timesheets-database
+  ```
+  
 
-### Talking points
+# Service Discovery
+
+## Talking points
 
 -   Service discovery
-	-   Explain why service discovery and registation could be useful
+	-   Explain why service discovery and registration could be useful
 	    in cloud
 	    - you don't want use hard-coded address of target service
 	    - in the cloud environment, services come and go
@@ -1108,7 +1264,7 @@ cf restart cups-example
 -   The terminology of spring cloud services in the code 
     needs to be explained
 
-### Tips
+## Tips
 
 -  PWS uses the following - see `build/version`
 
@@ -1173,7 +1329,7 @@ cf restart cups-example
   }
   ```
 
-### Challenge questions
+## Challenge questions
 
 -  Can discovery service and client-side loadbalancing be used
    independently from each other?
@@ -1186,7 +1342,7 @@ cf restart cups-example
    able to choose different load-balancing schemes at runtime.
    What are the example client-side loadbalancing schemes?
    
--  What does @LoadBalanced annotation used over RestTemplate
+-  What does `@LoadBalanced` annotation used over `RestTemplate`
    do for the application?
    
 -  In the early presentation, we talked about one of the 
@@ -1196,7 +1352,7 @@ cf restart cups-example
    of spring-cloud-commons and add it to the rest-support's
    build.gradle.  Is this recommended practice? 
    
-### Challenge exercise
+## Challenge exercise
    
 -  Retrieve the list of apps using rest call
 
@@ -1207,7 +1363,7 @@ cf restart cups-example
    https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
    ```
 
-### Container to Container networking
+## Container to Container networking
 
 - Add network policy
 
@@ -1219,27 +1375,27 @@ cf restart cups-example
 - [GoRouter does honor Ribbon load balancing algorithm](http://docs.pivotal.io/spring-cloud-services/1-4/common/service-registry/connectors.html#instance-specific-routing-in-ribbon)
 - [Configuring PCF Container-to-Container Networking, Service Registry and Client Load Balancing (SpringOne 2017)](https://www.youtube.com/watch?v=1WJhFhBr-0Q)
 
-### Client side load balancing
+## Client side load balancing
 
 - [Ribbon](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html)
 
-## Circuit breaker
+# Circuit breaker
 
-### Talking points
+## Talking points
 
 -   The @Hystrix command needs to be duplicated in 3 different places -
     there is a reason for this  
     
-### Tips
+## Tips
 
 -   The console for the evans is "login.sys.evans.pal.pivotal.io"
 
-### References
+## References
 
 -   [Circuit breaker diagrams](https://github.com/Netflix/Hystrix/wiki)
 -   [Hystrix dashboard](https://github.com/Netflix-Skunkworks/hystrix-dashboard/wiki)
 
-### Misc
+## Misc
 
 - commands at the local machine
 
@@ -1309,7 +1465,7 @@ while true; sleep .3; do curl -i -XPOST -H"Content-Type: application/json" alloc
   brew services cleanup
   ```
   
-### Challenge questions (Circuit breaker lab)
+## Challenge questions (Circuit breaker lab)
 
 - Can @Hystrix command can be chained?
 - When is the suitable usecase where circuit breaker can be used?
@@ -1319,17 +1475,17 @@ while true; sleep .3; do curl -i -XPOST -H"Content-Type: application/json" alloc
   (as shown in the 3rd figure in the https://github.com/Netflix/Hystrix/wiki)?
 
     
-## Securing Distributed Application
+# Securing Distributed Application
 
-### Talking points
+## Talking points
 
-### Demo steps
+## Demo steps
 
 -   Use `security-solution` as base code
 -   Change 4 manifest files to reflect route
 -   Make sure to create services manually at PCF
 
-### Trouble-shooting tips
+## Trouble-shooting tips
 
 -   Just found out why I had failure on my oauth2 testing.  I was running the apps using Spring Boot dashboard, which fails to read the security property values from the build.gradle.
 But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradle”?
@@ -1367,7 +1523,7 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
   com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
   ```
    
-### Tips
+## Tips
 
 -  Getting token from local authorization server
 
@@ -1393,16 +1549,16 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
   -  [OAuth2 overview presentation](https://www.slideshare.net/SangShin1/spring4-security-oauth2?qid=2163e6e6-ae99-48b0-afcc-88380b8724d8&v=&b=&from_search=1)
   -  [OAuth2 in cloud native environment presentation (slides 7 to 37)](https://www.slideshare.net/WillTran1/enabling-cloud-native-security-with-oauth2-and-multitenant-uaa?qid=2c77ae8e-b2d5-4319-baad-1cd1eb8fec42&v=&b=&from_search=1)
 
-## Config Server
+# Config Server
 
-### Talking points
+## Talking points
 
 -   ?? Is this lab dependent on security lab?
 -   ?? When to use branch?
 -   Fault tolerance
 -   Confguration drift
 
-### Challenge questions
+## Challenge questions
 
 -   It is a good practice to save security-sensitive data such as
     passwords in the config server? If not, what can we do?
@@ -1412,12 +1568,12 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 -   Is it a good practice to maintain configuration data in a
     single repository for multiple environments?
 
-### Trouble-shooting
+## Trouble-shooting
 
 - Setting the management include thing in the manifest file
   with just * fails - use "*" not just *
 
-### Tips
+## Tips
 
 - Creating `tracker-config-server` service instance in PCF
 
