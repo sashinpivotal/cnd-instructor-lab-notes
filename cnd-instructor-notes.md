@@ -171,6 +171,11 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
   git pull --allow-unrelated-histories
   ```
 
+# Pair Programming
+
+- Communicate what you do to your partner - if you are typing or
+  moving your mouse without talking, you are doing a disservice 
+  to your pair partner
 
 # Pair rotation
 
@@ -185,22 +190,41 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 4. git remote remove other-origin
 ```
 
+- Before the rotation, please do
+	- Ensure both pairs have code on their github
+
 - Sarah used post-it tag to designate a `driver` of the pair
   (ownder of GitHub and PCF account)
   
-- For each pair rotation, the following need to be changed to
-  the pink post-it person (driver)
+- My scheme - to make sure non-driver become a driver
+  - everyone moves to the right by one position
+  - non-driver in the pal-tracker will be become a driver 
+
+- After the rotation, the following need to be changed to
+  the pink post-it person (driver
   - Slack
   - PCF
   - GIT
   - Assignment Submission
   - Travis CI (edited) 
 
-- Steps of new pairing
-	- Ensure both pairs have code on their github
-	- Sticky person stays
-	- Find a new pair
-	- Upadte assignment submission emails in build.gradle
+```
+Pair rotation guide:
+- Before the rotation, please ensure that both members of the pair
+  save the code to the Github repository
+- Log out from PCF, Slack, Travis CI
+- Once everyone is ready, everyone moves to the right by one seat. 
+  The rightmost person of the table goes to leftmost seat of
+  the table behind. (This is to make sure non-driver in the 
+  previous lab play the role of the driver)
+- Once sitting is complete, use the driver's (the machine with
+  the red post-it) credentials of the following:
+    - Slack
+    - PCF (PAS) 
+    - GIT
+    - Assignment Submission
+    - Travis CI (edited) 
+```
 
 # Meerkat
 
@@ -522,6 +546,28 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   Deploying application
   failed to deploy
   ```
+  
+- ?? What do you do with the following error? (I see several of
+  these in students as well)
+  
+  ```
+  $ echo "Downloading allocations server $RELEASE_TAG"
+  Downloading allocations server release-28
+  $ wget -P applications/allocations-server/build/libs https://github.com/$GITHUB_USERNAME/pal-tracker-distributed/releases/download/$RELEASE_TAG/allocations-server.jar
+  
+  ...
+
+  HTTP request sent, awaiting response... 404 Not Found
+  2019-11-07 15:00:20 ERROR 404: Not Found.
+  The command "wget -P applications/allocations-server/build/libs  https://github.com/$GITHUB_USERNAME/pal-tracker-distributed/releases/download/$RELEASE_TAG/allocations-server.jar" exited with 8.
+  ```
+  
+  It is because the Travis is looking for release-28 while
+  the github has release-27 - you can edit the release number
+  to correct it.
+  
+  Or "git push" does start the correct version. So in the
+  Github, it generates release-29 skipping release-28.
 
 ## Challenge questions
 
@@ -1062,6 +1108,11 @@ cf restart cups-example
   org.junit.ComparisonFailure: expected:<[200]> but was:<[503]>
   ```
 
+## Prometheus 
+
+- Try prometheus from the [following instruction](https://github.com/sashinpivotal/spring-boot-actuator-micrometer)
+  - Ignore the part of `setting actuator/prometheus endpoint` since
+    pal-tracker is not using security at the moment 
   
 # Scaling lab
 
@@ -1141,22 +1192,25 @@ cf restart cups-example
    }
    ```
 
-- Variation of domian class
-  - TimeEntryForm (under .timesheets package)
-  - TimeEntryInfo (under .timesheets package)
-  - TimeEntryRecord (under .timesheets.data package)
-  - TimeEntryFields (under .timesheets.data package)
-  
-- 4 different databases vs a single database
-  - take a look at schema files under `databases`
+-   Variation of domian class
 
-- Data access abstraction
-  - TimeEntryDataGateway 
-  - AllocationDataGateway
-  - ProjectDataGateway
-  - AccountDataGateway
-  - UserDataGateway
-  - StoryDataGateway
+    - TimeEntryForm (under .timesheets package)
+    - TimeEntryInfo (under .timesheets package)
+    - TimeEntryRecord (under .timesheets.data package)
+    - TimeEntryFields (under .timesheets.data package)
+  
+-   4 different databases vs a single database
+
+    - take a look at schema files under `databases`
+
+-   Data access abstraction
+
+    - TimeEntryDataGateway 
+    - AllocationDataGateway
+    - ProjectDataGateway
+    - AccountDataGateway
+    - UserDataGateway
+    - StoryDataGateway
   
 ## Tips     
    
@@ -1211,6 +1265,7 @@ cf restart cups-example
   It was because I was using wrong domain `chicken` instead of `evans`.
   Expand the downward arrow to see what is being used:
   
+  
   ```
   Deploying application
   Pushing from manifest to org sashin.pivotal.io / space sandbox as sashin@pivotal.io...
@@ -1228,17 +1283,17 @@ cf restart cups-example
   
   ```
   applications:
-- name: tracker-timesheets
-  path: ./applications/timesheets-server/build/libs/timesheets-server.jar
-  routes:
-  - route: timesheets-pal-sang-shin.apps.evans.pal.pivotal.io
-  memory: 1G
-  instances: 1
-  env:
-    REGISTRATION_SERVER_ENDPOINT: http://registration-pal-sang-shin.apps.evans.pal.pivotal.io
-    JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
-  services:
-  - tracker-timesheets-database
+  - name: tracker-timesheets
+    path: ./applications/timesheets-server/build/libs/timesheets-server.jar
+    routes:
+    - route: timesheets-pal-sang-shin.apps.evans.pal.pivotal.io
+    memory: 1G
+    instances: 1
+    env:
+      REGISTRATION_SERVER_ENDPOINT: http://registration-pal-sang-shin.apps.evans.pal.pivotal.io
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
+    services:
+    - tracker-timesheets-database
   ```
   
 
@@ -1246,12 +1301,21 @@ cf restart cups-example
 
 ## Talking points
 
+-   This lab has a lot of moving parts: service discovery/registration,
+    client side load-balancing, spring cloud dependencies, end-to-end 
+    testing.
+
 -   Service discovery
 	-   Explain why service discovery and registration could be useful
 	    in cloud
-	    - you don't want use hard-coded address of target service
 	    - in the cloud environment, services come and go
-	-   Use service discovery picture
+	    - you don't want use hard-coded address of target service
+	    
+	-   Discovery server can also play the role of making sure
+	    unresponsive servers are removed from the list
+	    
+	-   Use service discovery picture (the lab document does not have
+	    a link so I might have to draw one)
 
 -   Dependency management (using Spring cloud dependency slides)
     - [Neil's slide](https://docs.google.com/presentation/d/1sY6mz_SRfRO-KFonJDjfEujgTFNmDkddit5l090PEZM/edit?ts=5d5a5860#slide=id.p) is a good one
@@ -1260,51 +1324,18 @@ cf restart cups-example
 -   Client side Load balancer diagram
 	-  Relationship between service discovery and client 
     	side load balancer
+   -  RestTemplate annotated with @LoadBalanced annotation
+      will talk to discovery server and retrieves the
+      list of addresses and then perform client-side
+      load-balanced
 
--   The terminology of spring cloud services in the code 
+-   ??The terminology of spring cloud services in the code 
     needs to be explained
 
 ## Tips
 
--  PWS uses the following - see `build/version`
-
-   ```
-   > curl https://spring-cloud-service-broker.cfapps.io/actuator/info |json_pp
-   {
-   "git" : {
-      "branch" : "HEAD",
-      "commit" : {
-         "time" : "2018-08-17T09:08:06Z",
-         "id" : "6af8fcf"
-      }
-   },
-   "build" : {
-      "time" : "2018-08-31T15:04:36.801Z",
-      "artifact" : "spring-cloud-service-broker",
-      "group" : "io.pivotal.spring.cloud",
-      "version" : "2.0.2-build.3",
-      "name" : "service-broker"
-   }
-   ```
-
-   ```
-   springCloudVersion = SPRING_CLOUD_VERSION
-   springCloudServicesClientLibrariesVersion =   SPRING_CLOUD_SERVICES_CLIENT_LIBRARIES_VERSION
-   ```
-   
-   ```
-   springCloudVersion = "Finchley.RELEASE"
-   springCloudServicesClientLibrariesVersion = "2.0.3.RELEASE"
-   ```
-   
-- In order to fund out the latest versions of the above two,
-  either use mvnrepository.com or google
-  
-  `spring cloud services starter service registry maven`
-  
-  and see [maven repository for Spring cloud services starter service registry](https://mvnrepository.com/artifact/io.pivotal.spring.cloud/spring-cloud-services-starter-service-registry)
-   
 - apps.evans.pal.pivotal.io is using the following
+
 
   ```
   curl https://spring-cloud-broker.apps.evans.pal.pivotal.io/actuator/info
@@ -1329,6 +1360,81 @@ cf restart cups-example
   }
   ```
 
+-  PWS uses the following - see `build/version`
+
+   ```
+   > curl https://spring-cloud-service-broker.cfapps.io/actuator/info |json_pp
+   {
+   "git" : {
+      "branch" : "HEAD",
+      "commit" : {
+         "time" : "2018-08-17T09:08:06Z",
+         "id" : "6af8fcf"
+      }
+   },
+   "build" : {
+      "time" : "2018-08-31T15:04:36.801Z",
+      "artifact" : "spring-cloud-service-broker",
+      "group" : "io.pivotal.spring.cloud",
+      "version" : "2.0.2-build.3",
+      "name" : "service-broker"
+   }
+   ```
+   
+- Example
+
+   ```
+   springCloudVersion = SPRING_CLOUD_VERSION
+   springCloudServicesClientLibrariesVersion =   SPRING_CLOUD_SERVICES_CLIENT_LIBRARIES_VERSION
+   ```
+   
+   ```
+   springCloudVersion = "Finchley.RELEASE"
+   springCloudServicesClientLibrariesVersion = "2.0.3.RELEASE"
+   ```
+   
+- In order to find out the latest versions of the above two,
+  either use mvnrepository.com or google
+  
+  `spring cloud services starter service registry maven`
+  
+  and see [maven repository for Spring cloud services starter service registry](https://mvnrepository.com/artifact/io.pivotal.spring.cloud/spring-cloud-services-starter-service-registry)
+   
+
+-  Verification of the Health endpoint (after all work is done)
+
+   ```
+         "discoveryComposite" : {
+         "status" : "UP",
+         "details" : {
+            "eureka" : {
+               "status" : "UP",
+               "details" : {
+                  "applications" : {
+                     "BACKLOG-SERVER" : 1,
+                     "TIMESHEETS-SERVER" : 1,
+                     "ALLOCATIONS-SERVER" : 1,
+                     "EUREKA-SERVER" : 1,
+                     "REGISTRATION-SERVER" : 1
+                  }
+               },
+               "description" : "Remote status from Eureka server"
+            },
+            "discoveryClient" : {
+               "details" : {
+                  "services" : [
+                     "eureka-server",
+                     "allocations-server",
+                     "backlog-server",
+                     "registration-server",
+                     "timesheets-server"
+                  ]
+               },
+               "status" : "UP"
+            }
+         }
+   ```
+   
 ## Challenge questions
 
 -  Can discovery service and client-side loadbalancing be used
@@ -1347,7 +1453,7 @@ cf restart cups-example
    
 -  In the early presentation, we talked about one of the 
    benefits of using Spring Boot is its dependency management.
-   But somehow in this lab (Dicovery lab), we were asked to do 
+   But somehow in this lab (Discovery lab), we were asked to do 
    manual dependency management such as finding out the version
    of spring-cloud-commons and add it to the rest-support's
    build.gradle.  Is this recommended practice? 
@@ -1365,10 +1471,30 @@ cf restart cups-example
 
 ## Container to Container networking
 
+- When container-to-container networking is enabled, the
+  Eureka server will maintain the addesses of the service
+  instances in the form of internal ip addresses, with
+  which the calling service can communicate directly
+  with the destination service
+  
+- *Is container to container networking enabled in evans?
+  Looks like it does not.
+  
+  ```
+  < workspace/pal-tracker-distributed - master > cf add-network-policy tracker-allocations --destination-app tracker-registration --protocol tcp --port 8080-8090
+Adding network policy to app tracker-allocations in org sashin.pivotal.io / space sandbox as sashin@pivotal.io...
+provided scopes [cloud_controller.read password.write cloud_controller.write openid uaa.user] do not include allowed scopes [network.admin network.write]
+FAILED
+  ```
+
 - Add network policy
 
   ```
   cf add-network-policy SOURCE_APP --destination-app DESTINATION_APP -s DESTINATION_SPACE_NAME -o DESTINATION_ORG_NAME --protocol (tcp | udp) --port RANGE
+  ```
+  
+  ```
+  cf add-network-policy tracker-allocations --destination-app tracker-registration --protocol tcp --port 8080-8090
   ```
   
 - [Configuring Cross Cloud Foundry Service Registy (route mode)](http://docs.pivotal.io/spring-cloud-services/1-4/common/service-registry/enabling-peer-replication.html)
@@ -1378,6 +1504,14 @@ cf restart cups-example
 ## Client side load balancing
 
 - [Ribbon](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html)
+
+## Trouble-shooting
+
+- ?? I get the following error when deploying the app
+
+  ```
+  2019-11-07T10:17:53.13-0500 [APP/PROC/WEB/2] OUT Caused by: java.lang.NoClassDefFoundError: org/springframework/cloud/config/client/ConfigServicePropertySourceLocator
+  ```
 
 # Circuit breaker
 
@@ -1435,8 +1569,9 @@ while true; sleep .3; do curl -i -XPOST -H"Content-Type: application/json" alloc
 - commands at PCF with evans
 
 ```
-// create account
+// create user and account
 curl -i -XPOST -H"Content-Type: application/json" registration-pal-sang-shin.apps.evans.pal.pivotal.io/registration -d'{"name": "Pete"}'
+
 curl -i registration-pal-sang-shin.apps.evans.pal.pivotal.io/accounts?ownerId=1
 
 // create 2 projects
@@ -1472,7 +1607,7 @@ while true; sleep .3; do curl -i -XPOST -H"Content-Type: application/json" alloc
   Can it be used for non-idempotent operations?
 - How would you handle a case where dependency service simply
   timed out and the calling service's threads get depleted
-  (as shown in the 3rd figure in the https://github.com/Netflix/Hystrix/wiki)?
+  (as shown in the [3rd figure in the https://github.com/Netflix/Hystrix/wiki](https://github.com/Netflix/Hystrix/wiki))?
 
     
 # Securing Distributed Application
@@ -1482,7 +1617,7 @@ while true; sleep .3; do curl -i -XPOST -H"Content-Type: application/json" alloc
 ## Demo steps
 
 -   Use `security-solution` as base code
--   Change 4 manifest files to reflect route
+-   Change 4 manifest files to reflect correct route
 -   Make sure to create services manually at PCF
 
 ## Trouble-shooting tips
@@ -1504,9 +1639,9 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
    application.oauth-enabled=false
    ```
    
-- I see p-identity with both uaa and p-identity plan. Which should
+- I see p-identity with both uaa and p-identity plans. Which should
   we use?  I used uaa and it worked fine.  
-  ?? When a student used `System` paln within the `App manager`, 
+  ?? When a student used `System` plan within the `App manager`, 
   then it did not work.
 
    ```
@@ -1535,7 +1670,7 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 
    ```
    cf env tracker-registration
-   curl -k https://login.sys.evans.pal.pivotal.io/oauth/token -i -u ea47b39b-06ab-4c01-a961-d3cec5c6be8f:7ffbc342-d529-42fc-8868-17b897509f1b -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
+   curl -k https://login.sys.evans.pal.pivotal.io/oauth/token -i -u 04f5dae7-0f07-47ca-9776-71e681cb6110:29e9bca4-d08a-47e6-af3c-d30eacf4efd2 -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
    ```
 
 -  How to access your allocation server with security in PCF
@@ -1544,43 +1679,6 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
    curl -i -XPOST -H"Content-Type: application/json" registration-pal-sang-shin.apps.evans.pal.pivotal.io/registration -H"Authorization: Bearer <token>" -d'{"name": "Pete"}'
    ```
    
-### Useful presentations on OAuth2
-
-  -  [OAuth2 overview presentation](https://www.slideshare.net/SangShin1/spring4-security-oauth2?qid=2163e6e6-ae99-48b0-afcc-88380b8724d8&v=&b=&from_search=1)
-  -  [OAuth2 in cloud native environment presentation (slides 7 to 37)](https://www.slideshare.net/WillTran1/enabling-cloud-native-security-with-oauth2-and-multitenant-uaa?qid=2c77ae8e-b2d5-4319-baad-1cd1eb8fec42&v=&b=&from_search=1)
-
-# Config Server
-
-## Talking points
-
--   ?? Is this lab dependent on security lab?
--   ?? When to use branch?
--   Fault tolerance
--   Confguration drift
-
-## Challenge questions
-
--   It is a good practice to save security-sensitive data such as
-    passwords in the config server? If not, what can we do?
-    
--   What happens when a config server is not available?
-    
--   Is it a good practice to maintain configuration data in a
-    single repository for multiple environments?
-
-## Trouble-shooting
-
-- Setting the management include thing in the manifest file
-  with just * fails - use "*" not just *
-
-## Tips
-
-- Creating `tracker-config-server` service instance in PCF
-
-  ```
-  cf create-service p-config-server standard tracker-config-server -c "{\"git\": {\"uri\": \"https://github.com/sashinpivotal/tracker-config.git\", \"label\": \"master\"}}"
-  ```
-  
 -  Getting token from local authorization server
 
    ```
@@ -1609,3 +1707,43 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
    cf env tracker-allocation
    curl -k https://login.sys.evans.pal.pivotal.io/oauth/token -i -u ea47b39b-06ab-4c01-a961-d3cec5c6be8f:7ffbc342-d529-42fc-8868-17b897509f1b -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
    ```
+   
+### Useful presentations on OAuth2
+
+  -  [OAuth2 overview presentation](https://www.slideshare.net/SangShin1/spring4-security-oauth2?qid=2163e6e6-ae99-48b0-afcc-88380b8724d8&v=&b=&from_search=1)
+  -  [OAuth2 in cloud native environment presentation (slides 7 to 37)](https://www.slideshare.net/WillTran1/enabling-cloud-native-security-with-oauth2-and-multitenant-uaa?qid=2c77ae8e-b2d5-4319-baad-1cd1eb8fec42&v=&b=&from_search=1)
+
+# Config Server
+
+## Talking points
+
+-   *Is this lab dependent on security lab? Yes, you can do this
+    lab without doing security lab
+-   ?? When to use branch?
+-   Fault tolerance
+-   Confguration drift
+
+## Challenge questions
+
+-   It is a good practice to save security-sensitive data such as
+    passwords in the config server? If not, what can we do?
+    
+-   What happens when a config server is not available?
+    
+-   Is it a good practice to maintain configuration data in a
+    single repository for multiple environments?
+
+## Trouble-shooting
+
+- Setting the management include thing in the manifest files
+  with just * fails - use `"*"` not just `*`
+
+## Tips
+
+- Creating `tracker-config-server` service instance in PCF
+
+  ```
+  cf create-service p-config-server standard tracker-config-server -c "{\"git\": {\"uri\": \"https://github.com/sashinpivotal/tracker-config.git\", \"label\": \"master\"}}"
+  ```
+  
+- Creating bootRun and
