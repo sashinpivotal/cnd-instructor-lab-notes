@@ -5,31 +5,47 @@
 - We can send the following message before cohort gets started
 
   ```
-  By now, I assume everyone can access the course contents
-  from the following site
+  Hello,
   
-   http://course.education.pivotal.io 
+  My name is Sang Shin. I am one of the 4 instructors from 
+  Pivotal (now part of VMWare) of this PAL course. A few
+  things to communicate before we get started.
+      
+  - Please make sure you can access the course 
+    contents from the following site
   
-  Please make sure you receive slack channel message from
-  PAL-Cloud-OPS team which provides your own PCF credentials 
-  like following:
+      http://courses.education.pivotal.io 
   
-    Hi <Your name>, welcome to Accenture. The below information 
-    will be useful throughout the course to access materials and 
-    infrastructure. View discussion about your course in 
-    #torontoc-nov-2019-cnd.
-    Cohort ID: 349803372
-    PCF Foundation API: api.sys.evans.pal.pivotal.io
-    PCF Org: <your PCF org>
-    PCF Username: <your email address>
-    PCF Password: <password>
+  - I assume everyone received slack channel message from
+    PAL-Cloud-OPS team which provides individual 
+    PCF (PAS) credentials like following:
   
-  From tomorrow morning, all our communication will be 
-  through our #torontoc-nov-2019-cnd slack channel.
+    Hi <Your name>, welcome to Mad Hatter. The below 
+    information will be useful throughout the course to 
+    access materials and infrastructure. View discussion 
+    about your course in #bostonma-jan-2020-cnd.
   
-  BTW, if this is your first time accessing Slack channel, 
-  please create an account via http://palexternal.slack.com
-  using your Accenture email address.
+       Cohort ID: 349803460
+       PCF Foundation API: api.sys.evans.pal.pivotal.io
+       PCF Org: <your own PCF org>
+       PCF Username: <your own email address>
+       PCF Password: <your own pcf password>
+     
+    (The above credentials can be also accessible from
+    http://courses.education.pivotal.io - there is link
+    by the PAL Developer course entry)
+  
+  - Once everyone is onboard, all our communication will be 
+    through our #bostonma-jan-2020-cnd slack channel during
+    the course.
+  
+    BTW, if this is your first time accessing Slack channel, 
+    please create an account via http://palexternal.slack.com
+    using your email address.
+  
+  If you have any questions, please feel free to respond
+  to this email.
+  
   ```
 
 # Getting started (logistics)
@@ -78,8 +94,8 @@
 
   ```
   Cohort Information:
-  Cohort Id: 349803278
-  Course Content: https://courses.education.pivotal.io/c/349803278
+  Cohort Id: xxxxxx
+  Course Content: https://courses.education.pivotal.io/c/xxxxx
   MeerKats password: keepitsimple
   Parrit: https://parrit.cfapps.io/bostonma-aug-2019-cnd (password:  keepitsimple)
   ```
@@ -89,7 +105,7 @@
   ```
   Cohort Information:
   Machine username/password: pivotaluser/keepitsimple
-  Cohort Id: 349803372
+  Cohort Id: 349803460
   Course URL: https://courses.education.pivotal.io
   PCF API endpoint: https://api.sys.evans.pal.pivotal.io
   PCF web UI: https://login.sys.evans.pal.pivotal.io
@@ -179,34 +195,28 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
 # Pair rotation
 
+- Before the rotation, please do ensure both pairs 
+  have code on their own github
+
 - Mention this after `pal-tracker` lab and just before 
   `pal-tracker-distributed` (This is what Brad sent out)
 
 ```
 @here This morning before we rotate pairs:
-1. The other pair should create a Github repository for `pal-tracker`
+1. The other pair partner should create a Github repository for `pal-tracker`
 2. git remote add other-origin <github repo url> 
 3. git push --tags -f  -u other-origin master
 4. git remote remove other-origin
 ```
 
-- Before the rotation, please do
-	- Ensure both pairs have code on their github
-
 - Sarah used post-it tag to designate a `driver` of the pair
-  (ownder of GitHub and PCF account)
+  (ownder of GitHub and PAS account)
   
 - My scheme - to make sure non-driver become a driver
   - everyone moves to the right by one position
   - non-driver in the pal-tracker will be become a driver 
 
-- After the rotation, the following need to be changed to
-  the pink post-it person (driver
-  - Slack
-  - PCF
-  - GIT
-  - Assignment Submission
-  - Travis CI (edited) 
+- Use the following message on slack for pair rotation
 
 ```
 Pair rotation guide:
@@ -232,7 +242,7 @@ Pair rotation guide:
 
 - [default keymap](https://resources.jetbrains.com/storage/products/intellij-idea/docs/IntelliJIDEA_ReferenceCard.pdf)
 
-- Alt+Enter what is quick fix combination
+- Alt+Enter what is quick fix combination (Option+Enter for Mac)
 - Alt+Insert for "generate" (CMD+N for Mac)
 - Ctrl+N for "opening a class" (CMD+O for Mac)
 - Ctrl+Shift+N for "open a file" 
@@ -253,6 +263,7 @@ Pair rotation guide:
 
 - Talk about dependency injection - what it is and why
 - Mention that the `pal-tracker` directory is under `workspace` directory
+- pal-tracker codebase should be downloaded
 
 ## Project structure
   
@@ -296,7 +307,7 @@ Pair rotation guide:
   If you additionally want to use third-party plugins, task classes, or other classes (in the build script!), you have to specify the corresponding dependencies in the buildScript block.
   ```
   
-- ?? Why do we have the following in both buildscript 
+- *Why do we have the following in both buildscript 
   section and regular section of the build.gradle?
   
   ```groovy
@@ -330,6 +341,12 @@ Pair rotation guide:
 
 -  What the purpose of "gradle wrapper"?
 
+## Challenge exercise
+
+-  Create a Person bean which has name and age fields
+-  Create CommandLineRunner that displays the name and age
+   of the person when application gets started
+
   
 # Configuring an App
   
@@ -338,7 +355,8 @@ Pair rotation guide:
 - Do we have to do “cf restage <app-name>” when we set a new environment variable?
 - What are the examples of PCF log types? (Google “PCF log types”)
 
-- What could be use cases where you will have to do “cf restage” (as opposed 
+- What could be use cases where you will have to do 
+  “cf restage” (as opposed 
   to “cf restart”)?
 - (Related question to the above) What are the differences among 3 different 
   ways of deploying the application on PCF - "pushing", "restaging", and "restart"?
@@ -398,12 +416,28 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
    - cannot solve process issues with technology
    
 - Travis
-   - concept is important, we dn't care which CI tool you use
+   - concept is important, we don't care which CI tool you use
 
 - What CD mean to you?
    - deployment to production is business decision not Eng decision
    - ??dep to prod is risky, user segregation??
    - github example, users, cost vs risk, regulartory constraint
+
+- Show how to set up Travis with GitHub and end result, how to
+  figure out errors
+  
+- Use instructor slide 
+  
+- Environment set-up in the pipeline (in the Travis)
+
+- Why you do not want to do "cf push" yourelf? 
+  (many org do not allow cf push)
+  (jar creation issue - we want to create jar file just once
+  and use it in multiple enviroments)
+  (jar versioning)
+  (buildpack has nothing to do with creating jar)
+
+## Wrap-up
 
 - Explain the following travis.yml 
 
@@ -615,13 +649,14 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 - Don't change the test code - that is the contract
 
 - Demo how to remove compile errors also show what to do
-  when there two compile 
+  when there are two compile 
   errors in a single line - you have to fix the one inside first
      
 - Make sure TimeEntry constructor with the correct naming - 
   otherwise you will have hard time reading test code
   
-- The reason we have a TimeEntry constructor that does not set id is because
+- The reason we have a TimeEntry constructor that does 
+  not set id is because
   we want to simulate the repository behavior where id gets generated 
   by the persistence layer
   
@@ -642,7 +677,8 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   instead of `List<TimeEntry>` - you need to manually
   change `boolean` to `List<TimeEntry>`
     
-- In the list() test, IntelliJ gets confused when there are 5 constructor
+- In the list() test, IntelliJ gets confused when there 
+  are 5 constructor
   arguments and there is already a constructor that takes 4 arguments.
   
 - Object comparison with `equals` and `hashCode`  
@@ -653,7 +689,8 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 
   - new ArrayList<>(timeEntryMap.values())
 
-- `timeEntryMap.replace(id, timeEntry)` returns an old value not new value
+- `timeEntryMap.replace(id, timeEntry)` returns an old 
+  value not new value
   You can use one of the following two schemes.
 
   ```
@@ -717,7 +754,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 
  
   ```
-         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
                                              .path("/{id}")
                                              .buildAndExpand(timeEntry.getId())
                                              .toUri();
@@ -745,14 +782,6 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   
 
 ## Local testing
-
-- ??Running the application within the IDE even though my 2019.1
-  is set to use Gradle Test Runner -  ?? need to try with 2019.2
-
-  ```
-  Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'welcome.message' in value "${welcome.message}"
-
-  ```
 
 - *experience the following problem when testing TimeEntryApiTest's
   create and read tests
@@ -787,6 +816,21 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   'welcome.message' in value welcome.message"
   ```
 
+- *I get the following error for mocking
+  It was because I was using wrong Mockito version
+  as documented in the lab document.
+  
+
+  ```
+  Underlying exception : java.lang.UnsupportedOperationException:    
+  Cannot define class using reflection
+  org.mockito.exceptions.base.MockitoException: 
+  Mockito cannot mock this class: interface   
+  io.pivotal.pal.tracker.TimeEntryRepository.
+
+  Mockito can only mock non-private & non-final classes.
+  If you're not sure why you're getting this error, please report to the mailing list.
+  ```
 
 ## Challenge Questions
 
@@ -796,14 +840,6 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 - Can you do "integration" or "end-to-end" testing as part of
   CI/CD pipeline?
 - What are differences between `RestTemplate` vs `TestRestTemplate`?
-- When do you want to use `@SpringBootTest` vs `@ContextConfiguration`
-  for your testing?
-- Why TimeEntryControllerTest code needs mocking while 
-  InMemoryTimeEntryRepositoryTesting code doesn’t?
-- What is the difference between stubbing and mocking? When
-  do you want use stubbing over mocking and vice-versa?
-- What is the reason controller TimeEntryControllerTest code 
-  has “verify” method?
 - From unit-testing standpoint, why is it a bad practice to create a 
   dependency object inside your class using “new” keyword or even using 
   factory (as opposed to getting it injected either through constructor 
@@ -814,6 +850,16 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 - What does SOLID (design principles) stand for?
 - What are the examples of “Open for extension Closed for 
   modification” design principle in the “pal-tracker” project?
+  
+- When do you want to use `@SpringBootTest` vs `@ContextConfiguration`
+  for your testing?
+- Why TimeEntryControllerTest code needs mocking while 
+  InMemoryTimeEntryRepositoryTesting code doesn’t?
+- What is the difference between stubbing and mocking? When
+  do you want use stubbing over mocking and vice-versa?
+- What is the reason controller TimeEntryControllerTest code 
+  has “verify” method?
+
   
 - In the case of testing respository's delete(..), why there is
   no training method? it is because respository's delete method
@@ -907,6 +953,38 @@ The installation instruction is right there in the website above. But they are a
 
 cf install-plugin -r CF-Community “open”
 cf install-plugin -r CF-Community “mysql-plugin”
+```
+
+```
+mysql> show databases;
++---------------------+
+| Database            |
++---------------------+
+| information_schema  |
+| cf_metadata         |
+| mysql               |
+| performance_schema  |
+| service_instance_db |
+| sys                 |
++---------------------+
+6 rows in set (0.05 sec)
+
+mysql> use service_instance_db;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++-------------------------------+
+| Tables_in_service_instance_db |
++-------------------------------+
+| flyway_schema_history         |
+| time_entries                  |
++-------------------------------+
+2 rows in set (0.05 sec)
+
+mysql> select * from time_entries;
+Empty set (0.05 sec)
 ```
 
 ## Student questions
@@ -1122,7 +1200,8 @@ cf restart cups-example
   Scaled up from 2 to 3 instances. Current HTTP Latency of 35.92ms is above upper threshold of 3.00ms.
   ```
 
-- ?? When applying auto-scaling, what is is "Percent of traffic to apply - 95% or 99%"?
+- ?? When applying auto-scaling, what is "Percent of traffic to apply    
+  95% or 99%"?
 
 # App Continnum
 
@@ -1251,6 +1330,22 @@ cf restart cups-example
   How do we achieve that in the "pal-tracker-distributed"? 
   
 ## Trouble-shooting
+
+- *I get the following Travis error in the creating 
+  allocation-server and other servers. One workaround is to restart 
+  this job.
+
+  ```
+  * What went wrong:
+A problem occurred configuring root project 'pal-tracker-distributed'.
+> Could not resolve all artifacts for configuration ':classpath'.
+   > Could not download protobuf-java.jar (com.google.protobuf:protobuf-java:3.6.1)
+      > Could not get resource 'https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.6.1/protobuf-java-3.6.1.jar'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.6.1/protobuf-java-3.6.1.jar'. Received status code 403 from server: Forbidden
+   > Could not download spring-jcl.jar (org.springframework:spring-jcl:5.0.10.RELEASE)
+      > Could not get resource 'https://repo.maven.apache.org/maven2/org/springframework/spring-jcl/5.0.10.RELEASE/spring-jcl-5.0.10.RELEASE.jar'.
+         > Could not GET 'https://repo.maven.apache.org/maven2/org/springframework/spring-jcl/5.0.10.RELEASE/spring-jcl-5.0.10.RELEASE.jar'. Received status code 403 from server: Forbidden
+  ```
 
 - *Somehow `Travis` deployment fails 
 
