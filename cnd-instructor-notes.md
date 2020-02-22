@@ -7,7 +7,7 @@
   ```
   Hello,
   
-  My name is Sang Shin. I am one of the 4 instructors from 
+  My name is Sang Shin. I am one of the 3 instructors from 
   Pivotal (now part of VMWare) of this PAL course. A few
   things to communicate before we get started.
       
@@ -20,13 +20,13 @@
     PAL-Cloud-OPS team which provides individual 
     PCF (PAS) credentials like following:
   
-    Hi <Your name>, welcome to Mad Hatter. The below 
+    Hi <Your name>, welcome to Ford. The below 
     information will be useful throughout the course to 
     access materials and infrastructure. View discussion 
-    about your course in #bostonma-jan-2020-cnd.
+    about your course in #dearborn-feb-2020-cnd.
   
-       Cohort ID: 349803460
-       PCF Foundation API: api.sys.evans.pal.pivotal.io
+       Cohort ID: 349803521
+       PCF Foundation API:  api.sys.evans.pal.pivotal.io
        PCF Org: <your own PCF org>
        PCF Username: <your own email address>
        PCF Password: <your own pcf password>
@@ -36,7 +36,7 @@
     by the PAL Developer course entry)
   
   - Once everyone is onboard, all our communication will be 
-    through our #bostonma-jan-2020-cnd slack channel during
+    through our #dearborn-feb-2020-cnd slack channel during
     the course.
   
     BTW, if this is your first time accessing Slack channel, 
@@ -277,6 +277,8 @@ Pair rotation guide:
 
 ## Bootstrap the application
 
+- ?? How do you compare different branches and tags using Github?
+
 - Why do we say the following?
 
   ```
@@ -320,13 +322,7 @@ Pair rotation guide:
   is because the Gradle project was not refreshed (as mentioned
   in step 8)
   
-- *Somehow, I could not find "bootRun", which means spring
-  boot plugin did not work - it is because I missed the
-  following:
-  
-  ```
-  apply plugin: 'org.springframework.boot'
-  ```
+
   
 ## Deploy
   
@@ -397,6 +393,10 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   }
   ```
 
+- You will not be able to run the application within the
+  IDE, instead, you will have to run it via "bootRun"
+  in order to pick up enviroment varaible settings.
+  
 ## Misc
 
 - *Is there a way to set environment variables to an application
@@ -415,7 +415,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
    - get deployment process taken care of in the earlier stage 
    - cannot solve process issues with technology
    
-- Travis
+- Github Actions
    - concept is important, we don't care which CI tool you use
 
 - What CD mean to you?
@@ -423,14 +423,11 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
    - ??dep to prod is risky, user segregation??
    - github example, users, cost vs risk, regulartory constraint
 
-- Show how to set up Travis with GitHub and end result, how to
-  figure out errors
+- Use instructor slide to talk about pipeline
   
-- Use instructor slide 
-  
-- Environment set-up in the pipeline (in the Travis)
+- Environment set-up in the pipeline (in the Github Actions)
 
-- Why you do not want to do "cf push" yourelf? 
+- Why you do not want to do "cf push" yourself? 
   (many org do not allow cf push)
   (jar creation issue - we want to create jar file just once
   and use it in multiple enviroments)
@@ -439,51 +436,8 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 
 ## Wrap-up
 
-- Explain the following travis.yml 
-
-  ```
-  dist: trusty
-  sudo: false
-  notifications:
-    email: false
-  env:
-    - RELEASE_TAG="release-$TRAVIS_BUILD_NUMBER"
-  if: tag IS blank
-
-
-  jobs:
-    include:
-      - stage: build and publish.  // create jar and publish to gihub
-        language: java
-        jdk: openjdk11
-        install: skip
-        script: ./gradlew clean build // command to create jar file
-        before_deploy:
-          - git config --local user.name "Travis CI"
-          - git config --local user.email "travis@example.com"
-          - git tag -f $RELEASE_TAG
-        deploy:                       // publish to github
-          provider: releases
-          api_key: $GITHUB_OAUTH_TOKEN
-          file: "build/libs/pal-tracker.jar"
-          skip_cleanup: true
-      - stage: deploy to cf       // deploy the jar to the PCF
-        language: bash
-        script:
-          - echo "Downloading $RELEASE_TAG"
-          - wget -P build/libs https://github.com/$GITHUB_USERNAME/pal-tracker/releases/download/$RELEASE_TAG/pal-tracker.jar // get the jar file from github
-        before_deploy:
-          - echo "Deploying $RELEASE_TAG to Cloud Foundry"
-        deploy:                   // deploy to PCF
-          provider: cloudfoundry
-          api: $CF_API_URL
-          username: $CF_USERNAME
-          password: $CF_PASSWORD
-          organization: $CF_ORG
-          space: $CF_SPACE
-
-  ```
-
+- Carl discusses "Travis yml" (too much is hidden) vs 
+  "Bash script" (more control, easier to understand what goes on)
 
 ## Tips
 
@@ -491,8 +445,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
    - Recommend to select `Display value in build log` when
      creating an Travis environment variable
      
-- Example Travis environment variables
-
+- Example Github Actions environment variables
 
   ```
   (when using PAL pcf endpoint)
@@ -501,8 +454,6 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   CF_SPACE sandbox
   CF_USERNAME sashin@pivotal.io
   CF_PASSWORD xxxxx
-  GITHUB_USERNAME sashinpivotal
-  GITHUB_OAUTH_TOKEN xxxx
 
   (when using pws pcf endpoint)
   CF_API_URL https://api.run.pivotal.io
@@ -510,35 +461,28 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   CF_SPACE development
   CF_USERNAME sashin@pivotal.io
   CF_PASSWORD xxxxxxxx
-  GITHUB_USERNAME sashinpivotal
-  GITHUB_OAUTH_TOKEN xxxx
+    ```
+    
   
-  (what gets displayed in the travis log)
-  $ export CF_API_URL=https://api.run.pivotal.io
-  $ export CF_ORG=sashin-org
-  $ export CF_SPACE=development
-  $ export CF_USERNAME=sashin@pivotal.io
-  $ export CF_PASSWORD=[secure]
-  $ export GITHUB_USERNAME=sashinpivotal
-  $ export GITHUB_OAUTH_TOKEN=
-  ```
-     
-- Travis supports running the job a specific branch by specifying it 
-  in the `.travis.yml` file
-
-  ```
-  on:
-    branch: my-own-branch
-  ```
-  
-- In order to trigger Travis job without making code change, you can
+- In order to trigger Github Actions job without making code change, you can
 
   ```
   git commit --allow-empty -m "start a new job"
   git push
   ```
   
-  A student also says clicking "retry job" option also worked.
+## GitHub Actions
+
+- *I could not locate settings under my repository
+  It was because I was looking at the wrong pal-tracker
+  repository (PAL's) not sashinpivotal below
+  
+  ```
+  https://github.com/sashinpivotal/pal-tracker
+  ```
+  
+- *When I deploy REST app, I get the failure during "Install Cf cli"
+  Redoing the job then worked.
      
 ## Trouble-shooting
    
@@ -581,7 +525,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   failed to deploy
   ```
   
-- ?? What do you do with the following error? (I see several of
+- *What do you do with the following error? (I see several of
   these in students as well)
   
   ```
@@ -602,6 +546,11 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   
   Or "git push" does start the correct version. So in the
   Github, it generates release-29 skipping release-28.
+  
+## Extra lab
+
+- How do you deploy to a different environment using Travis
+  conditional statement
 
 ## Challenge questions
 
@@ -859,7 +808,9 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   do you want use stubbing over mocking and vice-versa?
 - What is the reason controller TimeEntryControllerTest code 
   has “verify” method?
-
+- If you have code with tree structure, do you want to
+  use unit testing with mocking or do just integration
+  testing?
   
 - In the case of testing respository's delete(..), why there is
   no training method? it is because respository's delete method
@@ -888,6 +839,15 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   fact that the mock object is called and returns the prescribed 
   value.  So if the mock object is not called, the correctness of
   the unit test is not guaranteed.  
+  
+## Challenge exercise
+
+- For now, TimeEntryControllerTest is a unit test code, which does
+  not use Spring context (and for a good reason).  Now suppose you 
+  want to take advantage of Spring context - maybe you want to
+  read property files using Spring's @TestPropertySource,
+  for example -, how can you change the TimeEntryController.test?
+  (Create a new file called TimeEntryController2.test and change it)
   
 ## Slack channel tips
 
@@ -925,7 +885,11 @@ sudo snap install postman
 - *Brad went over the 12 factors - we covered 8 of
   12 factors so far
   
+## Trouble-shooting
 
+- If Json serialization does not work (TimeEntry from the client
+  contains fields set with zero's), make sure you have
+  getters in the TimeEntry class - 
   
 # Database Migration
 
@@ -934,12 +898,45 @@ sudo snap install postman
 - Talk about the need of migration
 - Talk about service in PAS
 
+(Dylan)
+- suggested to work with DBA (if that is the case in your org) as part of the team
+- talked about our codebase why we use interface so that we can swap out inmemory database with real database
+- in pcf, you don't directly talk to database, so we use ssh channel
+  to talk to the database (but ssh channel might or might not be
+  available, in mad hatter, available for dev but not for prod)
+- another solution is having one-off application (migration app)
+- schema vs data migration (we are mostly talking about 
+  schema migration) - data migration is typically done using 
+  different set of tools
+- what are the things you don't want to do in migration
+  - deleting a column, renaming a column - don't do this
+  - never to be destructive, always to add not delete
+  - eventually you will clean up
+- travis does the migration for us
+ 
+
 ## Tips
 
 - Make sure to use double underscore when creating migration files
 - *How do you see the list of services using brew?  `brew services list`
 - When executing flyway command, username and password will be asked.
   Enter `tracker` and no password
+  
+## GitHub Action 
+
+- *I get the following problem on the migration - it
+  was because I was using tracker-database that was
+  created in the previous cohort.
+
+  ```
+  Flyway Community Edition 5.2.1 by Boxfuse
+Database: jdbc:mysql://127.0.0.1:63306/ad_a3d2568a1752d06 (MySQL 5.5)
+ERROR: Validate failed: Migration checksum mismatch for migration version 1
+-> Applied to database : 1338248810
+-> Resolved locally    : -1395297860
+Closing tunnel
+##[error]Process completed with exit code 1.
+  ```
   
 ## Slack channel tips
 
@@ -956,6 +953,8 @@ cf install-plugin -r CF-Community “mysql-plugin”
 ```
 
 ```
+$ cf mysql tracker-database
+...
 mysql> show databases;
 +---------------------+
 | Database            |
@@ -987,21 +986,22 @@ mysql> select * from time_entries;
 Empty set (0.05 sec)
 ```
 
+## Wrap-up
+
+- (Dylan: went through migration script
+  - cf create-service-key
+  - vcap-services, credhub-ref, but when you cf env, you will see
+    username and password
+  - jq command for parsing
+- Went through format of the migration file
+  - you cannot change the migration file - flyway
+    keeps track of checksum - create a new one
+- development vs production issue (Bill K)
+  - do locally first
+
 ## Student questions
 
 - Can ssh enabled per space basis?
-
-## Trouble-shooting
-
-- *Somehow I could not display the shell output in the job #2 in
-  in Travis.  It just showed the following with (3) on-going.
-  
-  ```
-  (1) Job received (2) Queued (3) Booting virtual machine
-  ```
-  
-  You just have to wait a bit.
-  
   
 ## References
 
@@ -1009,6 +1009,10 @@ Empty set (0.05 sec)
 - [Migration stratgies and best practices](https://www.talend.com/resources/understanding-data-migration-strategies-best-practices/)
 
 # Spring JdbcTemplate
+
+## Talking points
+
+- (Bill K) create-service
 
 ## Misc
 
@@ -1121,6 +1125,39 @@ cf restart cups-example
     id "org.flywaydb.flyway" version "5.0.5"
    }
    ```
+
+1. ?? The following line gets red-colored
+
+   ```
+   import org.flywaydb.gradle.task.FlywayMigrateTask
+   ```
+   
+   Maybe this is IntelliJ issue? Bill suggested
+   to do 
+   
+   ```
+   ./gradlew clean build
+   ```
+   
+   and the IDE will fix it.
+   
+
+- ?? JdbcTemplate lab - if the time-entries table is not cleaned up, 
+  the api test will fail - actually, we have the following code
+  
+  ```
+    @BeforeEach
+    public void setUp() throws Exception {
+        MysqlDataSource dataSource = new MysqlDataSource();
+        dataSource.setUrl(System.getenv("SPRING_DATASOURCE_URL"));
+
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate.execute("TRUNCATE time_entries");
+
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    }
+  ```
+   
    
 ### Challenge questions
 
@@ -1158,19 +1195,7 @@ cf restart cups-example
    
 - The META-INF/build-info.properties is under build/resources/main directory
 
-- The code in the HealthApiTest below is not needed - you will
-  need @Autowired TestRestTemplate, then.
 
-  ```
-    @Before
-    public void setUp() throws Exception {
-        RestTemplateBuilder builder = new RestTemplateBuilder()
-                .rootUri("http://localhost:" + port)
-                .basicAuthorization("user", "password");
-
-        restTemplate = new TestRestTemplate(builder);
-    }
-  ```
    
 ## Talking points
 
@@ -1186,11 +1211,20 @@ cf restart cups-example
   org.junit.ComparisonFailure: expected:<[200]> but was:<[503]>
   ```
 
-## Prometheus 
+## Prometheus and Grafana
 
-- Try prometheus from the [following instruction](https://github.com/sashinpivotal/spring-boot-actuator-micrometer)
-  - Ignore the part of `setting actuator/prometheus endpoint` since
-    pal-tracker is not using security at the moment 
+```
+Prometheus and Grafana scripts I’ved used - they are using docker -
+can be obtained from https://github.com/sashinpivotal/prometheus-grafana
+
+If you don’t have docker installed on your machine, you can download and run prometheus and grafana individually from https://prometheus.io/download/ and https://grafana.com/grafana/download.  And you can use the same configuration files from the above website.
+```
+
+- Show how to create a dashboard using the new counter that was created
+    
+## Challenge exercise
+
+- Use AOP to increment the counter
   
 # Scaling lab
 
@@ -1202,6 +1236,16 @@ cf restart cups-example
 
 - ?? When applying auto-scaling, what is "Percent of traffic to apply    
   95% or 99%"?
+  
+- ?? Carl can see the build script of meerkat from the course website?
+  
+## Wrap-up
+
+- How do you know how many instances to run?
+  - why not 1 instance? availability
+- (Bill K) shows apps manager and shows auto-scaling feature
+  using JMeter
+  
 
 # App Continnum
 
@@ -1304,6 +1348,15 @@ cf restart cups-example
   https://timesheets-pal-sangshin.apps.evans.pal.pivotal.io/time-entries?userId=1
   ```
   
+  ```
+  https://registration-pal-sang-shin.cfapps.io/users/1
+  https://registration-pal-sang-shin.cfapps.io/accounts?ownerId=1
+https://registration-pal-sang-shin.cfapps.io/projects?accountId=1
+https://allocations-pal-sang-shin.cfapps.io/allocations?projectId=1
+https://backlog-pal-sang-shin.cfapps.io/stories?projectId=1
+https://timesheets-pal-sang-shin.cfapps.io/time-entries?userId=1
+  ```
+  
 - [Postman collection](https://github.com/pivotal-bill-kable/cnd-postman-collections)
   
 ## Challenge questions
@@ -1331,70 +1384,63 @@ cf restart cups-example
   
 ## Trouble-shooting
 
-- *I get the following Travis error in the creating 
-  allocation-server and other servers. One workaround is to restart 
-  this job.
-
-  ```
-  * What went wrong:
-A problem occurred configuring root project 'pal-tracker-distributed'.
-> Could not resolve all artifacts for configuration ':classpath'.
-   > Could not download protobuf-java.jar (com.google.protobuf:protobuf-java:3.6.1)
-      > Could not get resource 'https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.6.1/protobuf-java-3.6.1.jar'.
-         > Could not GET 'https://repo.maven.apache.org/maven2/com/google/protobuf/protobuf-java/3.6.1/protobuf-java-3.6.1.jar'. Received status code 403 from server: Forbidden
-   > Could not download spring-jcl.jar (org.springframework:spring-jcl:5.0.10.RELEASE)
-      > Could not get resource 'https://repo.maven.apache.org/maven2/org/springframework/spring-jcl/5.0.10.RELEASE/spring-jcl-5.0.10.RELEASE.jar'.
-         > Could not GET 'https://repo.maven.apache.org/maven2/org/springframework/spring-jcl/5.0.10.RELEASE/spring-jcl-5.0.10.RELEASE.jar'. Received status code 403 from server: Forbidden
-  ```
-
-- *Somehow `Travis` deployment fails 
-
-  ```
-  The command "wget -P  ... exited with 0.
-
-
-  Deploying application
-  failed to deploy
-  ```
-  
-  It was because I was using wrong domain `chicken` instead of `evans`.
-  Expand the downward arrow to see what is being used:
-  
+- *Where is the migration step in the pal-tracker-distributed app?
+  It is at the end (after deployment) of the pipeline.yml
   
   ```
-  Deploying application
-  Pushing from manifest to org sashin.pivotal.io / space sandbox as sashin@pivotal.io...
-  Using manifest file /home/travis/build/sashinpivotal/pal-tracker-distributed/manifest.yml
-  Getting app info...
-  The route backlog-pal-sang-shin.apps.chicken.pal.pivotal.io did not match any existing domains.
-  FAILED
-  Logging out sashin@pivotal.io...
-  OK
-  Failed to push app
-  ailed to deploy
+    migrate-databases:
+    needs:
+      - deploy-allocations
+      - deploy-backlog
+      - deploy-registration
+      - deploy-timesheets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install Cf
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update
+          sudo apt-get install cf-cli
+      - name: Migate tracker-database
+        run: |
+          cf login -a "$CF_API_URL" -o "$CF_ORG" -s "$CF_SPACE" -u "$CF_USERNAME" -p "$CF_PASSWORD"
+          ./gradlew cfMigrate
+        env:
+          CF_API_URL: ${{ secrets.CF_API_URL }}
+          CF_ORG: ${{ secrets.CF_ORG }}
+          CF_SPACE: ${{ secrets.CF_SPACE }}
+          CF_USERNAME: ${{ secrets.CF_USERNAME }}
+          CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
   ```
-  
-  You have to change both route and registration server address
-  
+ 
+- If GitHub action is causing too much a problem, just deploy the app using
+
   ```
-  applications:
-  - name: tracker-timesheets
-    path: ./applications/timesheets-server/build/libs/timesheets-server.jar
-    routes:
-    - route: timesheets-pal-sang-shin.apps.evans.pal.pivotal.io
-    memory: 1G
-    instances: 1
-    env:
-      REGISTRATION_SERVER_ENDPOINT: http://registration-pal-sang-shin.apps.evans.pal.pivotal.io
-      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.+ } }'
-    services:
-    - tracker-timesheets-database
+  cf push -f manifest-registration.yml
   ```
   
 
 # Service Discovery
 
 ## Talking points
+
+- (Dylan) 
+  - talked about problems of microservices
+  - in pcf, every routing goes through gorouter - we may need more
+    security, and more faster 
+  - ?? gorouter (for public facing apps) vs eureka server (use it for
+    internal communication)
+  - container to container networking (with it even if you are using Eureka
+    server, the services are still going through the gorouter)
+  - eureka server still gives you client-side load-balancing, 
+    eureka server can be used as a monitoring tool (health check)
+    
+- (Bill)
+  - Spring cloud release train - Horton, Greenweech, ..
+  - Technical debt
+  - How to resolve patch version - go to maven repo and find out
 
 -   This lab has a lot of moving parts: service discovery/registration,
     client side load-balancing, spring cloud dependencies, end-to-end 
@@ -1463,16 +1509,17 @@ A problem occurred configuring root project 'pal-tracker-distributed'.
    "git" : {
       "branch" : "HEAD",
       "commit" : {
-         "time" : "2018-08-17T09:08:06Z",
-         "id" : "6af8fcf"
+         "id" : "6325a90",
+         "time" : "2019-11-25T20:49:31Z"
       }
    },
    "build" : {
-      "time" : "2018-08-31T15:04:36.801Z",
+      "time" : "2019-11-27T00:26:12.716Z",
+      "version" : "2.0.13-build.6",
+      "name" : "service-broker",
       "artifact" : "spring-cloud-service-broker",
-      "group" : "io.pivotal.spring.cloud",
-      "version" : "2.0.2-build.3",
-      "name" : "service-broker"
+      "group" : "io.pivotal.spring.cloud"
+   }
    }
    ```
    
@@ -1551,7 +1598,7 @@ A problem occurred configuring root project 'pal-tracker-distributed'.
    But somehow in this lab (Discovery lab), we were asked to do 
    manual dependency management such as finding out the version
    of spring-cloud-commons and add it to the rest-support's
-   build.gradle.  Is this recommended practice? 
+   build.gradle.  Is this a recommended practice? 
    
 ## Challenge exercise
    
@@ -1624,9 +1671,18 @@ FAILED
 -   [Circuit breaker diagrams](https://github.com/Netflix/Hystrix/wiki)
 -   [Hystrix dashboard](https://github.com/Netflix-Skunkworks/hystrix-dashboard/wiki)
 
-## Misc
+## Test locally
 
 - commands at the local machine
+
+- Make sure to clean up the local databases using the following
+  commands which is described in the "distributed system lab"
+
+```
+mysql -uroot < databases/create_databases.sql
+./gradlew devMigrate testMigrate
+./gradlew clean build
+```
 
 ```
 // create account
@@ -1637,12 +1693,29 @@ curl -i localhost:8083/accounts?ownerId=1
 curl -i -XPOST -H"Content-Type: application/json" localhost:8083/projects -d"{\"name\": \"Project A\", \"accountId\": \"1\"}"
 curl -i -XPOST -H"Content-Type: application/json" localhost:8083/projects -d"{\"name\": \"Project B\", \"accountId\": \"1\"}"
 
-// create allocation assuming projectId is 2
+// ***You can start from here if you are not recreating tables***
+
+// create allocation assuming projectId is 1 (which is from Project A)
+curl -i -XPOST -H"Content-Type: application/json" localhost:8081/allocations/ -d"{\"projectId\": \"1\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+
+// Stop registration server
+
+// create allocation assuming projectId is 2 (which is from project B)
+// this should fail
 curl -i -XPOST -H"Content-Type: application/json" localhost:8081/allocations/ -d"{\"projectId\": \"2\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
 
-// create allocation assuming projectId is 4
-curl -i -XPOST -H"Content-Type: application/json" localhost:8081/allocations/ -d"{\"projectId\": \"4\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+// create allocation assuming projectId is 1 (which is from project A)
+// this should succeed
+curl -i -XPOST -H"Content-Type: application/json" localhost:8081/allocations/ -d"{\"projectId\": \"1\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+```
 
+- You should see the logging message like following:
+
+```
+2020-02-20 21:44:23.806  INFO 22098 --- [nio-8081-exec-2] i.p.p.tracker.allocations.ProjectClient  : ---> getProject(2)
+2020-02-20 21:44:23.813  INFO 22098 --- [nio-8081-exec-2] i.p.p.tracker.allocations.ProjectClient  : ---> getProjectFromCache(2)
+2020-02-20 21:44:34.878  INFO 22098 --- [nio-8081-exec-3] i.p.p.tracker.allocations.ProjectClient  : ---> getProject(1)
+2020-02-20 21:44:34.880  INFO 22098 --- [nio-8081-exec-3] i.p.p.tracker.allocations.ProjectClient  : ---> getProjectFromCache(1)
 ```
 - commands at PCF with PWS
 
@@ -1695,10 +1768,29 @@ while true; sleep .3; do curl -i -XPOST -H"Content-Type: application/json" alloc
   brew services cleanup
   ```
   
+## Trouble-shooting
+
+- *When performing local testing, I experience the following problem
+
+```
+java.lang.NoSuchMethodException: class io.pivotal.pal.tracker.allocations.ProjectInfo class io.pivotal.pal.tracker.allocations.ProjectClient.getProjectFromCache(long,class java.lang.Throwable)
+        at io.github.resilience4j.fallback.FallbackMethod.create(FallbackMethod.java:92) ~[resilience4j-spring-1.2.0.jar!/:1.2.0]
+        at io.github.resilience4j.circuitbreaker.configure.CircuitBreakerAspect.circuitBreakerAroundAdvice(CircuitBreakerAspect.java:110) ~[resilience4j-spring-1.2.0.jar!/:1.2.0]
+```
+
+  It was because I did not provide the `Throwable cause` argument
+  
+  ```
+    public ProjectInfo getProjectFromCache(long projectId, Throwable cause) {
+        logger.info("Getting project with id {} from cache", projectId);
+        return projectsCache.get(projectId);
+    }
+  ```
+  
 ## Challenge questions (Circuit breaker lab)
 
-- Can @Hystrix command can be chained?
-- When is the suitable usecase where circuit breaker can be used?
+- Can @CircuitBreaker command can be chained?
+- When is the suitable use case where circuit breaker can be used?
   Can it be used for non-idempotent operations?
 - How would you handle a case where dependency service simply
   timed out and the calling service's threads get depleted
@@ -1708,6 +1800,20 @@ while true; sleep .3; do curl -i -XPOST -H"Content-Type: application/json" alloc
 # Securing Distributed Application
 
 ## Talking points
+
+- [OpenID Connect](https://hackernoon.com/demystifying-oauth-2-0-and-openid-connect-and-saml-12aa4cf9fdba)
+
+```
+OpenId Connect is a set of defined process flows for “federated authentication”. OpenId Connect flows are built using the Oauth2.0 process flows as the base and then adding a few additional steps over it to allow for “federated authentication”.
+```
+
+- [OAuth2 and OpenID Connect](https://blog.runscope.com/posts/understanding-oauth-2-and-openid-connect)
+
+```
+The OAuth 2.0 Framework describes overarching patterns for granting authorization but does not define how to actually perform authentication. The application using OAuth constructs a specific request for permissions to a third party system - usually called an Identity Provider (IdP) - which handles the authentication process and returns an Access Token representing success. The IdP may require additional factors such as SMS or email but that is entirely outside the scope of OAuth. Finally, the contents and structure of that Access Token are undefined by default. This ambiguity guarantees that Identity Providers will build incompatible systems.
+
+Luckily, OpenID Connect or OIDC brings some sanity to the madness. It is an OAuth extension which adds and strictly defines an ID Token for returning user information.  Now when we log in with our Identity Provider, it can return specific fields that our applications can expect and handle. The important thing to remember is that OIDC is just a special, simplified case of OAuth, not a replacement. It uses the same terminology and concepts.
+```
 
 ## Demo steps
 
@@ -1810,6 +1916,31 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 
 # Config Server
 
+## Tips
+
+-   Use the following command for creating config-server instance
+
+    ```
+    cf create-service ${CONFIG_SERVER_SERVICE_NAME} ${PLAN_NAME} tracker-config-server \
+-c "{\"git\": {\"uri\": \"https://github.com/${YOUR_GITHUB_USERNAME}/tracker-config.git\", \"label\": \"master\"}}"
+    ```
+    
+    ```
+    cf create-service p-config-server standard tracker-config-server \
+-c "{\"git\": {\"uri\": \"https://github.com/sashinpivotal/tracker-config.git\", \"label\": \"master\"}}"
+    ```
+    
+- For local testing, get token first and then use that token to create
+  an allocation
+
+  ```
+  curl 'http://localhost:8999/oauth/token' -i -u 'tracker-client:supersecret' -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token&token_format=opaque'
+  ```
+
+  ```
+  curl -i -H"Authorization: Bearer db7a8491-10d7-4272-9efe-0d9aaa334fc6" -XPOST -H"Content-Type: application/json" localhost:8081/allocations -d"{\"projectId\": 1, \"userId\": 1, \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+  ```
+
 ## Talking points
 
 -   *Is this lab dependent on security lab? Yes, you can do this
@@ -1833,12 +1964,3 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 - Setting the management include thing in the manifest files
   with just * fails - use `"*"` not just `*`
 
-## Tips
-
-- Creating `tracker-config-server` service instance in PCF
-
-  ```
-  cf create-service p-config-server standard tracker-config-server -c "{\"git\": {\"uri\": \"https://github.com/sashinpivotal/tracker-config.git\", \"label\": \"master\"}}"
-  ```
-  
-- Creating bootRun and
