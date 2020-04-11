@@ -904,7 +904,6 @@ Closing tunnel
   
 ## Slack channel tips
 
-```
 A couple of CF plugins I would recommend to install: “open” and “mysql” from https://plugins.cloudfoundry.org/
 
 - “open”plugin opens a browser for you with the right route by typing “cf open pal-tracker”
@@ -912,13 +911,14 @@ A couple of CF plugins I would recommend to install: “open” and “mysql” 
 
 The installation instruction is right there in the website above. But they are as following:
 
+```
 cf install-plugin -r CF-Community "open"
 cf install-plugin -r CF-Community "mysql-plugin"
 ```
 
 ```
 $ cf mysql tracker-database
-...
+
 mysql> show databases;
 +---------------------+
 | Database            |
