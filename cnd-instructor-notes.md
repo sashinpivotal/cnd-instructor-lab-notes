@@ -50,41 +50,13 @@
 
 # Getting started (logistics)
 
-- Each student receive slack channel message which contains
-  PCF account and AWS account information from `PAL-Cloud-OPS`
-  
-  ```
-  Hi Sang Shin, welcome to EMEA - ATOS. The below information will be useful  throughout the  course to access materials and infrastructure. View discussion about your course in #bordeaux-sep-2019-cna.
-  Cohort ID: 349803278
-  PCF Foundation API: api.sys.evans.pal.pivotal.io
-  PCF Org: sashin.pivotal.io
-  PCF Username: sashin@pivotal.io
-  PCF Password: xxxx
-  AWS Credentials:
-   * AWS Access Key: xxxx
-   * AWS Secret Key: xxxx
-   * AWS Bucket Name: sashin.pivotal.io
-  ```
-  
-  ```
-  Hi <Your name>, welcome to Accenture. The below information will
-  be useful throughout the course to access materials and 
-  infrastructure. View discussion about your course in 
-  #torontoc-nov-2019-cnd.
-  Cohort ID: 349803372
-  PCF Foundation API: api.sys.evans.pal.pivotal.io
-  PCF Org: <your PCF org>
-  PCF Username: <your email address>
-  PCF Password: <password>
-  ```
-
 - A student can access their slack channel message by
   opening slack or go to `palexternal.slack.com` 
 
 - Does each student receive an email regarding how to
   access CNA course contents? No. They just receive
-  slack channel messege that contains PCF and AWS
-  credentials
+  slack channel messege that contains PCF (CND) and AWS
+  credentials (CNA)
   
 - In order to see the self-evaluation, please go to
   [https://registration.education.pivotal.io/admin/cohorts](https://registration.education.pivotal.io/admin/cohorts)
@@ -192,6 +164,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 - Communicate what you do to your partner - if you are typing or
   moving your mouse without talking, you are doing a disservice 
   to your pair partner
+- Use your mouse rather than using your finger
 
 # Pair rotation
 
@@ -222,7 +195,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 Pair rotation guide:
 - Before the rotation, please ensure that both members of the pair
   save the code to the Github repository
-- Log out from PCF, Slack, Travis CI
+- Log out from PCF, Slack, Github
 - Once everyone is ready, everyone moves to the right by one seat. 
   The rightmost person of the table goes to leftmost seat of
   the table behind. (This is to make sure non-driver in the 
@@ -231,9 +204,8 @@ Pair rotation guide:
   the red post-it) credentials of the following:
     - Slack
     - PCF (PAS) 
-    - GIT
+    - GitHub
     - Assignment Submission
-    - Travis CI (edited) 
 ```
 
 # Meerkat
@@ -254,7 +226,7 @@ Pair rotation guide:
 - Note that whenever student submit the lab result, 
   they always have to go to the `assigment-submission` directory
 
-- CND students should ignore `waveland` section
+- CND/CNA students should ignore `waveland` section
 
   
 # Building a Spring Boot App (lab #1)
@@ -263,7 +235,7 @@ Pair rotation guide:
 
 - Talk about dependency injection - what it is and why
 - Mention that the `pal-tracker` directory is under `workspace` directory
-- pal-tracker codebase should be downloaded
+- pal-tracker codebase should be downloaded under `workspace` directory
 
 ## Project structure
   
@@ -271,24 +243,26 @@ Pair rotation guide:
   - Create a personal GitHub account (if you don't have one yet)
   - Create "pal-tracker" repository 
   - Make sure you have unzipped the `pal-tracker.zip` under `workspace` directory
-  - Go to `pal-tracker` directory
+  - Go to local `pal-tracker` directory
   - Execute `git remote add origin <url>`
   - Execute `git push origin master --tags`
 
 ## Bootstrap the application
 
 - ?? How do you compare different branches and tags using Github?
+  (Use IntelliJ instead)
 
 - Why do we say the following?
 
   ```
-  Make sure to use File > Open to open your Gradle project rather than using the import feature.
+  Make sure to use File > Open to open your Gradle project 
+  rather than using the import feature.
   ```
 
 - If the test works at the command line but fails within 
   IntelliJ using bootRun task, make sure you 
-  set the Gradle Test Runner under setting (?? With
-  Spring Boot 2.2, this could cause a problem)
+  set the Gradle Test Runner under setting 
+  (This is now automatically set in recent version of IntelliJ)
 
 - If you are using STS, try to verify your yml file syntax
   with `http://www.yamllint.com/`
@@ -299,17 +273,20 @@ Pair rotation guide:
   bar. - this is to use refresh icon from the Gradle bar
   menu on the right.
   
-- *What is `buildscript` closure for?
+- ??What is `buildscript` closure for?
 
   ```
   The buildScript block determines which plugins, task classes, and  
   other classes are available for use in the rest of the build script.   
-  Without a buildScript block, you can use everything that ships with Gradle out-of-the-box. 
+  Without a buildScript block, you can use everything that ships with 
+  Gradle out-of-the-box. 
   
-  If you additionally want to use third-party plugins, task classes, or other classes (in the build script!), you have to specify the corresponding dependencies in the buildScript block.
+  If you additionally want to use third-party plugins, task classes, 
+  or other classes (in the build script!), you have to specify the 
+  corresponding dependencies in the buildScript block.
   ```
   
-- *Why do we have the following in both buildscript 
+- ??Why do we have the following in both buildscript 
   section and regular section of the build.gradle?
   
   ```groovy
@@ -318,7 +295,7 @@ Pair rotation guide:
   }
   ```
 
-- In step 10, if `create package` option is not available, it 
+- *In step 10, if `create package` option is not available, it 
   is because the Gradle project was not refreshed (as mentioned
   in step 8)
   
@@ -335,7 +312,14 @@ Pair rotation guide:
  
 ## Challenge questions
 
--  What the purpose of "gradle wrapper"?
+- What the purpose of "gradle wrapper"?
+- One of the features of Spring Boot (actually through the Spring Boot
+Maven/Gradle plugin) is to create a fat jar that contains everything
+including Tomcat.  Among the 12 factors, which factor is relevant to
+creating and deploying the same fat jar over different deployment
+environment?
+- What does @SpringBootApplication do? What is it made of?
+
 
 ## Challenge exercise
 
@@ -348,16 +332,36 @@ Pair rotation guide:
   
 ## Challenge questions
 
-- Do we have to do “cf restage <app-name>” when we set a new environment variable?
+- Do we have to do “cf restage <app-name>” when we set a 
+  new environment variable in PCF?
 - What are the examples of PCF log types? (Google “PCF log types”)
 
 - What could be use cases where you will have to do 
-  “cf restage” (as opposed 
-  to “cf restart”)?
-- (Related question to the above) What are the differences among 3 different 
-  ways of deploying the application on PCF - "pushing", "restaging", and "restart"?
-- Try to use “create-app-manifest” command to capture the metadata of your running app into a file and try to use that file to deploy the application
+  “cf restage” (as opposed to “cf restart”)?
+- (Related question to the above) What are the differences 
+  among 3 different ways of deploying an application 
+  on PCF - "pushing", "restaging", and "restarting"?
+- Try to use “create-app-manifest” command to capture 
+  the metadata of your running app into a file and try 
+  to use that file to deploy the application
 
+## Challenge exercises
+
+- Currently we have testing code for `WelcomeController` that does 
+  the testing of the controller class logic but it does not test 
+  Mvc layer, which is covered by API testing using `@SpringBootTest`.  
+  But one trade-off of using `@SpringBootTest` is that it is
+  slower than Web slice testing because it has to start 
+  the server.  So you might want to write controller testing code 
+  using `@WebMvcTest` and `MockMvc`.
+
+- Find out how you can use IntelliJ version control window to 
+  compare your local code against a branch or a tag.
+
+- Create a WelcomeService that returns a message, WelcomeController 
+  depends on the HelloService to get the message, Use Mockito in your  
+  WebControllerMockMvcTest code to mock the service, Write the 
+  WelcomeServiceTest code as 
 
 ## Slack channel tips
 
@@ -368,7 +372,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 ## Trouble-shootings
 
 - The document does not include instruction to remove compile
-  errors on EnvController before it says to run the app
+  errors on `EnvController` before it says to run the app
 
 - *The following code will fail because Spring looks for
   a bean that is a type of String but it is not there.
@@ -393,8 +397,8 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   }
   ```
 
-- You will not be able to run the application within the
-  IDE, instead, you will have to run it via "bootRun"
+- *You will not be able to run the application within the
+  IDE, instead, you will have to run it via `bootRun`
   in order to pick up enviroment varaible settings.
   
 ## Misc
@@ -412,7 +416,8 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 
 - Why we do this lab before we write complete code 
    - deloyment is hard, we want minimum complication
-   - get deployment process taken care of in the earlier stage 
+   - get deployment process taken care of in the earlier stage
+     of project life-cycle 
    - cannot solve process issues with technology
    
 - Github Actions
@@ -420,8 +425,8 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 
 - What CD mean to you?
    - deployment to production is business decision not Eng decision
-   - ??dep to prod is risky, user segregation??
-   - github example, users, cost vs risk, regulartory constraint
+   - ??depployment to prod is risky, user segregation??
+   - ??github example, users, cost vs risk, regulartory constraint
 
 - Use instructor slide to talk about pipeline
   
@@ -431,20 +436,16 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   (many org do not allow cf push)
   (jar creation issue - we want to create jar file just once
   and use it in multiple enviroments)
-  (jar versioning)
+  (??jar versioning)
   (buildpack has nothing to do with creating jar)
 
 ## Wrap-up
 
-- Carl discusses "Travis yml" (too much is hidden) vs 
+- Carl discusses "pipeline.yml" (too much is hidden) vs 
   "Bash script" (more control, easier to understand what goes on)
 
 ## Tips
 
-- Show how to set the environment variable in `travis-ci.org`
-   - Recommend to select `Display value in build log` when
-     creating an Travis environment variable
-     
 - Example Github Actions environment variables
 
   ```
@@ -453,7 +454,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   CF_ORG sashin.pivotal.io
   CF_SPACE sandbox
   CF_USERNAME sashin@pivotal.io
-  CF_PASSWORD xxxxx
+  CF_PASSWORD xxxxxxxxxxx
 
   (when using pws pcf endpoint)
   CF_API_URL https://api.run.pivotal.io
@@ -463,7 +464,6 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   CF_PASSWORD xxxxxxxx
     ```
     
-  
 - In order to trigger Github Actions job without making code change, you can
 
   ```
@@ -485,28 +485,9 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   Redoing the job then worked.
      
 ## Trouble-shooting
-   
--  *I got pcf deployment failure - you have to expand the arrow to
-   see the failure - it was because the manifest file has a wrong
-   domain (i.e. chicken vs evans)
-
-   ```
-   Installing deploy dependencies
-   Successfully installed dpl-cloud_foundry-1.10.8
-   Parsing documentation for dpl-cloud_foundry-1.10.8
-   Installing ri documentation for dpl-cloud_foundry-1.10.8
-   Deploying application
-
-   The route allocations-pal-sang-shin.cfapps.io did not match any existing domains.
-   FAILED
-   Logging out sashin@pivotal.io
-   OK
-   Failed to push app
-   failed to deploy
-   ```
-   
+      
 - *If everything worked fine in the 2nd phase but deployment
-  tails.
+  fails.
   Manually pusing the app works. ?? accessing ./env results in 404
   It was because I was using wrong target
   
@@ -525,34 +506,12 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   failed to deploy
   ```
   
-- *What do you do with the following error? (I see several of
-  these in students as well)
-  
-  ```
-  $ echo "Downloading allocations server $RELEASE_TAG"
-  Downloading allocations server release-28
-  $ wget -P applications/allocations-server/build/libs https://github.com/$GITHUB_USERNAME/pal-tracker-distributed/releases/download/$RELEASE_TAG/allocations-server.jar
-  
-  ...
+## Extra lab exercise
 
-  HTTP request sent, awaiting response... 404 Not Found
-  2019-11-07 15:00:20 ERROR 404: Not Found.
-  The command "wget -P applications/allocations-server/build/libs  https://github.com/$GITHUB_USERNAME/pal-tracker-distributed/releases/download/$RELEASE_TAG/allocations-server.jar" exited with 8.
-  ```
-  
-  It is because the Travis is looking for release-28 while
-  the github has release-27 - you can edit the release number
-  to correct it.
-  
-  Or "git push" does start the correct version. So in the
-  Github, it generates release-29 skipping release-28.
-  
-## Extra lab
-
-- How do you deploy to a different environment using Travis
+- ??How do you deploy to a different environment using GitHub
   conditional statement
 
-## Challenge questions
+## Challenge questions on routing
 
 - We know multiple routes can be assigned to an applicationh.
   Now can a route be assigned to multiple applications?
@@ -572,7 +531,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
     updating the routing table whenever a new instance is created
     or old instance gets destroyed?
     
-## Challenges in the blud-green deployment
+## Challenge questions in the blud-green deployment
     
 -   Is blue-green deployment suitable for major feature change?
 -   What are the challenges for doing blue-green deployment?
@@ -611,8 +570,6 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   
 - You can create an interface from a class - refactor->extract
 
-- Make sure to add correct mockito version as described in the
-  lab document
   
 ### InMemoryRepositoryTest
 
@@ -628,7 +585,8 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
     
 - In the list() test, IntelliJ gets confused when there 
   are 5 constructor
-  arguments and there is already a constructor that takes 4 arguments.
+  arguments and there is already a constructor that 
+  takes 4 arguments.
   
 - Object comparison with `equals` and `hashCode`  
   - leverage IDE support on this
@@ -729,6 +687,28 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
     }
   ```
   
+- * Somehow some students experience compile error on the assertThat's
+  `containsExactlyInAnyOrderElementsOf` method 
+  * It was because the student did have wrong return type to
+  list() method.
+
+```
+    @Test
+    public void list() throws Exception {
+        InMemoryTimeEntryRepository repo = new InMemoryTimeEntryRepository();
+        repo.create(new TimeEntry(123L, 456L, LocalDate.parse("2017-01-08"), 8));
+        repo.create(new TimeEntry(789L, 654L, LocalDate.parse("2017-01-07"), 4));
+
+        List<TimeEntry> expected = asList(
+                new TimeEntry(1L, 123L, 456L, LocalDate.parse("2017-01-08"), 8),
+                new TimeEntry(2L, 789L, 654L, LocalDate.parse("2017-01-07"), 4)
+        );
+        assertThat(repo.list()).containsExactlyInAnyOrderElementsOf(expected);
+    }
+```
+
+- *If you import the class within the IDE and then get compile errors,
+  you will have to rebuild the class 
 
 ## Local testing
 
@@ -763,22 +743,6 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   ```
   Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder    
   'welcome.message' in value welcome.message"
-  ```
-
-- *I get the following error for mocking
-  It was because I was using wrong Mockito version
-  as documented in the lab document.
-  
-
-  ```
-  Underlying exception : java.lang.UnsupportedOperationException:    
-  Cannot define class using reflection
-  org.mockito.exceptions.base.MockitoException: 
-  Mockito cannot mock this class: interface   
-  io.pivotal.pal.tracker.TimeEntryRepository.
-
-  Mockito can only mock non-private & non-final classes.
-  If you're not sure why you're getting this error, please report to the mailing list.
   ```
 
 ## Challenge Questions
@@ -948,8 +912,8 @@ A couple of CF plugins I would recommend to install: “open” and “mysql” 
 
 The installation instruction is right there in the website above. But they are as following:
 
-cf install-plugin -r CF-Community “open”
-cf install-plugin -r CF-Community “mysql-plugin”
+cf install-plugin -r CF-Community "open"
+cf install-plugin -r CF-Community "mysql-plugin"
 ```
 
 ```
@@ -988,7 +952,7 @@ Empty set (0.05 sec)
 
 ## Wrap-up
 
-- (Dylan: went through migration script
+- (Dylan: went through migration script)
   - cf create-service-key
   - vcap-services, credhub-ref, but when you cf env, you will see
     username and password
@@ -1058,6 +1022,10 @@ Empty set (0.05 sec)
 
 ```
 curl -i -XPOST -H"Content-Type: application/json" pal-tracker-sang-shin.cfapps.io/time-entries/ -d"{\"projectId\": 1, \"userId\": 1, \"date\": \"2015-05-17\", \"hours\": 6}"
+```
+
+```
+curl -i -XPOST -H"Content-Type: application/json" pal-tracker-sang-shin.apps.evans.pal.pivotal.io/time-entries/ -d"{\"projectId\": 1, \"userId\": 1, \"date\": \"2015-05-17\", \"hours\": 6}"
 ```
 
 ```
@@ -1163,9 +1131,10 @@ cf restart cups-example
 
 -   What are the two conditions that need to be met before
     Spring Boot's auto-configuration create DataSource bean
-    that represents MySQL?
+    that represents MySQL? 
+    (Answer: mysel driver in the classpath and crendentials)
 
--   So when we are running our pal-tracker app locally and in Travis 
+-   So when we are running our pal-tracker app locally and in GitHub Actions 
     with database, we have to provide database credentials (as 
     environment variables in our lab but could be from property
     file) but we did not have to do that when we are running
@@ -1180,7 +1149,19 @@ cf restart cups-example
     bean gets created from database credentials from the VCAP_SERVICES.
     How does PCF do this?
     
-    ?? Spring cloud connector
+-   *What is Spring cloud connector for?
+    (Answer: Spring Cloud Connectors provides a simple abstraction 
+    that JVM-based applications can use to discover information 
+    about the cloud environment on which they are running, 
+    connect to services, and have discovered services registered 
+    as Spring beans. It provides out-of-the-box support for 
+    discovering common services on Heroku and Cloud Foundry 
+    cloud platforms, and it supports custom service definitions 
+    through Java Service Provider Interfaces (SPI).
+    
+    This project is in maintenance mode, in favor of the 
+    newer Java CFEnv project. We will continue to release 
+    security-related updates but will not address enhancement requests.)
 
 ## Wrap-up talking points
 
@@ -1257,6 +1238,7 @@ If you don’t have docker installed on your machine, you can download and run p
   
 
 # Distributed System
+
 
 ## Talking points
 
@@ -1358,6 +1340,12 @@ https://timesheets-pal-sang-shin.cfapps.io/time-entries?userId=1
   ```
   
 - [Postman collection](https://github.com/pivotal-bill-kable/cnd-postman-collections)
+
+- Tip to replce
+
+```
+find ./ -type f -exec sed -i -e 's/\$\{UNIQUE_IDENTIFIER\}\.\$\{DOMAIN\}/sang-shin.apps.evans.pal.pivotal.io/g' {} \;
+```
   
 ## Challenge questions
   
@@ -1421,7 +1409,33 @@ https://timesheets-pal-sang-shin.cfapps.io/time-entries?userId=1
   cf push -f manifest-registration.yml
   ```
   
+- *When I execute the following command locally on my mac
 
+  ```
+  < workspace/pal-tracker-distributed + master > mysql -uroot < databases/create_databases.sql
+dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl.1.0.0.dylib
+  Referenced from: /usr/local/bin/mysql
+  Reason: image not found
+Abort trap: 6
+  ```
+  
+  I had to upgrade it using the following command.  It reinstalled
+  a lot of other software including mysql
+  
+  ```
+  brew upgrade openssl@1.1
+  ```
+  
+- ??? When you execute the following command - you have to remove or commit
+  the codebase.txt file
+
+  ```
+  < workspace/pal-tracker-distributed + master > git cherry-pick pipeline
+error: your local changes would be overwritten by cherry-pick.
+hint: commit your changes or stash them to proceed.
+fatal: cherry-pick failed  
+  ```
+  
 # Service Discovery
 
 ## Talking points
@@ -1649,18 +1663,49 @@ FAILED
 
 ## Trouble-shooting
 
+- ??? the step to refresh gradle is missing again after
+  creating build.gradle for platform-services/eureka-server
+
 - ?? I get the following error when deploying the app
 
   ```
   2019-11-07T10:17:53.13-0500 [APP/PROC/WEB/2] OUT Caused by: java.lang.NoClassDefFoundError: org/springframework/cloud/config/client/ConfigServicePropertySourceLocator
   ```
 
+- *If you experience the following problem, when you do
+  `./gradlew clean build`
+
+  ```
+  [Request processing failed; nested exception is java.lang.IllegalStateException: No instances available for localhost] with root cause
+
+java.lang.IllegalStateException: No instances available for localhost
+
+  ```
+  
+  It was because you missed one in the application's
+  `application.properties` file. The `application.properties`
+  file of the test in theory does not need to be changed.
+  
+  ```
+  registration.server.endpoint=http://registration-server
+  ```
+  
+- *When I deploy the app in the PCF, I get the following error
+  It was because I was running the apps with config server
+  bindings in the PCF.
+
+  ```
+  2020-04-09T13:08:24.11+0000 [APP/PROC/WEB/0] OUT Caused by: java.lang.NoClassDefFoundError: org/springframework/cloud/config/client/ConfigServicePropertySourceLocator
+  ```
+  
 # Circuit breaker
+
+
 
 ## Talking points
 
--   The @Hystrix command needs to be duplicated in 3 different places -
-    there is a reason for this  
+-   The circuit breaker prevents the calling service from 
+    sending more traffice to the callee service
     
 ## Tips
 
@@ -1675,13 +1720,14 @@ FAILED
 
 - commands at the local machine
 
-- Make sure to clean up the local databases using the following
-  commands which is described in the "distributed system lab"
+- You can clean up the local databases using the following
+  commands which is described in the "distributed system lab".
+  Otherwise, create a new user will result in duplicate key,
+  which is OK.
 
 ```
 mysql -uroot < databases/create_databases.sql
 ./gradlew devMigrate testMigrate
-./gradlew clean build
 ```
 
 ```
@@ -1823,6 +1869,15 @@ Luckily, OpenID Connect or OIDC brings some sanity to the madness. It is an OAut
 
 ## Trouble-shooting tips
 
+- ??I am experiencing the following problem on PCF (using PWS's p-dentity/pal)
+
+  ```
+  pal_user@instructor-demo-sang-large:~$ curl -k "https://pal.login.run.pivotal.io/oauth/token" -i -u "75216cc6-2d28-4990-89c5-c0572dc166a0:4a327ca2-2c25-4a64-a4cf-e29fe545c90b" -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
+HTTP/1.1 401 Unauthorized
+
+  ```
+
+
 -   Just found out why I had failure on my oauth2 testing.  I was running the apps using Spring Boot dashboard, which fails to read the security property values from the build.gradle.
 But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradle”?
 
@@ -1840,14 +1895,6 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
    application.oauth-enabled=false
    ```
    
-- I see p-identity with both uaa and p-identity plans. Which should
-  we use?  I used uaa and it worked fine.  
-  ?? When a student used `System` plan within the `App manager`, 
-  then it did not work.
-
-   ```
-   p-identity        uaa, p-identity   Provides identity capabilities via UAA as a Service
-   ```
    
 - When running integration testing via `./gradlew clean build`, 
   tell students to ignore the following 
@@ -1867,11 +1914,11 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
    curl 'http://localhost:8999/oauth/token' -i -u 'tracker-client:supersecret' -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token&token_format=opaque'
    ``` 
 
--  Getting token from UAA
+-  Getting token from UAA (using Evans)
 
    ```
    cf env tracker-registration
-   curl -k https://login.sys.evans.pal.pivotal.io/oauth/token -i -u 04f5dae7-0f07-47ca-9776-71e681cb6110:29e9bca4-d08a-47e6-af3c-d30eacf4efd2 -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
+   curl -k https://p-identity.login.sys.evans.pal.pivotal.io/oauth/token -i -u <client-id>:<client-secret> -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
    ```
 
 -  How to access your allocation server with security in PCF
@@ -1895,18 +1942,27 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 	
 	// create projects
 	curl -i -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer 82e595e2-62c2-4581-92d1-fe104acbc5b2" localhost:8083/projects -d"{\"name\": \"Project A\", \"accountId\": \"1\"}"
-	curl -i -XPOST -H"Content-Type: application/json" localhost:8083/projects -d"{\"name\": \"Project B\", \"accountId\": \"1\"}"
-	
-	// create allocation assuming projectId is 2
-	curl -i -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer 82e595e2-62c2-4581-92d1-fe104acbc5b2" localhost:8081/allocations/ -d"{\"projectId\": \"2\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+		
+	// create allocation assuming projectId is 1
+	curl -i -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer 82e595e2-62c2-4581-92d1-fe104acbc5b2" localhost:8081/allocations/ -d"{\"projectId\": \"1\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
 	```
 	
 - Perform operations in PCF using remotely acquired token
 
    ```
    // get a token from UAA
-   cf env tracker-allocation
-   curl -k https://login.sys.evans.pal.pivotal.io/oauth/token -i -u ea47b39b-06ab-4c01-a961-d3cec5c6be8f:7ffbc342-d529-42fc-8868-17b897509f1b -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
+   cf env tracker-registration
+   curl -k https://p-identity.login.sys.evans.pal.pivotal.io/oauth/token -i -u <cliend-id>:<client-secret> -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
+   
+   // create accounts
+   curl -i -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer <token>" registration-pal-sang-shin.apps.evans.pal.pivotal.io/registration -d'{"name": "Pete"}'
+   
+   // create projects
+	curl -i -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer <token>" registration-pal-sang-shin.apps.evans.pal.pivotal.io/projects -d"{\"name\": \"Project A\", \"accountId\": \"1\"}"
+   
+   // create allocation assuming projectId is 1
+   curl -i -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer <token>" http://allocations-pal-sang-shin.apps.evans.pal.pivotal.io/allocations/ -d"{\"projectId\": \"1\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+   
    ```
    
 ### Useful presentations on OAuth2
@@ -1914,11 +1970,12 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
   -  [OAuth2 overview presentation](https://www.slideshare.net/SangShin1/spring4-security-oauth2?qid=2163e6e6-ae99-48b0-afcc-88380b8724d8&v=&b=&from_search=1)
   -  [OAuth2 in cloud native environment presentation (slides 7 to 37)](https://www.slideshare.net/WillTran1/enabling-cloud-native-security-with-oauth2-and-multitenant-uaa?qid=2c77ae8e-b2d5-4319-baad-1cd1eb8fec42&v=&b=&from_search=1)
 
+  
 # Config Server
 
 ## Tips
 
--   Use the following command for creating config-server instance
+-   Use the following command for creating config-server instance (PWS)
 
     ```
     cf create-service ${CONFIG_SERVER_SERVICE_NAME} ${PLAN_NAME} tracker-config-server \
@@ -1930,16 +1987,41 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 -c "{\"git\": {\"uri\": \"https://github.com/sashinpivotal/tracker-config.git\", \"label\": \"master\"}}"
     ```
     
-- For local testing, get token first and then use that token to create
-  an allocation
+-   After getting a token, send refresh post
+
+    ```
+    curl -i -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer <token>" registration-pal-sang-shin.apps.evans.pal.pivotal.io/actuator/refresh -d"{}"
+    ```
+    
+## Trouble-shooting
+
+- *If you experience when you send refresh request, it is because
+  you did not send -d
 
   ```
-  curl 'http://localhost:8999/oauth/token' -i -u 'tracker-client:supersecret' -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token&token_format=opaque'
+  HTTP/1.0 411 Length Required
+Content-Type: text/html; charset=UTF-8
+Referrer-Policy: no-referrer
   ```
-
+  
+- *Setting the management include thing in the manifest files
+  with just * fails - use `"*"` not just `*`
+  
+  Now instruction actually uses concrete set of endpoints like
+  
   ```
-  curl -i -H"Authorization: Bearer db7a8491-10d7-4272-9efe-0d9aaa334fc6" -XPOST -H"Content-Type: application/json" localhost:8081/allocations -d"{\"projectId\": 1, \"userId\": 1, \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
+  management.endpoints.web.exposure.include=info,health,metrics,circuitbreakers,env
   ```
+  
+- *The extra exercise needs to use @RefreshScope, which results in
+  "unresolvable symbol" error
+  
+  I need to add the following to the rest-support's build.gradle
+  
+  ```
+  compile "org.springframework.cloud:spring-cloud-context:2.0.0.RELEASE"
+  ```
+  
 
 ## Talking points
 
@@ -1961,6 +2043,5 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 
 ## Trouble-shooting
 
-- Setting the management include thing in the manifest files
-  with just * fails - use `"*"` not just `*`
+
 
