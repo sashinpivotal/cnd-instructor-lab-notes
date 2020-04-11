@@ -888,18 +888,18 @@ sudo snap install postman
   
 ## GitHub Action 
 
-- *I get the following problem on the migration - it
+- *I get the following problem on the migration: it
   was because I was using tracker-database that was
   created in the previous cohort.
 
   ```
   Flyway Community Edition 5.2.1 by Boxfuse
-Database: jdbc:mysql://127.0.0.1:63306/ad_a3d2568a1752d06 (MySQL 5.5)
-ERROR: Validate failed: Migration checksum mismatch for migration version 1
--> Applied to database : 1338248810
--> Resolved locally    : -1395297860
-Closing tunnel
-##[error]Process completed with exit code 1.
+  Database: jdbc:mysql://127.0.0.1:63306/ad_a3d2568a1752d06 (MySQL 5.5)
+  ERROR: Validate failed: Migration checksum mismatch for migration version 1
+  -> Applied to database : 1338248810
+  -> Resolved locally    : -1395297860
+  Closing tunnel
+  ##[error]Process completed with exit code 1.
   ```
   
 ## Slack channel tips
