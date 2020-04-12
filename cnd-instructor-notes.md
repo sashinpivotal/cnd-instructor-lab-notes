@@ -1863,28 +1863,16 @@ Luckily, OpenID Connect or OIDC brings some sanity to the madness. It is an OAut
 - ??I am experiencing the following problem on PCF (using PWS's p-dentity/pal)
 
   ```
-  pal_user@instructor-demo-sang-large:~$ curl -k "https://pal.login.run.pivotal.io/oauth/token" -i -u "75216cc6-2d28-4990-89c5-c0572dc166a0:4a327ca2-2c25-4a64-a4cf-e29fe545c90b" -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
-HTTP/1.1 401 Unauthorized
+  pal_user@instructor-demo-sang-large:~$ curl -k "https://pal.login.run.pivotal.io/oauth/token" 
+  -i -u "75216cc6-2d28-4990-89c5-c0572dc166a0:4a327ca2-2c25-4a64-a4cf-e29fe545c90b" 
+  -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' 
+  -d 'grant_type=client_credentials&response_type=token'
+  HTTP/1.1 401 Unauthorized
   ```
 
 
 -   Just found out why I had failure on my oauth2 testing.  I was running the apps using Spring Boot dashboard, which fails to read the security property values from the build.gradle.
-But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradle”?
-
--  *In the local testing, I am experencing the following problem even 
-   though flowtest gets started with .put("APPLICATION_OAUTH_ENABLED", "false") 
-
-   ```
-   Caused by:
-        org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'projectClient' defined in io.pivotal.pal.tracker.allocations.App: Unsatisfied dependency expressed through method 'projectClient' parameter 0; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'restTemplate' defined in class path resource [io/pivotal/pal/tracker/allocations/OauthResourceServerConfig.class]: Unsatisfied dependency expressed through method 'restTemplate' parameter 0; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
-   ```
-   
-   It is because I should have added the following to the application.properties in the test not the target code
-   
-   ```
-   application.oauth-enabled=false
-   ```
-   
+But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradle”?   
    
 - When running integration testing via `./gradlew clean build`, 
   tell students to ignore the following 
