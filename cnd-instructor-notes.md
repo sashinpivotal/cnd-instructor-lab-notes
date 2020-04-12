@@ -1951,18 +1951,26 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
   
 # Config Server
 
+## Talking points
+
+-   *Is this lab dependent on security lab? Yes, you can do this
+    lab without doing security lab
+-   ?? When to use branch?
+-   Fault tolerance
+-   Confguration drift
+
 ## Tips
 
 -   Use the following command for creating config-server instance (PWS)
 
     ```
     cf create-service ${CONFIG_SERVER_SERVICE_NAME} ${PLAN_NAME} tracker-config-server \
--c "{\"git\": {\"uri\": \"https://github.com/${YOUR_GITHUB_USERNAME}/tracker-config.git\", \"label\": \"master\"}}"
+    -c "{\"git\": {\"uri\": \"https://github.com/${YOUR_GITHUB_USERNAME}/tracker-config.git\", \"label\":  \"master\"}}"
     ```
     
     ```
     cf create-service p-config-server standard tracker-config-server \
--c "{\"git\": {\"uri\": \"https://github.com/sashinpivotal/tracker-config.git\", \"label\": \"master\"}}"
+    -c "{\"git\": {\"uri\": \"https://github.com/sashinpivotal/tracker-config.git\", \"label\": \"master\"}}"
     ```
     
 -   After getting a token, send refresh post
@@ -1999,14 +2007,6 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
   ```
   
 
-## Talking points
-
--   *Is this lab dependent on security lab? Yes, you can do this
-    lab without doing security lab
--   ?? When to use branch?
--   Fault tolerance
--   Confguration drift
-
 ## Challenge questions
 
 -   It is a good practice to save security-sensitive data such as
@@ -2017,7 +2017,7 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 -   Is it a good practice to maintain configuration data in a
     single repository for multiple environments?
 
-## Trouble-shooting
+
 
 
 
