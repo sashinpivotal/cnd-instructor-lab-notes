@@ -3,7 +3,7 @@
 This is a collection of "tips and tricks" I've collected
 in teaching PAL CND, which includes
 
-- Additional logistics info that need to be communicated with 
+- Additional logistics info that might be useful to the 
   the students before/during/after the cohort
 - Tips and tricks used by other instructors
 - Talking points/Wrap-up points for each topic
@@ -1344,19 +1344,19 @@ If you don’t have docker installed on your machine, you can download and run p
   ```
   https://registration-pal-sang-shin.cfapps.io/users/1
   https://registration-pal-sang-shin.cfapps.io/accounts?ownerId=1
-https://registration-pal-sang-shin.cfapps.io/projects?accountId=1
-https://allocations-pal-sang-shin.cfapps.io/allocations?projectId=1
-https://backlog-pal-sang-shin.cfapps.io/stories?projectId=1
-https://timesheets-pal-sang-shin.cfapps.io/time-entries?userId=1
+  https://registration-pal-sang-shin.cfapps.io/projects?accountId=1
+  https://allocations-pal-sang-shin.cfapps.io/allocations?  projectId=1
+  https://backlog-pal-sang-shin.cfapps.io/stories?projectId=1
+  https://timesheets-pal-sang-shin.cfapps.io/time-entries?userId=1
   ```
   
 - [Postman collection](https://github.com/pivotal-bill-kable/cnd-postman-collections)
 
 - Tip to replce
 
-```
-find ./ -type f -exec sed -i -e 's/\$\{UNIQUE_IDENTIFIER\}\.\$\{DOMAIN\}/sang-shin.apps.evans.pal.pivotal.io/g' {} \;
-```
+  ```
+  find ./ -type f -exec sed -i -e 's/\$\{UNIQUE_IDENTIFIER\}\.\$\{DOMAIN\}/sang-shin.apps.evans.pal.pivotal.io/g' {} \;
+  ```
   
 ## Challenge questions
   
@@ -1419,32 +1419,14 @@ find ./ -type f -exec sed -i -e 's/\$\{UNIQUE_IDENTIFIER\}\.\$\{DOMAIN\}/sang-sh
   ```
   cf push -f manifest-registration.yml
   ```
-  
-- *When I execute the following command locally on my mac
-
-  ```
-  < workspace/pal-tracker-distributed + master > mysql -uroot < databases/create_databases.sql
-dyld: Library not loaded: /usr/local/opt/openssl/lib/libssl.1.0.0.dylib
-  Referenced from: /usr/local/bin/mysql
-  Reason: image not found
-Abort trap: 6
-  ```
-  
-  I had to upgrade it using the following command.  It reinstalled
-  a lot of other software including mysql
-  
-  ```
-  brew upgrade openssl@1.1
-  ```
-  
+    
 - ??? When you execute the following command - you have to remove or commit
   the codebase.txt file
 
   ```
-  < workspace/pal-tracker-distributed + master > git cherry-pick pipeline
-error: your local changes would be overwritten by cherry-pick.
-hint: commit your changes or stash them to proceed.
-fatal: cherry-pick failed  
+  < workspace/pal-tracker-distributed + master > git cherry-pick pipeline error: your local changes would be overwritten by cherry-pick.
+  hint: commit your changes or stash them to proceed.
+  fatal: cherry-pick failed  
   ```
   
 # Service Discovery
@@ -1471,7 +1453,7 @@ fatal: cherry-pick failed
     client side load-balancing, spring cloud dependencies, end-to-end 
     testing.
 
--   Service discovery
+- Service discovery
 	-   Explain why service discovery and registration could be useful
 	    in cloud
 	    - in the cloud environment, services come and go
@@ -1649,9 +1631,9 @@ fatal: cherry-pick failed
   
   ```
   < workspace/pal-tracker-distributed - master > cf add-network-policy tracker-allocations --destination-app tracker-registration --protocol tcp --port 8080-8090
-Adding network policy to app tracker-allocations in org sashin.pivotal.io / space sandbox as sashin@pivotal.io...
-provided scopes [cloud_controller.read password.write cloud_controller.write openid uaa.user] do not include allowed scopes [network.admin network.write]
-FAILED
+  Adding network policy to app tracker-allocations in org sashin.pivotal.io / space sandbox as sashin@pivotal.io...
+  provided scopes [cloud_controller.read password.write cloud_controller.write openid uaa.user] do not include allowed scopes [network.admin network.write]
+  FAILED
   ```
 
 - Add network policy
@@ -1687,9 +1669,9 @@ FAILED
   `./gradlew clean build`
 
   ```
-  [Request processing failed; nested exception is java.lang.IllegalStateException: No instances available for localhost] with root cause
+  [Request processing failed; nested exception is  java.lang.IllegalStateException: No instances available for localhost] with root cause
 
-java.lang.IllegalStateException: No instances available for localhost
+  java.lang.IllegalStateException: No instances available for localhost
 
   ```
   
@@ -1710,8 +1692,6 @@ java.lang.IllegalStateException: No instances available for localhost
   ```
   
 # Circuit breaker
-
-
 
 ## Talking points
 
@@ -1885,7 +1865,6 @@ Luckily, OpenID Connect or OIDC brings some sanity to the madness. It is an OAut
   ```
   pal_user@instructor-demo-sang-large:~$ curl -k "https://pal.login.run.pivotal.io/oauth/token" -i -u "75216cc6-2d28-4990-89c5-c0572dc166a0:4a327ca2-2c25-4a64-a4cf-e29fe545c90b" -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' -d 'grant_type=client_credentials&response_type=token'
 HTTP/1.1 401 Unauthorized
-
   ```
 
 
@@ -2010,9 +1989,7 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
   you did not send -d
 
   ```
-  HTTP/1.0 411 Length Required
-Content-Type: text/html; charset=UTF-8
-Referrer-Policy: no-referrer
+  HTTP/1.0 411 Length Required Content-Type: text/html; charset=UTF-8 Referrer-Policy: no-referrer
   ```
   
 - *Setting the management include thing in the manifest files
