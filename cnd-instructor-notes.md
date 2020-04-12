@@ -1,4 +1,15 @@
+# What is this instructor-note for?
 
+This is a collection of "tips and tricks" I've collected
+in teaching PAL CND, which includes
+
+- Additional logistics info that need to be communicated with 
+  the students before/during/after the cohort
+- Tips and tricks used by other instructors
+- Talking points/Wrap-up points for each topic
+- Challenge questions/exercises for each topic
+- Additional reference materials
+- Trouble-shooting tips
 
 # Before the cohort
 
@@ -7,12 +18,14 @@
   ```
   Hello,
   
-  My name is Sang Shin. I am one of the 3 instructors from 
+  My name is <Your name>. I am one of the 3 instructors from 
   Pivotal (now part of VMWare) of this PAL course. A few
   things to communicate before we get started.
       
   - Please make sure you can access the course 
-    contents from the following site
+    contents from the following site. If this is
+    your first time taking a course from Pivotal,
+    you will have to "sign up" first.
   
       http://courses.education.pivotal.io 
   
@@ -20,12 +33,12 @@
     PAL-Cloud-OPS team which provides individual 
     PCF (PAS) credentials like following:
   
-    Hi <Your name>, welcome to Ford. The below 
+    Hi <Your name>, welcome to <Company>. The below 
     information will be useful throughout the course to 
     access materials and infrastructure. View discussion 
-    about your course in #dearborn-feb-2020-cnd.
+    about your course in #<slack-channel>.
   
-       Cohort ID: 349803521
+       Cohort ID: <Cohort ID>
        PCF Foundation API:  api.sys.evans.pal.pivotal.io
        PCF Org: <your own PCF org>
        PCF Username: <your own email address>
@@ -36,7 +49,7 @@
     by the PAL Developer course entry)
   
   - Once everyone is onboard, all our communication will be 
-    through our #dearborn-feb-2020-cnd slack channel during
+    through our #<slack-channel> slack channel during
     the course.
   
     BTW, if this is your first time accessing Slack channel, 
@@ -52,11 +65,6 @@
 
 - A student can access their slack channel message by
   opening slack or go to `palexternal.slack.com` 
-
-- Does each student receive an email regarding how to
-  access CNA course contents? No. They just receive
-  slack channel messege that contains PCF (CND) and AWS
-  credentials (CNA)
   
 - In order to see the self-evaluation, please go to
   [https://registration.education.pivotal.io/admin/cohorts](https://registration.education.pivotal.io/admin/cohorts)
@@ -84,12 +92,14 @@
   ```
   
   ```
-  @here Do not worry about your pair setting up a github today. we will deal with that tomorrow before we do a pair rotation
+  @here Do not worry about your pair setting up a github today.
+  we will deal with that tomorrow before we do a pair rotation
   ```
   
   ```
   @here please make sure you are pairing effectively.
-  The easiest way is to use a timebox where you switch driving every 20  minutes.
+  The easiest way is to use a timebox where you switch 
+  driving every 20  minutes.
   if you are interested in more pairing information:
   https://stackify.com/pair-programming-styles/
   ```
@@ -106,9 +116,9 @@
     -   change manifest files to reflect correct domain and route in manifest file
         - route: pal-tracker-sang-shin.apps.evans.pal.pivotal.io
     -   git add-commit -m "manifest file changed"
+    -   Do the lab work
     -   git push origin master -f (to sync the remote master with local master - do not to this in production!)
-    -   Do the lab
-    -   git push
+
 
 ## Save "in progress" work in a personal branch
 
@@ -183,7 +193,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 ```
 
 - Sarah used post-it tag to designate a `driver` of the pair
-  (ownder of GitHub and PAS account)
+  (owner of GitHub and PAS account)
   
 - My scheme - to make sure non-driver become a driver
   - everyone moves to the right by one position
@@ -233,17 +243,26 @@ Pair rotation guide:
 
 ## Talking points
 
-- Talk about dependency injection - what it is and why
-- Mention that the `pal-tracker` directory is under `workspace` directory
-- pal-tracker codebase should be downloaded under `workspace` directory
+- Spring related
+	- Talk about dependency injection - what it is and why
+	
+- lab project
+	- Mention that the `pal-tracker` directory is under `workspace` directory
+	- You are going to create `pal-tracker` repository in your Github
+	  and sync up with local `pal-tracker` project
+	  
+- PCF related
+	- You are going to deploy the app to the PCF manually in this lab:
+	  later on, we will
+	  deploy the app using a CI/CD pipeline
 
-## Project structure
+## How to set up `pal-tracker` Git project
   
 - Steps to follow
   - Create a personal GitHub account (if you don't have one yet)
   - Create "pal-tracker" repository 
   - Make sure you have unzipped the `pal-tracker.zip` under `workspace` directory
-  - Go to local `pal-tracker` directory
+  - Go to local `workspace/pal-tracker` directory
   - Execute `git remote add origin <url>`
   - Execute `git push origin master --tags`
 
@@ -251,13 +270,6 @@ Pair rotation guide:
 
 - ?? How do you compare different branches and tags using Github?
   (Use IntelliJ instead)
-
-- Why do we say the following?
-
-  ```
-  Make sure to use File > Open to open your Gradle project 
-  rather than using the import feature.
-  ```
 
 - If the test works at the command line but fails within 
   IntelliJ using bootRun task, make sure you 
@@ -300,7 +312,6 @@ Pair rotation guide:
   in step 8)
   
 
-  
 ## Deploy
   
 -  *Somehow, I get the following error when deploying to the PCF:
@@ -314,10 +325,10 @@ Pair rotation guide:
 
 - What the purpose of "gradle wrapper"?
 - One of the features of Spring Boot (actually through the Spring Boot
-Maven/Gradle plugin) is to create a fat jar that contains everything
-including Tomcat.  Among the 12 factors, which factor is relevant to
-creating and deploying the same fat jar over different deployment
-environment?
+  Maven/Gradle plugin) is to create a fat jar that contains everything
+  including Tomcat.  Among the 12 factors, which factor is relevant to
+  creating and deploying the same fat jar over different deployment
+  environment?
 - What does @SpringBootApplication do? What is it made of?
 
 
