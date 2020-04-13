@@ -324,11 +324,13 @@ Pair rotation guide:
 ## Challenge questions
 
 - What the purpose of "gradle wrapper"?
+- What is 12 factor app?  (Google it)
 - One of the features of Spring Boot (actually through the Spring Boot
   Maven/Gradle plugin) is to create a fat jar that contains everything
   including Tomcat.  Among the 12 factors, which factor is relevant to
   creating and deploying the same fat jar over different deployment
   environment?
+- How does Spring Boot helps with dependency management?
 - What does @SpringBootApplication do? What is it made of?
 
 
