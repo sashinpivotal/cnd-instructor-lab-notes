@@ -115,13 +115,15 @@ in teaching PAL CND, which includes
 -   If you want to start "topic" lab from "topic-start", 
     follow the steps mentioned below 
     
-    -   git checkout master (if current branch is not master)
-    -   git reset --hard topic-start (to force local master to sync with remote master)
-    -   change manifest files to reflect correct domain and route in manifest file
+```
+-   git checkout master (if current branch is not master)
+-   git reset --hard <topic-start>
+-   change manifest files to reflect correct domain and route in manifest file like:
         - route: pal-tracker-sang-shin.apps.evans.pal.pivotal.io
-    -   git add-commit -m "manifest file changed"
-    -   Do the lab work
-    -   git push origin master -f (to sync the remote master with local master - do not to this in production!)
+-   Do the lab work
+-   git add-commit -m “my work done”
+-   git push origin master -f  (to force the remote master to sync with local master - do not to this in production! :-))
+```
 
 
 ## Save "in progress" work in a personal branch
