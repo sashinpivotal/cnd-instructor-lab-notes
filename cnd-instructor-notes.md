@@ -796,7 +796,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   modification” design principle in the “pal-tracker” project?
   
 - When do you want to use `@SpringBootTest` vs `@ContextConfiguration`
-  for your testing?
+  for your integration testing that involves Spring application context?
 - Why TimeEntryControllerTest code needs mocking while 
   InMemoryTimeEntryRepositoryTesting code doesn’t?
 - What is the difference between stubbing and mocking? When
