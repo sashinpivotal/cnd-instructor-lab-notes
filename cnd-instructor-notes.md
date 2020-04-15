@@ -778,39 +778,20 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 
 ## Challenge Questions
 
-- What are the differences between unit testing vs integration testing vs end-to-end testing? 
-  In “pal-tracker” project, which tests are unit testing?
-  integrating testing or end-to-end testing?
-- Can you do "integration" or "end-to-end" testing as part of
-  CI/CD pipeline?
-- What are differences between `RestTemplate` vs `TestRestTemplate`?
-- From unit-testing standpoint, why is it a bad practice to create a 
-  dependency object inside your class using “new” keyword or even using 
-  factory (as opposed to getting it injected either through constructor 
-  method or setting method)?
-- What is the another way of creating InMemoryTimeEntryRepository bean 
-  other than using @Bean in the configuration class? What 
-  would be pros and cons of each approach?
-- What does SOLID (design principles) stand for?
-- What are the examples of “Open for extension Closed for 
-  modification” design principle in the “pal-tracker” project?
-  
-- When do you want to use `@SpringBootTest` vs `@ContextConfiguration`
-  for your integration testing that involves Spring application context?
-- Why TimeEntryControllerTest code needs mocking while 
-  InMemoryTimeEntryRepositoryTesting code doesn’t?
-- What is the difference between stubbing and mocking? When
-  do you want use stubbing over mocking and vice-versa?
-- What is the reason controller TimeEntryControllerTest code 
-  has “verify” method?
-- If you have classes in a tree structure (for example,
-  Class A has dependencies of class B and C and class B
-  has a dependency D, in other words, class A and B has
-  dependencies while class C has no dependencies), which
-  class do you want to do Unit testing and which classes
-  you want to do integration testing?
-- What about a class that depends on backing services
-  such as database? How will you perform the integration testing? 
+1. What are the differences between unit testing vs integration testing vs end-to-end testing?
+1. In “pal-tracker” project, which tests are unit testing? integrating testing or end-to-end testing?
+1. Can you do “integration” or “end-to-end” testing as part of CI/CD pipeline?
+1. What are differences between `RestTemplate` vs `TestRestTemplate`?
+1. From unit-testing standpoint, why is it a bad practice to create a dependency object inside your class using “new” keyword or even using factory (as opposed to getting it injected either through constructor method or setting method)?
+1. What is the another way of creating InMemoryTimeEntryRepository bean other than using @Bean in the configuration class? What would be pros and cons of each approach?
+1. What does SOLID (design principles) stand for?
+1. What are the examples of “Open for extension Closed for modification” design principle in the “pal-tracker” project?
+1. When do you want to use `@SpringBootTest` vs `@ContextConfiguration` for your integration testing that involves Spring application context? 
+1. Why TimeEntryControllerTest code needs mocking while InMemoryTimeEntryRepositoryTesting code doesn’t?
+1. What is the difference between stubbing and mocking? When do you want use stubbing over mocking and vice-versa?
+1. What is the reason controller TimeEntryControllerTest code has “verify” method?
+1. If you have classes in a tree structure (for example, Class A has dependencies of class B and C and class B has a dependency D, in other words, class A and B has dependencies while class C has no dependencies), which class do you want to do Unit testing and which classes you want to do integration testing?
+1. What about a class that depends on backing services such as database? How will you perform the integration testing?
    
 - In the case of testing respository's delete(..), why there is
   no training method? it is because respository's delete method
