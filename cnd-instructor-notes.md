@@ -987,8 +987,8 @@ Empty set (0.05 sec)
   
 ## References
 
-- [Migration stratgies](https://github.com/pivotal-bill-kable/spring-cloud-flyway-migration-demo)
-- [Migration stratgies and best practices](https://www.talend.com/resources/understanding-data-migration-strategies-best-practices/)
+- [Migration strategies](https://github.com/pivotal-bill-kable/spring-cloud-flyway-migration-demo)
+- [Migration strategies and best practices](https://www.talend.com/resources/understanding-data-migration-strategies-best-practices/)
 
 # Spring JdbcTemplate
 
