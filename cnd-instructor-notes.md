@@ -18,8 +18,8 @@ in teaching PAL CND, which includes
   ```
   Hello,
   
-  My name is <Your name>. I am one of the 3 instructors from 
-  Pivotal (now part of VMWare) of this PAL course. A few
+  My name is <Instructor name>. I am one of the 3 instructors 
+  form Pivotal (now part of VMWare) of this PAL course. A few
   things to communicate before we get started.
       
   - Please make sure you can access the course 
@@ -48,16 +48,20 @@ in teaching PAL CND, which includes
     http://courses.education.pivotal.io - there is link
     by the PAL Developer course entry)
   
-  - Once everyone is onboard, all our communication will be 
+    Once everyone is onboard, all our communication will be 
     through our #<slack-channel> slack channel during
     the course.
   
     BTW, if this is your first time accessing Slack channel, 
     please create an account via http://palexternal.slack.com
     using your email address.
-  
+   
+  - Finally, please make sure you can access the VDI 
+    using the provided password. All our lab work will be
+    done through the VDI.
+      
   If you have any questions, please feel free to respond
-  to this email.
+  to this email at any time.
   
   ```
 
@@ -325,6 +329,7 @@ Pair rotation guide:
 
 - What the purpose of "gradle wrapper"?
 - What is 12 factor app?  (Google it)
+- What is a fat jar?  How does Spring Boot creats one?
 - One of the features of Spring Boot (actually through the Spring Boot
   Maven/Gradle plugin) is to create a fat jar that contains everything
   including Tomcat.  Among the 12 factors, which factor is relevant to
@@ -357,6 +362,8 @@ Pair rotation guide:
 - Try to use “create-app-manifest” command to capture 
   the metadata of your running app into a file and try 
   to use that file to deploy the application
+- When do you want to use `@ConfigurationProperties` annotation
+  as opposed to `@Value` annotation?/ 
 
 ## Challenge exercises
 
@@ -411,8 +418,8 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   ```
 
 - *You will not be able to run the application within the
-  IDE, instead, you will have to run it via `bootRun`
-  in order to pick up enviroment varaible settings.
+  IDE, instead, you will have to run it via `bootRun` Gradle
+  task in order to pick up enviroment variable settings.
   
 ## Misc
 
@@ -421,11 +428,22 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   Yes, there is. Click "Settings" link on the left in the application
   page.
   
+## Wrap-up
 
+- Why using environment variables is prefered over using property
+  files?  For example, setting database credentials for different
+  environment?
+- We covered several factors so far. What are those?
+  - factor 1 - one codebase many deploys
+  - factor 2 - explicit declaration of dependencies
+  - factor 3 - use environment variables for providing different
+               property values to different environment
+  - factor 10 - dev/production parity - creating a fat jar
+  - factor 11 - logs
   
 # Deployment Pipelines
 
-## Talking poijnts (used by Mike G.)
+## Talking points (used by Mike G.)
 
 - Why we do this lab before we write complete code 
    - deloyment is hard, we want minimum complication
@@ -688,7 +706,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
  
   It is because testing did not set the context right. 
   See https://stackoverflow.com/questions/9419606/unit-testing-a-method-dependent-to-the-request-context
-  Chaning the setUp() method as following works.
+  Changing the setUp() method as following works.
   
   ```
     @Before
@@ -785,10 +803,15 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   do you want use stubbing over mocking and vice-versa?
 - What is the reason controller TimeEntryControllerTest code 
   has “verify” method?
-- If you have code with tree structure, do you want to
-  use unit testing with mocking or do just integration
-  testing?
-  
+- If you have classes in a tree structure (for example,
+  Class A has dependencies of class B and C and class B
+  has a dependency D, in other words, class A and B has
+  dependencies while class C has no dependencies), which
+  class do you want to do Unit testing and which classes
+  you want to do integration testing?
+- What about a class that depends on backing services
+  such as database? How will you perform the integration testing? 
+   
 - In the case of testing respository's delete(..), why there is
   no training method? it is because respository's delete method
   returns void.
@@ -896,6 +919,7 @@ sudo snap install postman
 
 - Make sure to use double underscore when creating migration files
 - *How do you see the list of services using brew?  `brew services list`
+- *How do you install Java11 to Mac? `brew cask install java11`
 - When executing flyway command, username and password will be asked.
   Enter `tracker` and no password
   
