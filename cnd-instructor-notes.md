@@ -970,6 +970,11 @@ mysql> select * from time_entries;
 Empty set (0.05 sec)
 ```
 
+## Challenge questions
+
+- Does database migration include data migration?
+- Migration should keep backward compatibility - don't delete column, add a column instead
+
 ## Wrap-up
 
 - (Dylan: went through migration script)
@@ -1130,8 +1135,10 @@ cf restart cups-example
    and the IDE will fix it.
    
 
-- ?? JdbcTemplate lab - if the time-entries table is not cleaned up, 
-  the api test will fail - actually, we have the following code
+- *What is the reason we have the following code in the test?
+  The purpose of this code is to clean up the `time-entries` table
+  each time API testing is performed. Otherwise,
+  the api test will fail with duplicate entry.
   
   ```
     @BeforeEach
@@ -1152,15 +1159,14 @@ cf restart cups-example
 -   What are the two conditions that need to be met before
     Spring Boot's auto-configuration create DataSource bean
     that represents MySQL? 
-    (Answer: mysel driver in the classpath and crendentials)
+    (Answer: MySQL driver in the classpath and credentials)
 
 -   So when we are running our pal-tracker app locally and in GitHub Actions 
     with database, we have to provide database credentials (as 
     environment variables in our lab but could be from property
     file) but we did not have to do that when we are running
-    the same application in PCF.  How is it done?  (Hunter
-    talked about this.)
-    
+    the same application in PCF.  How is it done?  
+        
 -   We know that when we are running pal-tracker app locally, Spring Boot
     creates a `DataSource` bean from the environment-variable provided
     database credentials, which is then used to create `JdbcTemplate`
@@ -1168,6 +1174,8 @@ cf restart cups-example
     somehow different `DataSource`
     bean gets created from database credentials from the VCAP_SERVICES.
     How does PCF do this?
+    
+    See [Configuring Service Connections for Spring](https://docs.run.pivotal.io/buildpacks/java/configuring-service-connections/spring-service-bindings.html)
     
 -   *What is Spring cloud connector for?
     (Answer: Spring Cloud Connectors provides a simple abstraction 
@@ -1222,7 +1230,21 @@ If you don’t have docker installed on your machine, you can download and run p
 ```
 
 - Show how to create a dashboard using the new counter that was created
-    
+
+## Challenge question
+
+- What is code smell in the following code in the `TimeEntryController`?
+  (Does it follow Single Responsibility principle?) 
+  What could be the solution? Do implement it if you know how to.
+
+  ```
+  @GetMapping
+  public ResponseEntity<List<TimeEntry>> list() {
+      actionCounter.increment();
+      return new ResponseEntity<>(timeEntriesRepo.list(), HttpStatus.OK);
+  }
+  ```
+      
 ## Challenge exercise
 
 - Use AOP to increment the counter
@@ -1263,7 +1285,7 @@ If you don’t have docker installed on your machine, you can download and run p
 ## Talking points
 
 -   Explain what the `${USER_ID}` and `${PROJECT_ID}` variables for 
--   Describe the relationship among the 4 apps
+-   Describe the relationship among the 4 apps - use Bill Kable's picture
 -   Describe how to change the http://FILL_ME_IN - registration server
     endpoint is something you configure in the manifest.yml file 
     of the registration server
@@ -1282,7 +1304,7 @@ If you don’t have docker installed on your machine, you can download and run p
     @PostMapping
     public ResponseEntity<AllocationInfo> create(@RequestBody AllocationForm form) {
 
-        if (projectIsActive(form.projectId)) {
+        if (projectIsActive(form.projectId)) {   // <--------------
             AllocationRecord record = gateway.create(formToFields(form));
             return new ResponseEntity<>(present(record), HttpStatus.CREATED);
         }
@@ -1290,8 +1312,8 @@ If you don’t have docker installed on your machine, you can download and run p
         return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
     }
     
-    private boolean projectIsActive(long projectId) {
-        ProjectInfo project = client.getProject(projectId);
+    private boolean projectIsActive(long projectId) {. // <--------------
+        ProjectInfo project = client.getProject(projectId); // See ProjectClient class
 
         return project != null && project.active;
     }
@@ -1373,8 +1395,8 @@ If you don’t have docker installed on your machine, you can download and run p
   Isn't it a violation of the first rule of 12 factor app? 
 
 - Why are there variations of a domain class, for example,
-  why are there `TimeEntryForm`, `TimeEntryInfo`, `TimeEntryRecord`, `TimeEntryFields` classes?
-  Where are they used?
+  why are there `TimeEntryForm`, `TimeEntryInfo`, `TimeEntryRecord`, 
+  `TimeEntryFields` classes? Where are they used?
   
 - In the "pal-tracker-distributed", we use 4 different databases, one for
   each application. 
@@ -1385,7 +1407,7 @@ If you don’t have docker installed on your machine, you can download and run p
     (For example, a user is deleted in User database, how does other
     databases reflect that change?)
   - Is it OK to have duplication among the multiple databases?
-    (In 'pal-tracker-distributed", we don't have any duplcate data.)
+    (In 'pal-tracker-distributed", we don't have any duplicate data.)
 
 - Application code should be insulated from data access logic?
   How do we achieve that in the "pal-tracker-distributed"? 
@@ -1429,7 +1451,7 @@ If you don’t have docker installed on your machine, you can download and run p
   cf push -f manifest-registration.yml
   ```
     
-- ??? When you execute the following command - you have to remove or commit
+- *When you execute the following command - you have to remove or commit
   the codebase.txt file
 
   ```
@@ -1455,7 +1477,8 @@ If you don’t have docker installed on your machine, you can download and run p
     
 - (Bill)
   - Spring cloud release train - Horton, Greenweech, ..
-  - Technical debt
+  - Technical debt because when the version of the tile changes,
+    the applications need to be changed
   - How to resolve patch version - go to maven repo and find out
 
 -   This lab has a lot of moving parts: service discovery/registration,
@@ -1491,6 +1514,12 @@ If you don’t have docker installed on your machine, you can download and run p
 
 ## Tips
 
+- When you run "./gradlew clean build", the following is a expected behavior
+
+  ```
+  com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
+  ```
+
 - apps.evans.pal.pivotal.io is using the following
 
 
@@ -1501,18 +1530,18 @@ If you don’t have docker installed on your machine, you can download and run p
   ```
   {
    "git" : {
+      "branch" : "HEAD",
       "commit" : {
-         "id" : "fd850cb",
-         "time" : "2019-04-26T15:15:37Z"
-      },
-      "branch" : "HEAD"
+         "id" : "325b9c6",
+         "time" : "2019-11-25T20:46:52Z"
+      }
    },
    "build" : {
-      "time" : "2019-05-03T15:52:33.869Z",
+      "version" : "2.1.3-build.5",
+      "name" : "service-broker",
       "artifact" : "spring-cloud-service-broker",
-      "group" : "io.pivotal.spring.cloud",
-      "version" : "2.0.8-build.5",
-      "name" : "service-broker"
+      "time" : "2020-04-06T23:17:49.822Z",
+      "group" : "io.pivotal.spring.cloud"
    }
   }
   ```
@@ -1546,9 +1575,36 @@ If you don’t have docker installed on your machine, you can download and run p
    springCloudServicesClientLibrariesVersion =   SPRING_CLOUD_SERVICES_CLIENT_LIBRARIES_VERSION
    ```
    
+   The following worked with SCS was 2.0.8
+   
    ```
    springCloudVersion = "Finchley.RELEASE"
    springCloudServicesClientLibrariesVersion = "2.0.3.RELEASE"
+   ```
+   
+   In the solution project??
+   
+   ```
+   springCloudVersion = "Finchley.SR2"
+   springCloudServicesClientLibrariesVersion = "2.0.2.RELEASE"
+   springCloudCommonsVersion = "2.0.0.RELEASE"
+   ```
+   
+   Now evanss SCS is 2.1.3 and guide says
+   
+   2.1.x (uses Spring Cloud Connectors)	 2.1.x Spring Boot). Greenwich.x
+   
+   ?? But we are using Spring Boot 2.0.3
+   
+   I tried
+   
+   ```
+   springBootVersion = "2.1.6.RELEASE"
+   springVersion = "5.1.8.RELEASE"
+   
+   springCloudVersion = "Greenwich.RELEASE"
+   springCloudServicesClientLibrariesVersion = "2.1.2.RELEASE"
+   springCloudCommonsVersion = "2.1.1.RELEASE"
    ```
    
 - In order to find out the latest versions of the above two,
@@ -1664,6 +1720,21 @@ If you don’t have docker installed on your machine, you can download and run p
 - [Ribbon](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html)
 
 ## Trouble-shooting
+
+- ?? I get the following error when creating 
+
+  ```
+  < workspace/pal-tracker-distributed - master > curl -i -XPOST -H"Content-Type:  application/json" allocations-pal-sang-shin.apps.evans.pal.pivotal.io/allocations/ - d"{\"projectId\": \"1\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\":  \"2015-05-18\"}"
+  HTTP/1.1 500 Internal Server Error
+
+  {"timestamp":1587121186241,"status":500,"error":"Internal Server Error","message":"No instances available for registration-pal-sang-shin.apps.evans.pal.pivotal.io","path":"/allocations/"}
+  ```
+  
+  * It was because
+
+  ```
+  Ah false alarm.  I had to unset-env REGISTRATION_SERVER_ENDPOINT.
+  ```
 
 - ??? the step to refresh gradle is missing again after
   creating build.gradle for platform-services/eureka-server
@@ -2026,7 +2097,15 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 -   Is it a good practice to maintain configuration data in a
     single repository for multiple environments?
 
+# Ending the course
 
+-   (From Charles LeRose)
 
+    ```
+    As we head toward the end of this class, I’d like to repeat that the course material is available to you indefinitely (the web content with the labs, on the ‘courses’ site.)  You will also continue to have access to this Slack server.  (Be sure to remember you passwords for these.)  And I encourage you to join the #alumni channel here too.
+‘Evans’ will be torn down after the class ends, as will your remote desktops that we provided.
+Hopefully, you all have access to some sort of developer sandbox Cloud Foundry foundation.  If not, or if your sandbox lacks some of the services on ‘Evans’, you can use a Cloud Foundry foundation called Pivotal Web Services at  run.pivotal.io.  This is a for-pay service, but creating an account is free, and it comes with quite a bit of free service credit to get started.  There will be a few differences from Evans, such as the API endpoint, so keep your eye out for those.
+    ```
 
+- [Survey](https://www.surveymonkey.com/r/3GKNTN8?coid=pri)
 
