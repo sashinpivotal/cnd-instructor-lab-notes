@@ -538,7 +538,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   environment?
 - We covered several factors so far. What are those?
   - factor 1 - one codebase many deploys
-  - factor 2 - explicit declaration of dependencies
+  - factor 2 - explicit declaration of dependencies using Gradle
   - factor 3 - use environment variables for providing different
                property values to different environment
   - factor 10 - dev/production parity - creating a fat jar
@@ -558,8 +558,10 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
    - concept is important, we don't care which CI tool you use
 
 - What CD mean to you?
-   - deployment to production is business decision not Eng decision
-   - ??depployment to prod is risky, user segregation??
+   - deployment to production should be a business decision 
+     not an Eng decision (meaning it should be always 
+     `ready to be deploy'able to production`
+   - depployment to prod is risky, user segregation
    - ??github example, users, cost vs risk, regulartory constraint
 
 - Use instructor slide to talk about pipeline
@@ -570,7 +572,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   (many org do not allow cf push)
   (jar creation issue - we want to create jar file just once
   and use it in multiple enviroments)
-  (??jar versioning)
+  (jar versioning - in the form of release - is possible via CICD tool)
   (buildpack has nothing to do with creating jar)
 
 ## Wrap-up
@@ -590,20 +592,23 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   CF_USERNAME sashin@pivotal.io
   CF_PASSWORD xxxxxxxxxxx
 
-  (when using pws pcf endpoint)
+  (when using PWS pcf endpoint)
   CF_API_URL https://api.run.pivotal.io
   CF_ORG sashin-org
   CF_SPACE development
   CF_USERNAME sashin@pivotal.io
   CF_PASSWORD xxxxxxxx
-    ```
+  ```
     
-- In order to trigger Github Actions job without making code change, you can
+- In order to trigger Github Actions job without making code 
+  change, you can
 
   ```
   git commit --allow-empty -m "start a new job"
   git push
   ```
+  
+  Or you can select failed action and select "Redo all jobs"
   
 ## GitHub Actions
 
@@ -615,9 +620,6 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   https://github.com/sashinpivotal/pal-tracker
   ```
   
-- *When I deploy REST app, I get the failure during "Install Cf cli"
-  Redoing the job then worked.
-     
 ## Trouble-shooting
       
 - *If everything worked fine in the 2nd phase but deployment
@@ -642,7 +644,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   
 ## Extra lab exercise
 
-- ??How do you deploy to a different environment using GitHub
+- How do you deploy to a different environment using GitHub
   conditional statement
 
 ## Challenge questions on routing
@@ -688,7 +690,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 
 ## Talking points
 
-- Don't change the test code - that is the contract
+- Don't change the test code in this lab - that is the contract
 
 - Demo how to remove compile errors also show what to do
   when there are two compile 
