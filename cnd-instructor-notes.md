@@ -373,6 +373,15 @@ fatal: Authentication failed for 'https://github.com/sashinpivotal/pal-tracker-d
   - Execute `git remote add origin <url>`
   - Execute `git push origin master --tags`
 
+## Git Lola
+
+- It display the tags in the reverse order of the change
+
+```
+git config --global alias.lola "log --graph --decorate --pretty=oneline --abbrev-commit --all"
+git lola
+```
+
 ## Bootstrap the application
 
 - ?? How do you compare different branches and tags using Github?
