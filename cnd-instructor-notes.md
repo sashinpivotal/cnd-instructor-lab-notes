@@ -11,16 +11,19 @@ in teaching PAL CND, which includes
 - Additional reference materials
 - Trouble-shooting tips
 
+349803668-student-10.workspaces.pal.pivotal.io
+
 # Before the cohort
 
 - We can send the following message before cohort gets started
+  with email subject `PAL for Developer class - a few things to communicate`
 
   ```
   Hello,
   
-  My name is <Instructor name>. I am one of the 3 instructors 
-  form Pivotal (now part of VMWare) of this PAL course. A few
-  things to communicate before we get started.
+  My name is <Instructor name>. I am one of the several instructors 
+  from Pivotal (now part of VMWare) of this PAL course. A few
+  things to communicate before we start.
       
   - Please make sure you can access the course 
     contents from the following site. If this is
@@ -42,23 +45,33 @@ in teaching PAL CND, which includes
        PCF Foundation API:  api.sys.evans.pal.pivotal.io
        PCF Org: <your own PCF org>
        PCF Username: <your own email address>
-       PCF Password: <your own pcf password>
+       PCF Password: <your own PCF password>
      
     (The above credentials can be also accessible from
     http://courses.education.pivotal.io - there is link
     by the PAL Developer course entry)
   
-    Once everyone is onboard, all our communication will be 
-    through our #<slack-channel> slack channel during
-    the course.
+    Once everyone is onboard, all our technology-related 
+    communication will be through our #liveon-apr-2020-cnd-4 
+    slack channel during the course. (Zoom chat will be used 
+    only occasionally for logistics related issues.)
   
     BTW, if this is your first time accessing Slack channel, 
     please create an account via http://palexternal.slack.com
     using your email address.
+    
+  - Create a personal GitHub account if you don't have one.
+    (Using company GitHub is not recommended.)
+
+  - We are going to use IntelliJ (Community version) and
+    Gradle in our labs.  If you are new to these, please feel
+    free to explore the basic usage of them before coming
+    to the class.
    
-  - Finally, please make sure you can access the VDI 
-    using the provided password. All our lab work will be
-    done through the VDI.
+  - Finally, please make sure you can access the Remote Desktop 
+    instance using the provided URL and password. All our lab 
+    work will be done through the remote desktop.  See if
+    you can open IntelliJ and terminal window.
       
   If you have any questions, please feel free to respond
   to this email at any time.
@@ -125,7 +138,6 @@ in teaching PAL CND, which includes
 -   git push origin master -f  (to force the remote master to sync with local master - do not to this in production! :-))
 ```
 
-
 ## Save "in progress" work in a personal branch
 
 ```
@@ -138,8 +150,8 @@ By the way, before you do the above step, if you need to save your current unfin
 
 -   If you have created github repository with README.md, you
     will experience the following problem when you do 
-    `git push origin master`.
-    An easy way out is `git push origin master -f`
+    `git push origin master --tags`.
+    An easy way out is `git push origin master -f --tags`
 
 ```
 < workspace/movie-fun - master > git push
@@ -150,15 +162,6 @@ hint: Updates were rejected because the tip of your current branch is behind
 hint: its remote counterpart. Integrate the remote changes (e.g.
 hint: 'git pull ') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
-```
-
--   If you want to go to a solution project while maintaining
-    your code (??? Is this correct?)
-
-```
-- git checkout master
-- git cherry-pick abort
-- git cherry-pick <topic-solution-tag> and handle merge conflict
 ```
 
 - *When a repository is created with README file on, performing
@@ -174,6 +177,15 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
   ```
   git pull --allow-unrelated-histories
   ```
+
+-   If you want to go to a solution project while maintaining
+    your code (??? Is this correct?)
+
+```
+- git checkout master
+- git cherry-pick abort
+- git cherry-pick <topic-solution-tag> and handle merge conflict
+```
 
 # Pair Programming
 
@@ -235,12 +247,98 @@ Pair rotation guide:
 - Ctrl+N for "opening a class" (CMD+O for Mac)
 - Ctrl+Shift+N for "open a file" 
 
+# VDI
+
+## Linux keyboard shortcuts
+
+```
+- Keyboard shortcut keys within Remote Desktop
+  - ALT+F10 (maximizing window on and off)
+  - ALT+Tab (move between windows)
+  - ALT+F9 (minimize window)
+  - SHIFT+CTRL+C (copying from termimal) 
+  - SHIFT+CTRL+V (copying to the terminal)
+  - CTRL+C (copying) 
+  - CTRL+V (pasting)
+
+- Keyboard shortcut keys within IntelliJ
+
+  - CTRL+N (find class)
+  - CTRL+Shift+N (find file)
+  - ALT+Return (Quick fix)
+  - ALT+Insert (Generate) 
+  - Double SHIFT (global search)
+  - CTRL+SHIFT+Return (Complete current statement)
+  - F2, SHIFT+F2 (Go to next error)
+  - CTRL+ALT+Left (back to previous edit ?? Does not work on Mac - I have to set it myself manually)
+  - CTRL+ALT+Right (back to previous edit ?? Does not work on Mac - I have to set it myself manually)
+```
+
+## Misc. tips
+
+- You can bookmark the course webpage by right clicking ...
+  on the top-right corner and select bookmark
+- *If you enabled two-factor authentication, you will experience
+  the following. Easiest fix is to disable it.
+
+  ```
+  pal_user@instructor-demo-sang-large:~/workspace/pal-tracker-distributed$ git push origin master -f
+Username for 'https://github.com': sashinpivotal
+Password for 'https://sashinpivotal@github.com': 
+remote: Invalid username or password.
+fatal: Authentication failed for 'https://github.com/sashinpivotal/pal-tracker-distributed/'
+  ```
+  
+  It is because as mentioned [here](https://stackoverflow.com/questions/17659206/git-push-results-in-authentication-failed)
+  
+  ```
+  If you enabled two-factor authentication in your Github account you won't be able to push via HTTPS using your accounts password. Instead you need to generate a personal access token. This can be done in the application settings of your Github account. Using this token as your password should allow you to push to your remote repository via HTTPS. Use your username as usual.
+  ```
+  
+- In the browser, you can bookmark it but you have 
+  to select "show bookmark bar" to see it
+
+## Lab related
+
+- Getting actuator metrics from the browser is not formatted
+  But using curl command with json_pp works
+- *I could not see resilience metrics somehow - you have
+  to make a call that exercises the circuit breaker 
+  
+## ubuntu
+
+- vim is already there as an editor
+- Visual Studio is another option
+- bash shell - you can check with echo "$SHELL"
+- you have to create ~/.bash_profile
+
+# Zoom related tips and tricks
+
+- The host role should be played by an instructor who has the
+  least amount of work on that day
+- The activities host plays include
+  - create breakout rooms
+  - assign "ask for help" request to other co-hosts
+    (unfortunately co-hosts do not receive "ask for help" notifications)
+  - occasionally "lower all hands" 
+  - occasionally "mute" everyone
+- The first time, you become the host, you should
+  - assign other instructors as co-host
+  - create a teacher's lounge - this can be done only before you open breakout rooms
+- If the host gets disconnected from the Zoom session, for
+  whatever reason, the host role will be automatically transfered to
+  another co-host
+  - host role has to be manually switched back to original host
+    by the current host
+
 # Assignment Submission
    
 ## Talking points
 
 - Note that whenever student submit the lab result, 
   they always have to go to the `assigment-submission` directory
+  
+- Make sure to change the email address
 
 - CND/CNA students should ignore `waveland` section
 
@@ -255,14 +353,17 @@ Pair rotation guide:
 - lab project
 	- Mention that the `pal-tracker` directory is under `workspace` directory
 	- You are going to create `pal-tracker` repository in your Github
-	  and sync up with local `pal-tracker` project
+	  and sync up with local `pal-tracker` project using `git remote add origin <URL>`
 	  
 - PCF related
-	- You are going to deploy the app to the PCF manually in this lab:
-	  later on, we will
+	- You are going to deploy the app to the PCF manually in this lab 
+	  using `cf push` command:
+	  later on, you will
 	  deploy the app using a CI/CD pipeline
 
 ## How to set up `pal-tracker` Git project
+
+- Create personal Github account if you have not done so yet
   
 - Steps to follow
   - Create a personal GitHub account (if you don't have one yet)
@@ -329,7 +430,7 @@ Pair rotation guide:
  
 ## Challenge questions
 
-- What the purpose of "gradle wrapper"?
+- What the purpose of using "gradle wrapper"?
 - What is 12 factor app?  (Google it)
 - What is a fat jar?  How does Spring Boot creats one?
 - One of the features of Spring Boot (actually through the Spring Boot
@@ -1594,17 +1695,24 @@ If you don’t have docker installed on your machine, you can download and run p
    
    2.1.x (uses Spring Cloud Connectors)	 2.1.x Spring Boot). Greenwich.x
    
-   ?? But we are using Spring Boot 2.0.3
-   
-   I tried
-   
    ```
-   springBootVersion = "2.1.6.RELEASE"
-   springVersion = "5.1.8.RELEASE"
-   
-   springCloudVersion = "Greenwich.RELEASE"
-   springCloudServicesClientLibrariesVersion = "2.1.2.RELEASE"
-   springCloudCommonsVersion = "2.1.1.RELEASE"
+   ext {
+        springBootVersion = "2.1.13.RELEASE"
+        springVersion = "5.1.14.RELEASE"
+        mysqlVersion = "8.0.13"
+        jacksonVersion = "2.9.7"
+        slf4jVersion = "1.7.25"
+        mockitoVersion = "2.23.0"
+        assertJVersion = "3.11.1"
+        hikariVersion = "3.1.0"
+        logbackVersion = "1.2.3"
+        junitVersion = "4.12"
+        okhttpVersion = "3.12.0"
+        jsonPathVersion = "2.4.0"
+        springCloudVersion = "Greenwich.SR5"
+        springCloudServicesClientLibrariesVersion = "2.1.7.RELEASE"
+        springCloudCommonsVersion = "2.1.5.RELEASE"
+    }
    ```
    
 - In order to find out the latest versions of the above two,
@@ -2106,6 +2214,15 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 ‘Evans’ will be torn down after the class ends, as will your remote desktops that we provided.
 Hopefully, you all have access to some sort of developer sandbox Cloud Foundry foundation.  If not, or if your sandbox lacks some of the services on ‘Evans’, you can use a Cloud Foundry foundation called Pivotal Web Services at  run.pivotal.io.  This is a for-pay service, but creating an account is free, and it comes with quite a bit of free service credit to get started.  There will be a few differences from Evans, such as the API endpoint, so keep your eye out for those.
     ```
+    
+- (From Bill Kable)
+
+```
+Pivotal EDU offerings
+- List of certifications: https://tanzu.vmware.com/training/certification
+- List of Product Trainings: https://tanzu.vmware.com/training
+- List of Platform Acceleration Labs Trainings: https://tanzu.vmware.com/platform-acceleration-lab
+```
 
 - [Survey](https://www.surveymonkey.com/r/3GKNTN8?coid=pri)
 
