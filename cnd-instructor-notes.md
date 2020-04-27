@@ -282,17 +282,17 @@ Pair rotation guide:
   the following. Easiest fix is to disable it.
 
   ```
-  pal_user@instructor-demo-sang-large:~/workspace/pal-tracker-distributed$ git push origin master -f
-Username for 'https://github.com': sashinpivotal
-Password for 'https://sashinpivotal@github.com': 
-remote: Invalid username or password.
-fatal: Authentication failed for 'https://github.com/sashinpivotal/pal-tracker-distributed/'
+  pal_user@instructor-demo-sang-large:~/workspace/pal-tracker- distributed$ git push origin master -f
+  Username for 'https://github.com': sashinpivotal
+  Password for 'https://sashinpivotal@github.com': 
+  remote: Invalid username or password.
+  fatal: Authentication failed for 'https://github.com/sashinpivotal/ pal-tracker-distributed/'
   ```
   
   It is because as mentioned [here](https://stackoverflow.com/questions/17659206/git-push-results-in-authentication-failed)
   
   ```
-  If you enabled two-factor authentication in your Github account you won't be able to push via HTTPS using your accounts password. Instead you need to generate a personal access token. This can be done in the application settings of your Github account. Using this token as your password should allow you to push to your remote repository via HTTPS. Use your username as usual.
+  If you enabled two-factor authentication in your Github account you  won't be able to push via HTTPS using your accounts password. Instead  you need to generate a personal access token. This can be done in the  application settings of your Github account. Using this token as your  password should allow you to push to your remote repository via  HTTPS. Use your username as usual.
   ```
   
 - In the browser, you can bookmark it but you have 
@@ -317,6 +317,7 @@ fatal: Authentication failed for 'https://github.com/sashinpivotal/pal-tracker-d
 - The host role should be played by an instructor who has the
   least amount of work on that day
 - The activities host plays include
+  - admit participants (this is very important)
   - create breakout rooms
   - assign "ask for help" request to other co-hosts
     (unfortunately co-hosts do not receive "ask for help" notifications)
@@ -373,14 +374,6 @@ fatal: Authentication failed for 'https://github.com/sashinpivotal/pal-tracker-d
   - Execute `git remote add origin <url>`
   - Execute `git push origin master --tags`
 
-## Git Lola
-
-- It display the tags in the reverse order of the change
-
-```
-git config --global alias.lola "log --graph --decorate --pretty=oneline --abbrev-commit --all"
-git lola
-```
 
 ## Bootstrap the application
 
@@ -436,12 +429,27 @@ git lola
   ```
   None of the buildpacks detected a compatible application
   ```
- 
+  
+## Tips
+
+- It display the tags in the reverse order of the check-in
+
+```
+git config --global alias.lola "log --graph --decorate --pretty=oneline --abbrev-commit --all"
+git lola
+```
+
+- In Linux, you can use the following command to find jar files
+
+```
+find . -name \*.jar -print
+```
+
 ## Challenge questions
 
 - What the purpose of using "gradle wrapper"?
-- What is 12 factor app?  (Google it)
 - What is a fat jar?  How does Spring Boot creats one?
+- What is 12 factor app?  (Google it)
 - One of the features of Spring Boot (actually through the Spring Boot
   Maven/Gradle plugin) is to create a fat jar that contains everything
   including Tomcat.  Among the 12 factors, which factor is relevant to
@@ -450,7 +458,7 @@ git lola
 - How does Spring Boot helps with dependency management?
 - What does @SpringBootApplication do? What is it made of?
 
-
+	
 ## Challenge exercise
 
 -  Create a Person bean which has name and age fields
