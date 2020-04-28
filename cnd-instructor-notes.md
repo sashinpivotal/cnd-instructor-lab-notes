@@ -266,12 +266,15 @@ Pair rotation guide:
   - CTRL+N (find class)
   - CTRL+Shift+N (find file)
   - ALT+Return (Quick fix)
+  - CTRL+SHIFT+Enter (complete the statement)
   - ALT+Insert (Generate) 
   - Double SHIFT (global search)
   - CTRL+SHIFT+Return (Complete current statement)
-  - F2, SHIFT+F2 (Go to next error)
-  - CTRL+ALT+Left (back to previous edit ?? Does not work on Mac - I have to set it myself manually)
-  - CTRL+ALT+Right (back to previous edit ?? Does not work on Mac - I have to set it myself manually)
+  - F2, SHIFT+F2 (Go to next/previous error)
+  - CTRL+ALT+Left (back - Does not work on Mac - I have to set it myself manually
+  - CTRL+ALT+Right (forward - Does not work on Mac - I have to set it myself manually)
+  - CTRL+SHIFT+F10 (run the app/test)
+  - CTRL+F10(rerun the app/test)
 ```
 
 ## Misc. tips
@@ -457,6 +460,16 @@ find . -name \*.jar -print
   environment?
 - How does Spring Boot helps with dependency management?
 - What does @SpringBootApplication do? What is it made of?
+- Why we use random route in our lab?
+- Try the following commands
+  
+```
+cf target
+cf apps
+cf app pal-tracker
+cf routes
+cf help -a
+```
 
 	
 ## Challenge exercise
@@ -483,9 +496,13 @@ find . -name \*.jar -print
   the metadata of your running app into a file and try 
   to use that file to deploy the application
 - When do you want to use `@ConfigurationProperties` annotation
-  as opposed to `@Value` annotation?/ 
+  as opposed to `@Value` annotation?
 
 ## Challenge exercises
+
+- Modify the code so that you are using 
+  `@ConfigurationProperties` annotation
+  as opposed to `@Value` annotation
 
 - Currently we have testing code for `WelcomeController` that does 
   the testing of the controller class logic but it does not test 
@@ -550,14 +567,14 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   
 ## Wrap-up
 
-- Why using environment variables is prefered over using property
+- Why using environment variables is preferred over using property
   files?  For example, setting database credentials for different
-  environment?
+  environments(dev, testing, staging, production, etc)?
 - We covered several factors so far. What are those?
   - factor 1 - one codebase many deploys
   - factor 2 - explicit declaration of dependencies using Gradle
   - factor 3 - use environment variables for providing different
-               property values to different environment
+               property values for different environments   
   - factor 10 - dev/production parity - creating a fat jar
   - factor 11 - logs
   
@@ -688,7 +705,6 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
     
 -   Is blue-green deployment suitable for major feature change?
 -   What are the challenges for doing blue-green deployment?
-    - Brad thinks blue-green deployment is possible for most cases
     - What about table change - don't delete field, don't delete tables
     
 ## Steps for blue-green deployment
