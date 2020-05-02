@@ -129,7 +129,7 @@ in teaching PAL CND, which includes
     follow the steps mentioned below 
     
 ```
--   git checkout master (if current branch is not master)
+-   git checkout master 
 -   git reset --hard <topic-start>
 -   change manifest files to reflect correct domain and route in manifest file like:
         - route: pal-tracker-sang-shin.apps.evans.pal.pivotal.io
@@ -274,7 +274,9 @@ Pair rotation guide:
   - CTRL+ALT+Left (back - Does not work on Mac - I have to set it myself manually
   - CTRL+ALT+Right (forward - Does not work on Mac - I have to set it myself manually)
   - CTRL+SHIFT+F10 (run the app/test)
-  - CTRL+F10(rerun the app/test)
+  - SHIFT+F10(rerun the app/test)
+  - CTRL+ALT+V (extract return value into a local variable)
+  - CTRL+SHIFT+T (go to target/test code)
 ```
 
 ## Misc. tips
@@ -930,6 +932,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 1. What is the reason controller TimeEntryControllerTest code has “verify” method?
 1. If you have classes in a tree structure (for example, Class A has dependencies of class B and C and class B has a dependency D, in other words, class A and B has dependencies while class C has no dependencies), which class do you want to do Unit testing and which classes you want to do integration testing?
 1. What about a class that depends on backing services such as database? How will you perform the integration testing?
+1. What happens to the in-memory data when the application instances come and go?
    
 - In the case of testing respository's delete(..), why there is
   no training method? it is because respository's delete method
@@ -945,6 +948,10 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
     }
   ```
   
+## Lab tips
+
+- Use jq command to pretty-format the response
+
 ## Answers to challenge questions
 
 - (How does verification work?)
@@ -1108,7 +1115,7 @@ Empty set (0.05 sec)
 
 ## Challenge questions
 
-- Does database migration include data migration?
+- Does database migration include data migration in addition to schema migration?
 - Migration should keep backward compatibility - don't delete column, add a column instead
 
 ## Wrap-up
@@ -1228,6 +1235,10 @@ cf restart cups-example
 ```
 
 ## Trouble-shooting
+
+1. *When running `./gradlew clean build` results in Database not
+   found problem, you will have to run the database create script
+   and migration in the previous lab
 
 1. *When running a test, I get a flyway problem in the build.gradle
 
@@ -1396,7 +1407,7 @@ If you don’t have docker installed on your machine, you can download and run p
 - ?? When applying auto-scaling, what is "Percent of traffic to apply    
   95% or 99%"?
   
-- ?? Carl can see the build script of meerkat from the course website?
+- app manager url https://apps.sys.evans.pal.pivotal.io
   
 ## Wrap-up
 
@@ -2081,9 +2092,50 @@ Luckily, OpenID Connect or OIDC brings some sanity to the madness. It is an OAut
 -   Change 4 manifest files to reflect correct route
 -   Make sure to create services manually at PCF
 
-## Trouble-shooting tips
+## Trouble-shooting 
 
-- ??I am experiencing the following problem on PCF (using PWS's p-dentity/pal)
+- *I use security-solution project and run the following locally
+  after successfuly got the token for auth server.  (Answer:
+  it was because I was running the application using Spring Boot
+  services tab.  Using boorun with --parallel works. 
+      
+```
+ workspace/pal-tracker-distributed - master > curl localhost:8083 -H"Authorization: Bearer b78147e6-75f6-4a22-8498-26efe95d5dc6"
+<!doctype html><html lang="en"><head><title>HTTP Status 500 – Internal Server Error
+```
+
+  I can see registration-server log has the following, so
+  somehow registration-server thinks that the caller is
+  not authenticated.
+  
+```
+org.springframework.web.client.HttpClientErrorException: 401 null
+```
+
+  But running on PCF works. *Even if it sends incorrect token,
+  it still works? Actually changing jti value works but chaning
+  real token value results in 500 response
+  
+  server.gradle has the following which needs to be picked
+  up by the servers when they run
+  
+  
+  ```
+  bootRun.environment([
+    "APPLICATION_OAUTH_ENABLED": true,
+    "SECURITY_OAUTH2_CLIENT_CLIENT_ID": "tracker-client",
+    "SECURITY_OAUTH2_CLIENT_CLIENT_SECRET": "supersecret"
+  ])
+  ```
+  
+-  (Same as above) Just found out why I had failure on my oauth2 testing.  I was running the apps using Spring Boot dashboard, which fails to read the security property values from the build.gradle.
+But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradle”? 
+
+- *I am experiencing the following problem on PCF (using PWS's p-dentity/pal). Somehow this problem occurs only in PWS and does
+  not occur on evans.  (Answer) It is because on evans, 
+  when you bind your
+  app with sso service, it correctly configures the client-credentials while in PWS, it configures with authorization-code
+  credential
 
   ```
   pal_user@instructor-demo-sang-large:~$ curl -k "https://pal.login.run.pivotal.io/oauth/token" 
@@ -2091,11 +2143,7 @@ Luckily, OpenID Connect or OIDC brings some sanity to the madness. It is an OAut
   -X POST -H 'Accept: application/json' -H 'Content-Type: application/x-www-form-urlencoded' 
   -d 'grant_type=client_credentials&response_type=token'
   HTTP/1.1 401 Unauthorized
-  ```
-
-
--   Just found out why I had failure on my oauth2 testing.  I was running the apps using Spring Boot dashboard, which fails to read the security property values from the build.gradle.
-But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradle”?   
+  ```  
    
 - When running integration testing via `./gradlew clean build`, 
   tell students to ignore the following 
@@ -2168,8 +2216,8 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
    
 ### Useful presentations on OAuth2
 
-  -  [OAuth2 overview presentation](https://www.slideshare.net/SangShin1/spring4-security-oauth2?qid=2163e6e6-ae99-48b0-afcc-88380b8724d8&v=&b=&from_search=1)
-  -  [OAuth2 in cloud native environment presentation (slides 7 to 37)](https://www.slideshare.net/WillTran1/enabling-cloud-native-security-with-oauth2-and-multitenant-uaa?qid=2c77ae8e-b2d5-4319-baad-1cd1eb8fec42&v=&b=&from_search=1)
+-  [OAuth2 overview presentation](https://www.slideshare.net/SangShin1/spring4-security-oauth2?qid=2163e6e6-ae99-48b0-afcc-88380b8724d8&v=&b=&from_search=1)
+-  [OAuth2 in cloud native environment presentation (slides 7 to 37)](https://www.slideshare.net/WillTran1/enabling-cloud-native-security-with-oauth2-and-multitenant-uaa?qid=2c77ae8e-b2d5-4319-baad-1cd1eb8fec42&v=&b=&from_search=1)
 
   
 # Config Server
