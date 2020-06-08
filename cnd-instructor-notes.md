@@ -11,13 +11,13 @@ in teaching PAL CND, which includes
 - Additional reference materials
 - Trouble-shooting tips
 
-349803668-student-10.workspaces.pal.pivotal.io
+
 
 # Before the cohort
 
 - We can send the following message before cohort gets started
   with email subject `PAL for Developer class - a few things to communicate`
-
+  
   ```
   Hello,
   
@@ -141,14 +141,14 @@ in teaching PAL CND, which includes
 ## Save "in progress" work in a personal branch
 
 ```
-By the way, before you do the above step, if you need to save your current unfinished work into “work in progress” branch, you do the following:
+By the way, before you do the above step, if you need to save your current unfinished work into “work in progress” branch so that you can work on that on later time, you do the following:
 -   git checkout -b wip-branch
 -   git add .
 -   git commit -m “work in progress in my lab”
 -   git push origin wip-branch --tags
 ```
 
--   If you have created github repository with README.md, you
+-   If you have created github repository with `README.md`, you
     will experience the following problem when you do 
     `git push origin master --tags`.
     An easy way out is `git push origin master -f --tags`
@@ -189,12 +189,16 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
 # Pair Programming
 
+(Not relevant for LOL)
+
 - Communicate what you do to your partner - if you are typing or
   moving your mouse without talking, you are doing a disservice 
   to your pair partner
 - Use your mouse rather than using your finger
 
 # Pair rotation
+
+(Not relevant for LOL)
 
 - Before the rotation, please do ensure both pairs 
   have code on their own github
@@ -312,7 +316,7 @@ Pair rotation guide:
   
 ## ubuntu
 
-- vim is already there as an editor
+- vim or nano are already there as an editor
 - Visual Studio is another option
 - bash shell - you can check with echo "$SHELL"
 - you have to create ~/.bash_profile
