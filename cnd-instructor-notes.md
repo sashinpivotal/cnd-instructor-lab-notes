@@ -501,6 +501,8 @@ cf help -a
 - Try to use “create-app-manifest” command to capture 
   the metadata of your running app into a file and try 
   to use that file to deploy the application
+- If you remove "random-route: true" from your manifest.yml 
+  file and then do "cf push", will it work? Why?
 - When do you want to use `@ConfigurationProperties` annotation
   as opposed to `@Value` annotation?
 
@@ -522,9 +524,9 @@ cf help -a
   compare your local code against a branch or a tag.
 
 - Create a WelcomeService that returns a message, WelcomeController 
-  depends on the HelloService to get the message, Use Mockito in your  
+  depends on the HelloService to get that message, Use Mockito in your  
   WebControllerMockMvcTest code to mock the service, Write the 
-  WelcomeServiceTest code as 
+  WelcomeServiceTest code to test WelcomeService. 
 
 ## Slack channel tips
 
