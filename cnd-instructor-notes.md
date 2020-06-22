@@ -566,6 +566,11 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   IDE, instead, you will have to run it via `bootRun` Gradle
   task in order to pick up enviroment variable settings.
   
+- *One student gets 404 when accessing localhost:8080/env 
+  even though the code is correct.  
+  He had to "./gradlew clean bootrun" (instead of ./gradlew bootRun"
+  to fix it.
+  
 ## Misc
 
 - *Is there a way to set environment variables to an application
@@ -1321,14 +1326,18 @@ cf restart cups-example
     the same application in PCF.  How is it done?  
         
 -   We know that when we are running pal-tracker app locally, Spring Boot
-    creates a `DataSource` bean from the environment-variable provided
-    database credentials, which is then used to create `JdbcTemplate`
+    auto-configures a `DataSource` bean from the environment-variable provided
+    database credentials, which is then used to auto-configure `JdbcTemplate`
     bean.  Now when we deploy the same application to PCF, 
     somehow different `DataSource`
-    bean gets created from database credentials from the VCAP_SERVICES.
+    bean gets auto-configured from database credentials from the VCAP_SERVICES.
     How does PCF do this?
     
     See [Configuring Service Connections for Spring](https://docs.run.pivotal.io/buildpacks/java/configuring-service-connections/spring-service-bindings.html)
+    
+-   Suppose I have some VCAP_SERVICES environment variables that I need to read in my Spring Boot application, is there any helper utility? 
+
+    (See the following for a clue https://stackoverflow.com/questions/50456365/how-to-inject-user-provided-vcap-services-in-spring-boot)
     
 -   *What is Spring cloud connector for?
     (Answer: Spring Cloud Connectors provides a simple abstraction 
@@ -1446,6 +1455,9 @@ If you don’t have docker installed on your machine, you can download and run p
 
 ## Code review
 
+-   Review component architecture
+    
+
 -   Whenever a new `backlog`, `allocation`, `timesheet` needs to 
     be created, backlog, allocation, and timesheet application has 
     to know if a corresponding `Project` is already enabled or not. 
@@ -1534,7 +1546,14 @@ If you don’t have docker installed on your machine, you can download and run p
   https://timesheets-pal-sang-shin.cfapps.io/time-entries?userId=1
   ```
   
-- [Postman collection](https://github.com/pivotal-bill-kable/cnd-postman-collections)
+- [Postman collection](https://github.com/billkable/cnd-postman-collections)
+
+- Installation and running of postman
+
+```
+$sudo snap install postman
+$postman&
+```
 
 - Tip to replce
 
@@ -1561,6 +1580,7 @@ If you don’t have docker installed on your machine, you can download and run p
     databases reflect that change?)
   - Is it OK to have duplication among the multiple databases?
     (In 'pal-tracker-distributed", we don't have any duplicate data.)
+  - Is distributed transaction possible in micro-service architecture?
 
 - Application code should be insulated from data access logic?
   How do we achieve that in the "pal-tracker-distributed"? 
@@ -1672,6 +1692,35 @@ If you don’t have docker installed on your machine, you can download and run p
   ```
   com.netflix.discovery.shared.transport.TransportException: Cannot execute request on any known server
   ```
+  
+In order to find right version of "springCloudVersion"
+and "springCloudServicesClientLibrariesVersion", you have
+to do the following
+  
+1. Get the Tile version installed in PCF as descried in the
+   guide.  Right now it is "2.1.4-build.4", which has to match with "springCloudServicesClientLibrariesVersion" (Spring Client Starters)
+     
+2. From the the table from https://docs.pivotal.io/spring-cloud-services/3-1/common/client-dependencies.html#including-spring-cloud-services-dependencies, we are supposed to use 2.1.x of "springCloudServicesClientLibrariesVersion" (Spring Client Starters) and 2.1.x of Spring Boot something like following:
+
+```
+springBootVersion = "2.1.6.RELEASE"
+springVersion = "5.1.8.RELEASE"
+  
+springCloudVersion = "Greenwich.RELEASE"
+springCloudServicesClientLibrariesVersion = "2.1.2.RELEASE"
+springCloudCommonsVersion = "2.1.1.RELEASE"
+```
+  
+Unfortunately, a consequence of using Spring Boot 2.1.x is that from  Spring Boot 2.1.x, bean overloading is disabled.  (In order to enable it, you have to enable it using a property.)  Since we use bean overloading in the subsequent labs (like security lab), and our lab document does not mention bean overloading, we can use the versions in the solution lab, which works. So please use the following:
+
+```
+springBootVersion = "2.0.6.RELEASE" 
+springVersion = "5.0.9.RELEASE"
+   
+springCloudVersion = "Finchley.SR2"
+springCloudServicesClientLibrariesVersion = "2.0.2.RELEASE"
+springCloudCommonsVersion = "2.0.0.RELEASE"
+```
 
 - apps.evans.pal.pivotal.io is using the following
 
@@ -1681,22 +1730,22 @@ If you don’t have docker installed on your machine, you can download and run p
   ```
   
   ```
-  {
-   "git" : {
-      "branch" : "HEAD",
-      "commit" : {
-         "id" : "325b9c6",
-         "time" : "2019-11-25T20:46:52Z"
-      }
-   },
-   "build" : {
-      "version" : "2.1.3-build.5",
-      "name" : "service-broker",
-      "artifact" : "spring-cloud-service-broker",
-      "time" : "2020-04-06T23:17:49.822Z",
-      "group" : "io.pivotal.spring.cloud"
-   }
+{
+  "git": {
+    "commit": {
+      "time": "2019-11-25T20:46:52Z",
+      "id": "325b9c6"
+    },
+    "branch": "HEAD"
+  },
+  "build": {
+    "version": "2.1.4-build.4",
+    "artifact": "spring-cloud-service-broker",
+    "name": "service-broker",
+    "group": "io.pivotal.spring.cloud",
+    "time": "2020-04-24T15:28:18.633Z"
   }
+}
   ```
 
 -  PWS uses the following - see `build/version`
