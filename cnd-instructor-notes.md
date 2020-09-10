@@ -269,18 +269,17 @@ Pair rotation guide:
 
   - CTRL+N (find class)
   - CTRL+Shift+N (find file)
-  - ALT+Return (Quick fix)
-  - CTRL+SHIFT+Enter (complete the statement)
-  - ALT+Insert (Generate) 
+  - ALT+Return (Quick fix)*
   - Double SHIFT (global search)
-  - CTRL+SHIFT+Return (Complete current statement)
-  - F2, SHIFT+F2 (Go to next/previous error)
-  - CTRL+ALT+Left (back - Does not work on Mac - I have to set it myself manually
-  - CTRL+ALT+Right (forward - Does not work on Mac - I have to set it myself manually)
-  - CTRL+SHIFT+F10 (run the app/test)
-  - SHIFT+F10(rerun the app/test)
-  - CTRL+ALT+V (extract return value into a local variable)
-  - CTRL+SHIFT+T (go to target/test code)
+  - CTRL+SHIFT+Return (Complete current statement)*
+  - F2, SHIFT+F2 (Go to next/previous error)*
+  - CTRL+SHIFT+F10 (run the app/test)*
+  - SHIFT+F10(rerun the app/test)*
+  - CTRL+ALT+V (extract return value into a local variable)*
+  - CTRL+SHIFT+T (go to target/test code)*
+  - CTRL+ALT+Left (back - Does not work on Mac - I have to set it myself manually)*
+  - CTRL+ALT+Right (forward - Does not work on Mac - I have to set it myself manually)*
+  - ALT+Insert (Generate) 
 ```
 
 ## Misc. tips
@@ -491,13 +490,17 @@ cf help -a
 
 - Do we have to do “cf restage <app-name>” when we set a 
   new environment variable in PCF?
-- What are the examples of PCF log types? (Google “PCF log types”)
-
 - What could be use cases where you will have to do 
   “cf restage” (as opposed to “cf restart”)?
 - (Related question to the above) What are the differences 
   among 3 different ways of deploying an application 
   on PCF - "pushing", "restaging", and "restarting"?
+- What are the environment variables that PCF automatically
+  create for your application instance?
+- Do "cf ssh pal-tracker" and display the value of 
+  CF_INSTANCE_INDEX environment variable
+  using "echo $CF_INSTANCE_INDEX"
+- What are the examples of PCF log types? (Google “PCF log types”)
 - Try to use “create-app-manifest” command to capture 
   the metadata of your running app into a file and try 
   to use that file to deploy the application
@@ -776,7 +779,9 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 
 - Creating `List` object from `timeEntryMap.values()`
 
-  - new ArrayList<>(timeEntryMap.values())
+  ```
+  new ArrayList<>(timeEntryMap.values())
+  ```
 
 - `timeEntryMap.replace(id, timeEntry)` returns an old 
   value not new value
@@ -984,7 +989,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   want to take advantage of Spring context - maybe you want to
   read property files using Spring's @TestPropertySource,
   for example -, how can you change the TimeEntryController.test?
-  (Create a new file called TimeEntryController2.test and change it)
+  (Create a new file called TimeEntryController2.test and `@WebMvcTest` and `MockMvc`)
   
 ## Slack channel tips
 
@@ -1007,7 +1012,8 @@ Of course, if you like GUI REST client, you can use PostMan
 - Install of postman on meerkat
 
 ```
-sudo snap install postman
+$sudo snap install postman
+$postman&
 ```
 
 - TDD presentation - https://www.youtube.com/watch?v=s9vt6UJiHg4
@@ -1157,6 +1163,53 @@ Empty set (0.05 sec)
 
 - (Bill K) create-service
 
+### Challenge questions
+
+-   What are the two conditions that need to be met before
+    Spring Boot's auto-configuration create DataSource bean
+    that represents MySQL? 
+    (Answer: MySQL driver in the classpath and credentials)
+
+-   So when we are running our pal-tracker app locally and in GitHub Actions 
+    with database, we have to provide database credentials (as 
+    environment variables in our lab but could be from property
+    file) but we did not have to do that when we are running
+    the same application in PCF.  How is it done?  
+        
+-   We know that when we are running pal-tracker app locally, Spring Boot
+    auto-configures a `DataSource` bean from the environment-variable provided
+    database credentials, which is then used to auto-configure `JdbcTemplate`
+    bean.  Now when we deploy the same application to PCF, 
+    somehow different `DataSource`
+    bean gets auto-configured from database credentials from the VCAP_SERVICES.
+    How does PCF do this?
+    
+    See [See the Auto-Reconfiguration section in this document](https://docs.run.pivotal.io/buildpacks/java/configuring-service-connections/spring-service-bindings.html#auto)
+    
+-   Suppose I have some VCAP_SERVICES environment variables that I need to read in my Spring Boot application, is there any helper utility? 
+
+    (See the following for a clue https://stackoverflow.com/questions/50456365/how-to-inject-user-provided-vcap-services-in-spring-boot)
+    
+-   *What is Spring cloud connector for?
+    (Answer: Spring Cloud Connectors provides a simple abstraction 
+    that JVM-based applications can use to discover information 
+    about the cloud environment on which they are running, 
+    connect to services, and have discovered services registered 
+    as Spring beans. It provides out-of-the-box support for 
+    discovering common services on Heroku and Cloud Foundry 
+    cloud platforms, and it supports custom service definitions 
+    through Java Service Provider Interfaces (SPI).
+    
+    This project is in maintenance mode, in favor of the 
+    newer Java CFEnv project. We will continue to release 
+    security-related updates but will not address enhancement requests.)
+
+## Challenge Exercise
+
+- The lab code shows DataSource bean is auto-configured by Spring Boot, meaning you don’t have to configure DataSource bean yourself. Hence the reason we can inject the auto-configured DataSource object into JdbcTimeEntryRepository through constructor injection. And we create JdbcTemplate object ourselves in that constructor.
+
+Now Spring Boot auto-configures JdbcTemplate bean as well so there is no need for us to create a new JdbcTemplate object.  So challenge exercise is to refactor the code to use auto-configured JdbcTemplate bean instead of manually creating it yourself.  Verify that it works by creating a new TimeEntry.
+
 ## Misc
 
 -   Regarding the usage of `useTimezone`
@@ -1247,6 +1300,15 @@ cf restart cups-example
 
 ## Trouble-shooting
 
+-  *IntelliJ shows any database table references in red-colored
+   I turned off SQL inspection and it is gone.
+-  *Also the following in the build.gradle is red-colored.  
+   It was because I did not refresh build.gradle.
+
+```
+import org.flywaydb.gradle.task.FlywayMigrateTask
+```
+
 1. *When running `./gradlew clean build` results in Database not
    found problem, you will have to run the database create script
    and migration in the previous lab
@@ -1277,7 +1339,9 @@ cf restart cups-example
    }
    ```
 
-1. ?? The following line gets red-colored
+1. *The following line gets red-colored. It was because
+   build.gradle is not refreshed.
+   
 
    ```
    import org.flywaydb.gradle.task.FlywayMigrateTask
@@ -1311,47 +1375,6 @@ cf restart cups-example
     }
   ```
    
-   
-### Challenge questions
-
--   What are the two conditions that need to be met before
-    Spring Boot's auto-configuration create DataSource bean
-    that represents MySQL? 
-    (Answer: MySQL driver in the classpath and credentials)
-
--   So when we are running our pal-tracker app locally and in GitHub Actions 
-    with database, we have to provide database credentials (as 
-    environment variables in our lab but could be from property
-    file) but we did not have to do that when we are running
-    the same application in PCF.  How is it done?  
-        
--   We know that when we are running pal-tracker app locally, Spring Boot
-    auto-configures a `DataSource` bean from the environment-variable provided
-    database credentials, which is then used to auto-configure `JdbcTemplate`
-    bean.  Now when we deploy the same application to PCF, 
-    somehow different `DataSource`
-    bean gets auto-configured from database credentials from the VCAP_SERVICES.
-    How does PCF do this?
-    
-    See [Configuring Service Connections for Spring](https://docs.run.pivotal.io/buildpacks/java/configuring-service-connections/spring-service-bindings.html)
-    
--   Suppose I have some VCAP_SERVICES environment variables that I need to read in my Spring Boot application, is there any helper utility? 
-
-    (See the following for a clue https://stackoverflow.com/questions/50456365/how-to-inject-user-provided-vcap-services-in-spring-boot)
-    
--   *What is Spring cloud connector for?
-    (Answer: Spring Cloud Connectors provides a simple abstraction 
-    that JVM-based applications can use to discover information 
-    about the cloud environment on which they are running, 
-    connect to services, and have discovered services registered 
-    as Spring beans. It provides out-of-the-box support for 
-    discovering common services on Heroku and Cloud Foundry 
-    cloud platforms, and it supports custom service definitions 
-    through Java Service Provider Interfaces (SPI).
-    
-    This project is in maintenance mode, in favor of the 
-    newer Java CFEnv project. We will continue to release 
-    security-related updates but will not address enhancement requests.)
 
 ## Wrap-up talking points
 
@@ -1392,6 +1415,14 @@ If you don’t have docker installed on your machine, you can download and run p
 ```
 
 - Show how to create a dashboard using the new counter that was created
+
+## Tips
+
+- In order to set env variable
+
+```
+cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
+```
 
 ## Challenge question
 
@@ -1563,29 +1594,42 @@ $postman&
   
 ## Challenge questions
   
-- Why are we using a single repository for all 4 microservices?  
-  Isn't it a violation of the first rule of 12 factor app? 
+```
+If you are responsible for a greenfield project, would you start with Microservice architecture or monolith architecture? Why?
 
-- Why are there variations of a domain class, for example,
-  why are there `TimeEntryForm`, `TimeEntryInfo`, `TimeEntryRecord`, 
-  `TimeEntryFields` classes? Where are they used?
+In the component architecture, what is the role of component and what is the role of application? How would you divide the required logic between the two?
+
+Why are we using a single repository for all 4 microservices?  Isn't it a violation of the first rule of 12 factor app? 
   
-- In the "pal-tracker-distributed", we use 4 different databases, one for
-  each application. 
+In the "pal-tracker-distributed", we use 4 different databases, one for each application. 
+
   - Is it a recommended practice?  Should we have a single database instead?
-  - Is it possible to have database inconsistency among the databases if
-    there are multiple databases? 
-    If it is not possible, what is our alternative?
-    (For example, a user is deleted in User database, how does other
-    databases reflect that change?)
+  - Is it possible to have database inconsistency among the databases if there are multiple databases?  (For example, a user is deleted in User database, how does other databases reflect that change?) What would be the consequence to overall application behavior?
   - Is it OK to have duplication among the multiple databases?
     (In 'pal-tracker-distributed", we don't have any duplicate data.)
   - Is distributed transaction possible in micro-service architecture?
 
-- Application code should be insulated from data access logic?
-  How do we achieve that in the "pal-tracker-distributed"? 
+Application code should be insulated from data access logic? How do we achieve that in the "pal-tracker-distributed"? 
+
+Why are there variations of a domain class, for example, why are there `TimeEntryForm`, `TimeEntryInfo`, `TimeEntryRecord`, `TimeEntryFields` classes? Where are they used?
+
+When Timesheet server needs to talk to registration server via REST call, where does the Timesheet server finds the address of the registration server?
+
+```
   
 ## Trouble-shooting
+
+- ?? Somehow port 8081 is taken on my machine and "openPorts"
+  does not show if the port is taken by any process
+  
+  You can try the following command on Mac
+  
+```
+< workspace/pal-tracker-distributed - master > sudo lsof -i tcp:8081
+Password:
+COMMAND  PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+macmnsvc  69  mfe   20u  IPv6 0x607ea1e1983cb26d      0t0  TCP *:sunproxyadmin (LISTEN)  
+```
 
 - *Where is the migration step in the pal-tracker-distributed app?
   It is at the end (after deployment) of the pipeline.yml
@@ -2152,7 +2196,7 @@ Luckily, OpenID Connect or OIDC brings some sanity to the madness. It is an OAut
 - *I use security-solution project and run the following locally
   after successfuly got the token for auth server.  (Answer:
   it was because I was running the application using Spring Boot
-  services tab.  Using boorun with --parallel works. 
+  services tab.  Using boorun with --parallel works.)
       
 ```
  workspace/pal-tracker-distributed - master > curl localhost:8083 -H"Authorization: Bearer b78147e6-75f6-4a22-8498-26efe95d5dc6"
@@ -2363,4 +2407,10 @@ Pivotal EDU offerings
 ```
 
 - [Survey](https://www.surveymonkey.com/r/3GKNTN8?coid=pri)
+
+# Retro
+
+```
+Got it. My team is using parabol.co for our retros and I like it a lot more than the cfapps retro tool . Might be worth trying sometime!
+```
 
