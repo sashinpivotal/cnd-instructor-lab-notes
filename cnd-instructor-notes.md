@@ -256,7 +256,7 @@ Pair rotation guide:
 ## Linux keyboard shortcuts
 
 ```
-- Keyboard shortcut keys within Remote Desktop
+- Keyboard shortcut keys within VDI/Remote Desktop
   - ALT+F10 (maximizing window on and off)
   - ALT+Tab (move between windows)
   - ALT+F9 (minimize window)
@@ -265,7 +265,7 @@ Pair rotation guide:
   - CTRL+C (copying) 
   - CTRL+V (pasting)
 
-- Keyboard shortcut keys within IntelliJ
+- Keyboard shortcut keys within the VDI provided IntelliJ
 
   - CTRL+N (find class)
   - CTRL+Shift+N (find file)
@@ -277,9 +277,9 @@ Pair rotation guide:
   - SHIFT+F10(rerun the app/test)*
   - CTRL+ALT+V (extract return value into a local variable)*
   - CTRL+SHIFT+T (go to target/test code)*
-  - CTRL+ALT+Left (back - Does not work on Mac - I have to set it myself manually)*
-  - CTRL+ALT+Right (forward - Does not work on Mac - I have to set it myself manually)*
-  - ALT+Insert (Generate) 
+  - CTRL+ALT+Left (back - might not work on Mac - you might have to set it yourself manually)*
+  - CTRL+ALT+Right (forward - might not work on Mac - you might have to set it yourself manually)*
+  - ALT+Insert (Generate - might not work on Mac - you might have to set it yourself manually) 
 ```
 
 ## Misc. tips
@@ -287,7 +287,8 @@ Pair rotation guide:
 - You can bookmark the course webpage by right clicking ...
   on the top-right corner and select bookmark
 - *If you enabled two-factor authentication, you will experience
-  the following. Easiest fix is to disable it.
+  the following. Easiest fix is to disable it.  (See "Pair
+  programming document" for other suggestions.)
 
   ```
   pal_user@instructor-demo-sang-large:~/workspace/pal-tracker- distributed$ git push origin master -f
@@ -303,16 +304,17 @@ Pair rotation guide:
   If you enabled two-factor authentication in your Github account you  won't be able to push via HTTPS using your accounts password. Instead  you need to generate a personal access token. This can be done in the  application settings of your Github account. Using this token as your  password should allow you to push to your remote repository via  HTTPS. Use your username as usual.
   ```
   
-- In the browser, you can bookmark it but you have 
+- In the VDI provided Firefox browser, you can bookmark 
+  it but you have 
   to select "show bookmark bar" to see it
 
 ## Lab related
 
-- Getting actuator metrics from the browser is not formatted
-  But using curl command with json_pp works
-- *I could not see resilience metrics somehow - you have
-  to make a call that exercises the circuit breaker 
-  
+- Getting actuator metrics from the VDI provided Chrome 
+  browser is not formatted
+  But using curl command with json_pp works. 
+  Also Firefox does the formatting automatically.
+
 ## ubuntu
 
 - vim or nano are already there as an editor
@@ -360,15 +362,19 @@ Pair rotation guide:
 	- Talk about dependency injection - what it is and why
 	
 - lab project
-	- Mention that the `pal-tracker` directory is under `workspace` directory
-	- You are going to create `pal-tracker` repository in your Github
-	  and sync up with local `pal-tracker` project using `git remote add origin <URL>`
+	- Mention that the `pal-tracker` directory is 
+	  under `workspace` directory
+	- You are going to create `pal-tracker` repository 
+	  in your Github
+	  and sync up with local `pal-tracker` project 
+	  using `git remote add origin <URL>`
 	  
 - PCF related
-	- You are going to deploy the app to the PCF manually in this lab 
+	- You are going to deploy the app to the PCF manually 
+	  in this lab 
 	  using `cf push` command:
 	  later on, you will
-	  deploy the app using a CI/CD pipeline
+	  deploy the app using a CI/CD pipeline.
 
 ## How to set up `pal-tracker` Git project
 
