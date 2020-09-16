@@ -353,6 +353,10 @@ Pair rotation guide:
 
 - CND/CNA students should ignore `waveland` section
 
+- Even though Charles said not to do "copying and pasting",
+  in this lab, it is OK to copy the contents of build 
+  script and paste it.
+
   
 # Building a Spring Boot App (lab #1)
 
@@ -462,23 +466,26 @@ find . -name \*.jar -print
 ## Challenge questions
 
 - What the purpose of using "gradle wrapper"?
-- What is a fat jar?  How does Spring Boot creats one?
+- What are the main features of Spring Boot?
+- What is a fat jar?  How does Spring Boot create one?
 - What is 12 factor app?  (Google it)
-- One of the features of Spring Boot (actually through the Spring Boot
-  Maven/Gradle plugin) is to create a fat jar that contains everything
-  including Tomcat.  Among the 12 factors, which factor is relevant to
-  creating and deploying the same fat jar over different deployment
-  environment?
+  - One of the features of Spring Boot (actually through 
+    the Spring Boot Maven/Gradle plugin) is to create a fat jar
+    that contains everything including Tomcat. 
+    Among the 12 factors, which factor is relevant to
+    creating and deploying the same fat jar over different 
+    deployment environment?
 - How does Spring Boot helps with dependency management?
 - What does @SpringBootApplication do? What is it made of?
 - Why we use random route in our lab?
-- Try the following commands
+- Try the following cf commands
   
 ```
 cf target
 cf apps
 cf app pal-tracker
 cf routes
+cf domains
 cf help -a
 ```
 
@@ -491,6 +498,13 @@ cf help -a
 
   
 # Configuring an App
+
+## Talking points (Bill K)
+
+- Externalizing configurations such as database configuration out of code
+  - Ask students how they handle this in their org
+- In cloud native architecture, we prefer the usage of environment variables
+- In pal-tracker app, we can externalize the value of the message
   
 ## Challenge questions
 
@@ -503,15 +517,16 @@ cf help -a
   on PCF - "pushing", "restaging", and "restarting"?
 - What are the environment variables that PCF automatically
   create for your application instance?
-- Do "cf ssh pal-tracker" and display the value of 
-  CF_INSTANCE_INDEX environment variable
-  using "echo $CF_INSTANCE_INDEX"
+- Do "cf ssh pal-tracker" and display the values of 
+  all Cloud Foundry related environment variables by
+  typing "env | grep CF"
 - What are the examples of PCF log types? (Google “PCF log types”)
 - Try to use “create-app-manifest” command to capture 
   the metadata of your running app into a file and try 
   to use that file to deploy the application
 - If you remove "random-route: true" from your manifest.yml 
-  file and then do "cf push", will it work? Why?
+  file and then do "cf push", will it work or will it
+  fail due to "The host is taken: pal-tracker" error? Why?
 - When do you want to use `@ConfigurationProperties` annotation
   as opposed to `@Value` annotation?
 
@@ -705,22 +720,27 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 
 ## Challenge questions on routing
 
-- We know multiple routes can be assigned to an applicationh.
-  Now can a route be assigned to multiple applications?
-- Anybody knows what “blue-green-deployment” is?
-- Speaking “blue-green deployment”, anybody can think of conceptual 
-  steps you will take in PCF environment?
+-   What is the factor (among the 12 factors) that is relevant to
+    using a pipeline for deploying an application (instead of you
+    manually "cf push"'ing yourself?
+-   What makes up a route?  (It is made of [??]+ {??]).
+-   We know multiple routes can be assigned to an application.
+    Now can a route be assigned to multiple applications?
+-   Anybody knows what “blue-green-deployment” is?
+-   Speaking of “blue-green deployment”, anybody can think of conceptual 
+    steps you will take in order to achieve it in PCF environment?
 -   How can we control the ratio of the traffic between V1.0.1 (blue) 
-    vs. V1.0.2 (green)?
+    vs. V1.0.2 (green) in PCF environment?
 -   Can a route exist without an application associated with it? 
     (See “cf routes” and “cf create-route” commands.)
 -   What could be the use case of "cf create-route"?
--   When mapping or unmapping routes, do you have to restart
-    or restage an application?
--   How can you delete all routes that are not associated with
-    any apps?
+-   When mapping or unmapping routes, do you have to "restart"
+    or "restage" an application?
+-   What is "cf" command to delete all routes that are not 
+    associated with any apps?
 -   Can you describe which PCF components are responsible for
-    updating the routing table whenever a new instance is created
+    updating the routing table (that is being used by "GoRouter)
+    whenever a new instance is created
     or old instance gets destroyed?
     
 ## Challenge questions in the blud-green deployment
@@ -774,7 +794,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   instead of `List<TimeEntry>` - you need to manually
   change `boolean` to `List<TimeEntry>`
     
-- In the list() test, IntelliJ gets confused when there 
+- In the `list()` test, IntelliJ gets confused when there 
   are 5 constructor
   arguments and there is already a constructor that 
   takes 4 arguments.
@@ -824,7 +844,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
     }
   ```
 
-- Show them how to compare code within IntelliJ
+- Show them how to compare code within IntelliJ (git->log)
   
 ### TimeEntryController test
 
@@ -940,20 +960,38 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 
 ## Challenge Questions
 
-1. What are the differences between unit testing vs integration testing vs end-to-end testing?
-1. In “pal-tracker” project, which tests are unit testing? integrating testing or end-to-end testing?
-1. Can you do “integration” or “end-to-end” testing as part of CI/CD pipeline?
+1. What are the differences between unit testing vs integration 
+   testing vs end-to-end testing?
+1. In “pal-tracker” project, which tests are unit testing? integrating 
+   testing or end-to-end testing?
+1. Can you do “integration” or “end-to-end” testing as part 
+   of CI/CD pipeline?
 1. What are differences between `RestTemplate` vs `TestRestTemplate`?
-1. From unit-testing standpoint, why is it a bad practice to create a dependency object inside your class using “new” keyword or even using factory (as opposed to getting it injected either through constructor method or setting method)?
-1. What is the another way of creating InMemoryTimeEntryRepository bean other than using @Bean in the configuration class? What would be pros and cons of each approach?
+1. From unit-testing standpoint, why is it a bad practice to create 
+   a dependency object inside your class using “new” keyword or even 
+   using factory (as opposed to getting it injected either through 
+   constructor method or setting method)?
+1. What is the another way of creating InMemoryTimeEntryRepository 
+   bean other than using @Bean in the configuration class? What would 
+   be pros and cons of each approach?
 1. What does SOLID (design principles) stand for?
-1. What are the examples of “Open for extension Closed for modification” design principle in the “pal-tracker” project?
-1. When do you want to use `@SpringBootTest` vs `@ContextConfiguration` for your integration testing that involves Spring application context? 
-1. Why TimeEntryControllerTest code needs mocking while InMemoryTimeEntryRepositoryTesting code doesn’t?
-1. What is the difference between stubbing and mocking? When do you want use stubbing over mocking and vice-versa?
-1. What is the reason controller TimeEntryControllerTest code has “verify” method?
-1. If you have classes in a tree structure (for example, Class A has dependencies of class B and C and class B has a dependency D, in other words, class A and B has dependencies while class C has no dependencies), which class do you want to do Unit testing and which classes you want to do integration testing?
-1. What about a class that depends on backing services such as database? How will you perform the integration testing?
+1. What are the examples of “Open for extension Closed for modification” 
+   design principle in the “pal-tracker” project?
+1. When do you want to use `@SpringBootTest` vs `@ContextConfiguration` 
+   for your integration testing that involves Spring application context? 
+1. Why `TimeEntryControllerTest` code needs mocking while 
+   `InMemoryTimeEntryRepositoryTesting` code doesn’t?
+1. What is the difference between stubbing and mocking? When do you 
+   want use stubbing over mocking and vice-versa?
+1. What is the reason controller TimeEntryControllerTest code 
+   has “verify” method?
+1. If you have classes in a tree structure (for example, Class 
+   A has dependencies of class B and C and class B has a dependency D, 
+   in other words, class A and B has dependencies while class C has 
+   no dependencies), which class do you want to do Unit testing and 
+   which classes you want to do integration testing?
+1. What about a class that depends on backing services such 
+   as database? How will you perform the integration testing?
 1. What happens to the in-memory data when the application instances come and go?
    
 - In the case of testing respository's delete(..), why there is
