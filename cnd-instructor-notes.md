@@ -86,28 +86,6 @@ in teaching PAL CND, which includes
 - In order to see the self-evaluation, please go to
   [https://registration.education.pivotal.io/admin/cohorts](https://registration.education.pivotal.io/admin/cohorts)
   
-- Brad send out the following information to the class channel
-  (Make sure to set the Cohort Id and course Id)
-
-  ```
-  Cohort Information:
-  Cohort Id: xxxxxx
-  Course Content: https://courses.education.pivotal.io/c/xxxxx
-  MeerKats password: keepitsimple
-  Parrit: https://parrit.cfapps.io/bostonma-aug-2019-cnd (password:  keepitsimple)
-  ```
-  
-- Mike G sent out the following
-
-  ```
-  Cohort Information:
-  Machine username/password: pivotaluser/keepitsimple
-  Cohort Id: 349803460
-  Course URL: https://courses.education.pivotal.io
-  PCF API endpoint: https://api.sys.evans.pal.pivotal.io
-  PCF web UI: https://login.sys.evans.pal.pivotal.io
-  ```
-  
   ```
   @here Do not worry about your pair setting up a github today.
   we will deal with that tomorrow before we do a pair rotation
@@ -240,16 +218,6 @@ Pair rotation guide:
     - Assignment Submission
 ```
 
-# Meerkat
-
-## Meerkat keyboard shortcuts
-
-- [default keymap](https://resources.jetbrains.com/storage/products/intellij-idea/docs/IntelliJIDEA_ReferenceCard.pdf)
-
-- Alt+Enter what is quick fix combination (Option+Enter for Mac)
-- Alt+Insert for "generate" (CMD+N for Mac)
-- Ctrl+N for "opening a class" (CMD+O for Mac)
-- Ctrl+Shift+N for "open a file" 
 
 # VDI
 
@@ -527,14 +495,9 @@ cf help -a
 - If you remove "random-route: true" from your manifest.yml 
   file and then do "cf push", will it work or will it
   fail due to "The host is taken: pal-tracker" error? Why?
-- When do you want to use `@ConfigurationProperties` annotation
-  as opposed to `@Value` annotation?
+
 
 ## Challenge exercises
-
-- Modify the code so that you are using 
-  `@ConfigurationProperties` annotation
-  as opposed to `@Value` annotation
 
 - Currently we have testing code for `WelcomeController` that does 
   the testing of the controller class logic but it does not test 
@@ -958,41 +921,48 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   'welcome.message' in value welcome.message"
   ```
 
-## Challenge Questions
+## Challenge Questions (testing related)
 
-1. What are the differences between unit testing vs integration 
+-  What are the differences between unit testing vs integration 
    testing vs end-to-end testing?
-1. In “pal-tracker” project, which tests are unit testing? integrating 
-   testing or end-to-end testing?
-1. Can you do “integration” or “end-to-end” testing as part 
+-  In “pal-tracker” project, which tests are unit testing? 
+   integrating testing or end-to-end testing?
+-  Can you do “integration” or “end-to-end” testing as part 
    of CI/CD pipeline?
-1. What are differences between `RestTemplate` vs `TestRestTemplate`?
-1. From unit-testing standpoint, why is it a bad practice to create 
+-  What are differences between `RestTemplate` vs `TestRestTemplate`?
+-  From unit-testing standpoint, why is it a bad practice to create 
    a dependency object inside your class using “new” keyword or even 
    using factory (as opposed to getting it injected either through 
    constructor method or setting method)?
-1. What is the another way of creating InMemoryTimeEntryRepository 
-   bean other than using @Bean in the configuration class? What would 
-   be pros and cons of each approach?
-1. What does SOLID (design principles) stand for?
-1. What are the examples of “Open for extension Closed for modification” 
-   design principle in the “pal-tracker” project?
-1. When do you want to use `@SpringBootTest` vs `@ContextConfiguration` 
-   for your integration testing that involves Spring application context? 
-1. Why `TimeEntryControllerTest` code needs mocking while 
+-  When do you want to use `@SpringBootTest` vs 
+   `@ContextConfiguration` for your integration testing 
+   that involves Spring application context? 
+-  Why `TimeEntryControllerTest` code needs mocking while 
    `InMemoryTimeEntryRepositoryTesting` code doesn’t?
-1. What is the difference between stubbing and mocking? When do you 
-   want use stubbing over mocking and vice-versa?
-1. What is the reason controller TimeEntryControllerTest code 
+-  What is the difference between stubbing and mocking?  
+   When do you want use stubbing over mocking and vice-versa?
+-  What is the reason controller TimeEntryControllerTest code 
    has “verify” method?
-1. If you have classes in a tree structure (for example, Class 
-   A has dependencies of class B and C and class B has a dependency D, 
-   in other words, class A and B has dependencies while class C has 
-   no dependencies), which class do you want to do Unit testing and 
+-  If you have classes in a tree structure (for example, Class 
+   A has dependencies of class B and C and class B 
+   has a dependency D, in other words, class A and B has 
+   dependencies while class C has no dependencies), 
+   which class do you want to do Unit testing and 
    which classes you want to do integration testing?
-1. What about a class that depends on backing services such 
+-  What about a class that depends on backing services such 
    as database? How will you perform the integration testing?
-1. What happens to the in-memory data when the application instances come and go?
+   
+## Challenge Questions (non-testing related)   
+
+-  What happens to the in-memory data when the application 
+   instances come and go?
+-  What is the another way of creating InMemoryTimeEntryRepository 
+   bean other than using @Bean in the configuration class? 
+   What would be pros and cons of each approach?
+-  What does SOLID (design principles) stand for?
+-  What are the examples of “Open for extension Closed  
+   for modification” design principle in the 
+   “pal-tracker” project?   
    
 - In the case of testing respository's delete(..), why there is
   no training method? it is because respository's delete method
@@ -1053,7 +1023,7 @@ In order to install Httpie, please do
 Of course, if you like GUI REST client, you can use PostMan
 ```
 
-- Install of postman on meerkat
+- Install of postman on VDI
 
 ```
 $sudo snap install postman
@@ -1494,13 +1464,18 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
   Scaled up from 2 to 3 instances. Current HTTP Latency of 35.92ms is above upper threshold of 3.00ms.
   ```
 
-- ?? When applying auto-scaling, what is "Percent of traffic to apply    
-  95% or 99%"?
-  
-- app manager url https://apps.sys.evans.pal.pivotal.io
+- app manager url [https://apps.sys.evans.pal.pivotal.io](https://apps.sys.evans.pal.pivotal.io)
+
+## Slack channel tis
+
+- [JMeter installation on Ubuntu](https://linuxhint.com/install_apache_jmeter_ubuntu/)
   
 ## Wrap-up
 
+- See [Scaling rules](https://docs.run.pivotal.io/appsman-services/autoscaler/using-autoscaler.html#metric) for scaling rules detail
+- See [PCF Autoscaler advisory for scaling Apps based on the CPU utilization](https://community.pivotal.io/s/article/PCF-Autoscaler-Advisory-for-Scaling-Apps-Based-on-the-CPU-utilization?language=en_US)
+- *When applying auto-scaling, what is "Percent of traffic to apply    
+  95% or 99%"?
 - How do you know how many instances to run?
   - why not 1 instance? availability
 - (Bill K) shows apps manager and shows auto-scaling feature
@@ -1630,7 +1605,7 @@ $sudo snap install postman
 $postman&
 ```
 
-- Tip to replce
+- Tip to replce - ?? somehow the following does not work
 
   ```
   find ./ -type f -exec sed -i -e 's/\$\{UNIQUE_IDENTIFIER\}\.\$\{DOMAIN\}/sang-shin.apps.evans.pal.pivotal.io/g' {} \;
@@ -1639,32 +1614,50 @@ $postman&
 ## Challenge questions
   
 ```
-If you are responsible for a greenfield project, would you start with Microservice architecture or monolith architecture? Why?
+If you are responsible for a greenfield project, would 
+you start with Microservice architecture or monolith 
+architecture? Why?
 
-In the component architecture, what is the role of component and what is the role of application? How would you divide the required logic between the two?
+In the component architecture, what is the role of 
+component and what is the role of application? How 
+would you divide the required logic between the two?
 
-Why are we using a single repository for all 4 microservices?  Isn't it a violation of the first rule of 12 factor app? 
+Why are we using a single repository for all 4 microservices?  
+Isn't it a violation of the first rule of 12 factor app? 
   
-In the "pal-tracker-distributed", we use 4 different databases, one for each application. 
+In the "pal-tracker-distributed", we use 4 different 
+databases, one for each application. 
 
-  - Is it a recommended practice?  Should we have a single database instead?
-  - Is it possible to have database inconsistency among the databases if there are multiple databases?  (For example, a user is deleted in User database, how does other databases reflect that change?) What would be the consequence to overall application behavior?
+  - Is it a recommended practice?  
+    Should we have a single database instead?
+  - Is it possible to have database inconsistency among 
+    the databases if there are multiple databases?  (For example, 
+    a user is deleted in User database, how does other databases 
+    reflect that change?) What would be the consequence to 
+    overall application behavior?
   - Is it OK to have duplication among the multiple databases?
     (In 'pal-tracker-distributed", we don't have any duplicate data.)
   - Is distributed transaction possible in micro-service architecture?
 
-Application code should be insulated from data access logic? How do we achieve that in the "pal-tracker-distributed"? 
+Application code should be insulated from data access logic? 
+How do we achieve that in the "pal-tracker-distributed"? 
 
-Why are there variations of a domain class, for example, why are there `TimeEntryForm`, `TimeEntryInfo`, `TimeEntryRecord`, `TimeEntryFields` classes? Where are they used?
+Why are there variations of a domain class, for example, 
+why are there `TimeEntryForm`, `TimeEntryInfo`, `TimeEntryRecord`, 
+`TimeEntryFields` classes? Where are they used?
 
-When Timesheet server needs to talk to registration server via REST call, where does the Timesheet server finds the address of the registration server?
+When Timesheet server needs to talk to registration server via 
+REST call, where does the Timesheet server finds the address 
+of the registration server?
 
 ```
   
 ## Trouble-shooting
 
-- ?? Somehow port 8081 is taken on my machine and "openPorts"
+- *Somehow port 8081 is taken on my machine and "openPorts"
   does not show if the port is taken by any process
+  (It is because the MaAfee is installed by VMware security team
+  on my machine.)
   
   You can try the following command on Mac
   
@@ -1705,12 +1698,6 @@ macmnsvc  69  mfe   20u  IPv6 0x607ea1e1983cb26d      0t0  TCP *:sunproxyadmin (
           CF_USERNAME: ${{ secrets.CF_USERNAME }}
           CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
   ```
- 
-- If GitHub action is causing too much a problem, just deploy the app using
-
-  ```
-  cf push -f manifest-registration.yml
-  ```
     
 - *When you execute the following command - you have to remove or commit
   the codebase.txt file
@@ -1726,15 +1713,15 @@ macmnsvc  69  mfe   20u  IPv6 0x607ea1e1983cb26d      0t0  TCP *:sunproxyadmin (
 ## Talking points
 
 - (Dylan) 
-  - talked about problems of microservices
+  - talked about problems of microservices - services come and go
   - in pcf, every routing goes through gorouter - we may need more
     security, and more faster 
-  - ?? gorouter (for public facing apps) vs eureka server (use it for
+  - gorouter (for public facing apps) vs eureka server (use it for
     internal communication)
   - container to container networking (with it even if you are using Eureka
     server, the services are still going through the gorouter)
   - eureka server still gives you client-side load-balancing, 
-    eureka server can be used as a monitoring tool (health check)
+  - eureka server can be used as a monitoring tool (health check)
     
 - (Bill)
   - Spring cloud release train - Horton, Greenweech, ..
@@ -2018,7 +2005,7 @@ springCloudCommonsVersion = "2.0.0.RELEASE"
 
 ## Trouble-shooting
 
-- ?? I get the following error when creating 
+- *I get the following error when creating 
 
   ```
   < workspace/pal-tracker-distributed - master > curl -i -XPOST -H"Content-Type:  application/json" allocations-pal-sang-shin.apps.evans.pal.pivotal.io/allocations/ - d"{\"projectId\": \"1\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\":  \"2015-05-18\"}"
@@ -2027,20 +2014,8 @@ springCloudCommonsVersion = "2.0.0.RELEASE"
   {"timestamp":1587121186241,"status":500,"error":"Internal Server Error","message":"No instances available for registration-pal-sang-shin.apps.evans.pal.pivotal.io","path":"/allocations/"}
   ```
   
-  * It was because
-
-  ```
-  Ah false alarm.  I had to unset-env REGISTRATION_SERVER_ENDPOINT.
-  ```
-
-- ??? the step to refresh gradle is missing again after
-  creating build.gradle for platform-services/eureka-server
-
-- ?? I get the following error when deploying the app
-
-  ```
-  2019-11-07T10:17:53.13-0500 [APP/PROC/WEB/2] OUT Caused by: java.lang.NoClassDefFoundError: org/springframework/cloud/config/client/ConfigServicePropertySourceLocator
-  ```
+  *It was because I did not perform `cf unset-env REGISTRATION_SERVER_ENDPOINT`
+  as instructed in the lab document
 
 - *If you experience the following problem, when you do
   `./gradlew clean build`
