@@ -83,6 +83,9 @@ in teaching PAL CND, which includes
 - A student can access their slack channel message by
   opening slack or go to `palexternal.slack.com` 
   
+- ?? Some students did not receive slack invitation email
+  because company firewall blocks the email?
+  
 - In order to see the self-evaluation, please go to
   [https://registration.education.pivotal.io/admin/cohorts](https://registration.education.pivotal.io/admin/cohorts)
   
@@ -237,17 +240,18 @@ Pair rotation guide:
 
   - CTRL+N (find class)
   - CTRL+Shift+N (find file)
-  - ALT+Return (Quick fix)*
+  - ALT+Return (Quick fix)
   - Double SHIFT (global search)
-  - CTRL+SHIFT+Return (Complete current statement)*
-  - F2, SHIFT+F2 (Go to next/previous error)*
-  - CTRL+SHIFT+F10 (run the app/test)*
-  - SHIFT+F10(rerun the app/test)*
-  - CTRL+ALT+V (extract return value into a local variable)*
-  - CTRL+SHIFT+T (go to target/test code)*
-  - CTRL+ALT+Left (back - might not work on Mac - you might have to set it yourself manually)*
-  - CTRL+ALT+Right (forward - might not work on Mac - you might have to set it yourself manually)*
+  - CTRL+SHIFT+Return (Complete current statement)
+  - F2, SHIFT+F2 (Go to next/previous error)
+  - CTRL+SHIFT+F10 (run the app/test)
+  - SHIFT+F10(rerun the app/test)
+  - CTRL+ALT+V (extract return value into a local variable)
+  - CTRL+SHIFT+T (go to target/test code)
+  - CTRL+ALT+Left (back - might not work on Mac - you might have to set it yourself manually)
+  - CTRL+ALT+Right (forward - might not work on Mac - you might have to set it yourself manually)
   - ALT+Insert (Generate - might not work on Mac - you might have to set it yourself manually) 
+  - CTRL+SHIFT+' - to maximize/minimize tool window
 ```
 
 ## Misc. tips
@@ -355,30 +359,14 @@ Pair rotation guide:
 - Steps to follow
   - Create a personal GitHub account (if you don't have one yet)
   - Create "pal-tracker" repository 
-  - Make sure you have unzipped the `pal-tracker.zip` under `workspace` directory
+  - Make sure you have unzipped the `pal-tracker.zip` 
+    under `workspace` directory
   - Go to local `workspace/pal-tracker` directory
   - Execute `git remote add origin <url>`
   - Execute `git push origin master --tags`
 
 
-## Bootstrap the application
-
-- ?? How do you compare different branches and tags using Github?
-  (Use IntelliJ instead)
-
-- If the test works at the command line but fails within 
-  IntelliJ using bootRun task, make sure you 
-  set the Gradle Test Runner under setting 
-  (This is now automatically set in recent version of IntelliJ)
-
-- If you are using STS, try to verify your yml file syntax
-  with `http://www.yamllint.com/`
-  
-- *IntelliJ - I don't find refresh menu option, and I don't
-  see Gradle menu bar option either - I had to
-  close and re-import the project to see Gradle menu 
-  bar. - this is to use refresh icon from the Gradle bar
-  menu on the right.
+## Misc
   
 - ??What is `buildscript` closure for?
 
@@ -434,7 +422,7 @@ find . -name \*.jar -print
 ## Challenge questions
 
 - What the purpose of using "gradle wrapper"?
-- What are the main features of Spring Boot?
+- What are the main features of Spring Boot? 
 - What is a fat jar?  How does Spring Boot create one?
 - What is 12 factor app?  (Google it)
   - One of the features of Spring Boot (actually through 
@@ -444,35 +432,67 @@ find . -name \*.jar -print
     creating and deploying the same fat jar over different 
     deployment environment?
 - How does Spring Boot helps with dependency management?
-- What does @SpringBootApplication do? What is it made of?
+- What does `@SpringBootApplication` do? What is it made of?
 - Why we use random route in our lab?
 - Try the following cf commands
   
 ```
 cf target
+cf domains
 cf apps
 cf app pal-tracker
 cf routes
-cf domains
 cf help -a
 ```
 
+## Challenge question answers
+
+- Spring boot features include
+  - starter
+  - embedded tomcat
+  - fat jar
+  - dependency management
 	
 ## Challenge exercise
 
 -  Create a Person bean which has name and age fields
 -  Create CommandLineRunner that displays the name and age
    of the person when application gets started
+   
+## Wrap-up (Charles)
+
+-  Draws architecral diagram to show all PCF components involved
+-  Environment variable is set tp JDK11, which will be used
+   by buildpack to recreate droplet
 
   
-# Configuring an App
+# Configuring an App ------------
 
 ## Talking points (Bill K)
+
+- What is the problem of the previous codebase?
+- Here we are talking about 'configuration' - external to the code
+- We mean "external configuration" here (as opposed to internal configration
+  inside spring app)
+- Bill asked how Fedex how they separate external configuration
+  such as database configuration?
+  - vault server, spring cloud config server, cf set-env
+- Bill asked how environment variables work in modern apps?
+- In cloud native application, we use enviroment variables
+- Bill talked about motivation of 12 factors by Heroku
+  - run applications in on any cloud environment
+- Bill used the learning outcomes as talking point guideline
 
 - Externalizing configurations such as database configuration out of code
   - Ask students how they handle this in their org
 - In cloud native architecture, we prefer the usage of environment variables
 - In pal-tracker app, we can externalize the value of the message
+
+- Mention that you have to move to pal-tracker directory
+- Talk about "git cherry-pick", we give failing tests
+- This is the first lab we give failing tests 
+
+- manifest is a declarative way of deploying the application
   
 ## Challenge questions
 
@@ -495,6 +515,8 @@ cf help -a
 - If you remove "random-route: true" from your manifest.yml 
   file and then do "cf push", will it work or will it
   fail due to "The host is taken: pal-tracker" error? Why?
+  What happens if you delete the pal-tracker app by
+  "cf delete pal-tracker" first and then "cf push" again?
 
 
 ## Challenge exercises
@@ -577,10 +599,65 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
                property values for different environments   
   - factor 10 - dev/production parity - creating a fat jar
   - factor 11 - logs
+
+## Wrap-up (Bill)
+
+- In cloud native development, Enviromnet specific properties 
+  should not be in the application.properties inside the jar file
+  Instead, they should be provided as environment variables
+- How @Value("$(welcome.message)") is set - by using annotation processor,
+  it reads value from properties
+- Naming convention of the welcome.message
+- How many instances of welcomecontroller get created?
+- Can you set the environment variable again after the application is rest
+
+- cf ssh
+  - see the number of processes (compared to normal linux processes)
+  - do "ls -al" and see how small number of folders
+  - show java command that is created by java buildpack
+  - we delete tuning the app to java buildpack - it knows how to
+    best optimize the command
+  - show staging_info command
+  - what is is logs directory for?  it is dummay directory.
+    All logs go to standard output device
   
-# Deployment Pipelines
+```
+< workspace/pal-tracker - master > cf ssh pal-tracker
+vcap@6101881c-bff1-4da1-4497-2dbc:~$ ps -ef
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 18:06 ?        00:00:00 /tmp/garden-init
+vcap          14       0  0 18:06 ?        00:00:00 /tmp/lifecycle/diego-sshd --allowedKeyExchanges= --address=0.0.0.0:2222 --allowUnau
+root          21       0  0 18:06 ?        00:00:00 sh -c trap 'kill -9 0' TERM; /etc/cf-assets/envoy/envoy -c /etc/cf-assets/envoy_con
+vcap          22       0  0 18:06 ?        00:00:16 /home/vcap/app/.java-buildpack/open_jdk_jre/bin/java -agentpath:/home/vcap/app/.jav
+root         100      21  0 18:06 ?        00:00:09 /etc/cf-assets/envoy/envoy -c /etc/cf-assets/envoy_config/envoy.yaml --drain-time-s
+root         143       0  0 18:06 ?        00:00:00 /etc/cf-assets/healthcheck/healthcheck -port=8080 -timeout=1000ms -liveness-interva
+vcap         169      14  0 18:49 pts/0    00:00:00 /bin/bash
+vcap         179     169  0 18:49 pts/0    00:00:00 ps -ef
+```
+
+- show /app directory (should reflect the contents of the boot jar file
+  - /app/BOOT-INF, /app/META_INF
+- blue-colored ones are the ones under /app/BOOT_INF/lib that are added by buildpack
+- client certificate jar file - used by microservices to communicate each other
+
+- env |grep PORT
+- private address not public address - CF_INSTANCE_ADDR is private address
+- ?? What is the difference between CF_INSTANCE_ADDR vs CF_INSTANCE_INTERNAL_IP
+- if you have firewall, talk to platform operators who maintain the network provisioning
+
+- cf logs - show prefixes of [APP/..]
+- STG
+- refresh (using spring cloud config) is a dangerous operation
+
+- You don't see port or application index in the output "cf env pal-tracker outout"
+- In pcf, you can use vault server without using config server
+  
+# Deployment Pipelines --------------
 
 ## Talking points (used by Mike G.)
+
+- We want to handle infrastructure stuff as soon as possible
+- Automate everything - checking code, CI/CD pipeline
 
 - Why we do this lab before we write complete code 
    - deloyment is hard, we want minimum complication
@@ -594,9 +671,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 - What CD mean to you?
    - deployment to production should be a business decision 
      not an Eng decision (meaning it should be always 
-     `ready to be deploy'able to production`
-   - depployment to prod is risky, user segregation
-   - ??github example, users, cost vs risk, regulartory constraint
+     `ready to be deploy'able to production`)
 
 - Use instructor slide to talk about pipeline
   
@@ -606,13 +681,38 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   (many org do not allow cf push)
   (jar creation issue - we want to create jar file just once
   and use it in multiple enviroments)
-  (jar versioning - in the form of release - is possible via CICD tool)
+  (jar versioning - in the form of release - is possible via CI/CD tool)
   (buildpack has nothing to do with creating jar)
+  
+(Bill K)
+- Automate deployment of our apps
+- GitHub actions
+- Define CI - why do we automate? 
+  - how long does it take to get the feedback? check in the code -- get feedback
+  - 3 minutes or 4 minutes in Fedex - compare to without CI - it might take days
+  - we want developers to move quicky by having fast feedback
+  - its more than tools, it is a process - we need tools because we need automation
+- Define CD -
+- repeatable process
+
+- we don't want to hard-code configuration variables
+- try cf target to get the values of these configuration variables except the password
+- build your pipeline (and infrastructure) early in the project cycle 
+
+(Charles)
+- Explain pipeline.yml
+- Each build takes a few minutes - a bit tediousness
 
 ## Wrap-up
 
 - Carl discusses "pipeline.yml" (too much is hidden) vs 
   "Bash script" (more control, easier to understand what goes on)
+
+## Wrap-up (Charles)
+
+- CI - check in the code and make sure the integration works
+- CD - deploy to the PCF
+
 
 ## Tips
 
@@ -656,44 +756,23 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   
 ## Trouble-shooting
       
-- *If everything worked fine in the 2nd phase but deployment
-  fails.
-  Manually pusing the app works. ?? accessing ./env results in 404
-  It was because I was using wrong target
-  
-  ```
-  The command "wget -P build/libs https://github.com/$GITHUB_USERNAME/pal-tracker/releases/download/$RELEASE_TAG/pal-tracker.jar" exited with 0.
-  before_deploy
-  0.00s$ echo "Deploying $RELEASE_TAG to Cloud Foundry"
-  dpl_0
-  1.74s$ rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install dpl
-  dpl.1
-  Installing deploy dependencies
-  dpl.2
-  Preparing deploy
-  pl.3
-  Deploying application
-  failed to deploy
-  ```
   
 ## Extra lab exercise
 
 - How do you deploy to a different environment using GitHub
   conditional statement
 
-## Challenge questions on routing
+## Challenge questions of "Deployment Pipelines" lab
 
+(Cloud native development)
 -   What is the factor (among the 12 factors) that is relevant to
     using a pipeline for deploying an application (instead of you
-    manually "cf push"'ing yourself?
+    manually "cf push"'ing yourself?)
+    
+(Routing)
 -   What makes up a route?  (It is made of [??]+ {??]).
 -   We know multiple routes can be assigned to an application.
     Now can a route be assigned to multiple applications?
--   Anybody knows what “blue-green-deployment” is?
--   Speaking of “blue-green deployment”, anybody can think of conceptual 
-    steps you will take in order to achieve it in PCF environment?
--   How can we control the ratio of the traffic between V1.0.1 (blue) 
-    vs. V1.0.2 (green) in PCF environment?
 -   Can a route exist without an application associated with it? 
     (See “cf routes” and “cf create-route” commands.)
 -   What could be the use case of "cf create-route"?
@@ -701,17 +780,28 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
     or "restage" an application?
 -   What is "cf" command to delete all routes that are not 
     associated with any apps?
--   Can you describe which PCF components are responsible for
-    updating the routing table (that is being used by "GoRouter)
-    whenever a new instance is created
-    or old instance gets destroyed?
     
-## Challenge questions in the blud-green deployment
+(Blue Green deployment mechanics)
+-   Anybody knows what “blue-green-deployment” is?
+-   Speaking of “blue-green deployment”, anybody can think of conceptual 
+    steps you will take in order to achieve it in PCF environment?
+-   How can we control the ratio of the traffic between V1.0.1 (blue) 
+    vs. V1.0.2 (green) in PCF environment?
+-   There is a blue-green deployment plugin avaialble to
+    automate the process with smoke test
+    [blue-green-deployment plugin](https://docs.cloudfoundry.org/devguide/deploy-apps/blue-green.html)
     
+(Blue green deployment strategies)
 -   Is blue-green deployment suitable for major feature change?
 -   What are the challenges for doing blue-green deployment?
     - What about table change - don't delete field, don't delete tables
     
+(PCF and routing)
+-   Can you describe which PCF components are responsible for
+    updating the routing table (that is being used by "GoRouter)
+    whenever a new instance is created
+    or old instance gets destroyed?
+        
 ## Steps for blue-green deployment
 
 - V1 - R1 is currently running
@@ -724,9 +814,13 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 - Remove R2 from V2 - now V2 handles only R1
   (cf unmap-route pal-tracker-v2 apps.evans.pal.pivotal.io -n pal-tracker-r2)
       
-# Spring MVC with REST endpoints
+# Spring MVC with REST endpoint ------
 
 ## Talking points
+
+- Let Charles talk about "dependency containe" (application context),
+  in which he talks about controller->repository->datasource 
+  dependency relationship.
 
 - Don't change the test code in this lab - that is the contract
 
@@ -744,8 +838,25 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   
 - You can create an interface from a class - refactor->extract
 
+## Instruction on how to get InMemoryTimeRepository
+
+Run the following commands under `pal-tracker` directory to
+get the InMemoryTimeEntryRepository related code.
+
+```
+wget https://raw.githubusercontent.com/billkable/pal-tracker/cherry-pick-in-mem-repo/mvc-start-with-inmem-repo.sh
+chmod 755 mvc-start-with-inmem-repo.sh
+./mvc-start-with-inmem-repo.sh 
+
+or
+bash <(curl -s https://raw.githubusercontent.com/billkable/pal-tracker/cherry-pick-in-mem-repo/mvc-start-with-inmem-repo.sh)
+
+And then click the io.pivotal.pal.tracker package to see 
+newly added files.
+```
+
   
-### InMemoryRepositoryTest
+## InMemoryTimeRepositoryTest
 
 - How to set the `id` field of `TimeEntry` when it gets created 
   without `id` argument?
@@ -809,7 +920,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 
 - Show them how to compare code within IntelliJ (git->log)
   
-### TimeEntryController test
+## TimeEntryController test
 
 - *We are not testing that the create operation sets the location 
  response field - verify the solution is something like following:
@@ -886,97 +997,87 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
 - *If you import the class within the IDE and then get compile errors,
   you will have to rebuild the class 
 
-## Local testing
+  
+## Challenge Questions of "REST" lab
 
-- *experience the following problem when testing TimeEntryApiTest's
-  create and read tests
-
-  ```bash
-  No results for path: date
-  com.jayway.jsonpath.PathNotFoundException: No results for path: date
-  ```
-  
-  It was because fieldname and method name mismatch like following
-  
-  ```
-    public LocalDate getLocalDate() {
-        return date;
-    }
-  ```
-  
-  instead of
-  
-  ```
-    public LocalDate getDate() {
-        return date;
-    }
-  ```
-  
-- *Even if Gradle runner setting is done in IntelliJ, running the app
-  directly within the IDE still results in the following error
-  You should use "bootRun" task from the list of Gradle tasks.
-  
-  ```
-  Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder    
-  'welcome.message' in value welcome.message"
-  ```
-
-## Challenge Questions (testing related)
-
--  What are the differences between unit testing vs integration 
-   testing vs end-to-end testing?
--  In “pal-tracker” project, which tests are unit testing? 
-   integrating testing or end-to-end testing?
--  Can you do “integration” or “end-to-end” testing as part 
+(Testing)
+-  What are the differences between unit testing and integration 
+   testing? Between integration testing and end-to-end testing?
+   What are their trade-off's?
+-  What is slice testing in the context of Spring testing framework?
+   What are the examples of slice testing?
+-  In “pal-tracker” project, which tests are unit tests? 
+   integrating tests or end-to-end tests (or pseudo end-to-end tests)?
+-  Can you do “integration” or “pseudo end-to-end” testing as part 
    of CI/CD pipeline?
--  What are differences between `RestTemplate` vs `TestRestTemplate`?
--  From unit-testing standpoint, why is it a bad practice to create 
-   a dependency object inside your class using “new” keyword or even 
-   using factory (as opposed to getting it injected either through 
-   constructor method or setting method)?
--  When do you want to use `@SpringBootTest` vs 
-   `@ContextConfiguration` for your integration testing 
-   that involves Spring application context? 
--  Why `TimeEntryControllerTest` code needs mocking while 
-   `InMemoryTimeEntryRepositoryTesting` code doesn’t?
--  What is the difference between stubbing and mocking?  
+-  From unit-testing standpoint, why constructor injection
+   is preferred over field injection?
+-  What is the difference between stubbing and mocking? 
    When do you want use stubbing over mocking and vice-versa?
--  What is the reason controller TimeEntryControllerTest code 
-   has “verify” method?
--  If you have classes in a tree structure (for example, Class 
-   A has dependencies of class B and C and class B 
+-  What are the down-sides of using test doubles such as
+   stubbing or mocking?
+   
+(Testing strategies)
+-  If you have classes with dependency relationship as following
+   (Class A has dependencies class B and C and class B 
    has a dependency D, in other words, class A and B has 
    dependencies while class C has no dependencies), 
    which class do you want to do Unit testing and 
    which classes you want to do integration testing?
--  What about a class that depends on backing services such 
-   as database? How will you perform the integration testing?
    
-## Challenge Questions (non-testing related)   
-
+   ```
+               ______
+               | A  |
+               ------
+                 |
+                 /\      
+                /  \
+            -----  -----
+            | B |  | C |
+            -----  -----
+              |
+              /
+            -----
+            | D |
+            -----
+   ```  
+                
+-  What about a class that depends on backing services such 
+   as databases? How will you perform the integration testing?
+   
+(Spring testing)   
+-  What are differences between `RestTemplate` vs `TestRestTemplate`?
+-  When do you want to use `@SpringBootTest` vs 
+   `@ContextConfiguration` for your integration testing 
+   that involves Spring application context (so that your
+   test code have access of Spring beans)? 
+-  Speaking of the testing of controller code, there are three
+   different options you can use as following: What are the 
+   trade-off's of each testing scheme?
+   - Option #1: create POJO test that just test the controller business logic
+   - Option #2: use MockMvc to test the interaction with the Mvc layer
+   - Option #3: use pseudo end-to-end testing using the 
+     `@SpringBootTest(webEnvironment = RANDOM_PORT)` and
+     `TestRestTemplate`
+   
+(pal-tracker codebase)
+-  Why `TimeEntryControllerTest` code needs mocking while 
+   `InMemoryTimeEntryRepositoryTesting` code doesn’t?
+-  What is the reason controller `TimeEntryControllerTest` code 
+   has `verify` method?
+   
+(Spring)  
 -  What happens to the in-memory data when the application 
    instances come and go?
--  What is the another way of creating InMemoryTimeEntryRepository 
-   bean other than using @Bean in the configuration class? 
+-  What is the another way of creating `InMemoryTimeEntryRepository` 
+   bean other than using `@Bean` in the configuration class? 
    What would be pros and cons of each approach?
+   
+(Design principles)
 -  What does SOLID (design principles) stand for?
 -  What are the examples of “Open for extension Closed  
    for modification” design principle in the 
    “pal-tracker” project?   
-   
-- In the case of testing respository's delete(..), why there is
-  no training method? it is because respository's delete method
-  returns void.
-
-  ```
-    @Test
-    public void testDelete() {
-        long timeEntryId = 1L;
-        ResponseEntity response = controller.delete(timeEntryId);
-        verify(timeEntryRepository).delete(timeEntryId);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
-    }
-  ```
   
 ## Lab tips
 
@@ -988,7 +1089,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   Mockito.verify(MockedObject).someMethodOnTheObject(someParametersToTheMethod);
   verifies that the methods you called on your mocked object are indeed called. 
   If they weren't called, or called with the wrong parameters, or called the 
-  wrong number of times, they would fail your test.
+  incorrect number of times, they would fail your test.
 
 - (Why you want to use verify method?)
   The correctness of the unit test of the target class is based on the
@@ -1070,6 +1171,17 @@ $postman&
   - never to be destructive, always to add not delete
   - eventually you will clean up
 - travis does the migration for us
+
+(Bill)
+- What is the process of adding a column to the table?
+  (answer) Ford is using DB2
+
+- Creating a backing service
+
+(Charles)
+- Charles will do architecture diagram 
+- container is transient, ephumeral - will impact how you write code
+- shopping cart in memory is bad idea - use backing service
  
 
 ## Tips
@@ -1159,23 +1271,109 @@ Empty set (0.05 sec)
 - Went through format of the migration file
   - you cannot change the migration file - flyway
     keeps track of checksum - create a new one
-- development vs production issue (Bill K)
+    
+- (Bill K)
+- development vs production issue 
   - do locally first
+- what is flyway clean or migrate command for? 
+  (you don't want to use clean command in production)
+  migrate command will execute migration scripts that are not executed yet
+  you cannot run migration again.  It has checksum that verifies that it was
+  executed already so you will create a new script
+- flyway allows other versioning scheme such as semantic versioning
+- in production env with existing data, do you want to alter that table?
+  no, it might result outage
+- if you have legacy db (only dba can make change) - index, performance index
+  (environment parity is important) your baseline is the dump of all existing
+  databases 
+- what happens if things fail in the middle of migration?
+- what is the tool for migration data like ETL (extract, transform, load)?  
+  ETL is used for data warehousing
+  look for ETL type of tools instead of flyway for data migration
+- most customers are using external database (oracle, db2, etc.)
+- talk to platform operators to find out what plans are available
+- ford typically create small/medium apps
 
-## Student questions
-
-- Can ssh enabled per space basis?
+(Bill K -10/01/2020)
+- disposability in cloud enviroment, repeatable process - major theme
+- how can add a column to a table? any change you take (DDL) is 
+  captured in a new migration file, once migration file is executed,
+  you cannot change it, it creates other tables other than time_entries
+  table - flyway-schema-history table
+- what could be a problem in adding a column in a table with 5 million rows
+- as your data grows, your index grows, it will lock your table for
+  a long period time - be careful
+- your schema might not in match with your domain class, you might
+  have to some mapping??  Impedance mismatch
+- adding a new feature with several migrations - might work in development 
+  but in production, you can use flyway's baseline
   
+- service broker,  cf marketplace is a catalog of services
+- what is service instance?
+- user-provided service
+- VCAP (vmware cloud application platform)
+- the hostname in the vcap-services is not publicly accessible
+- ??PCF uses internal DNS 
+- how can we execute migration script against the database that is
+  not accessible - show migration file - migration-database.sh file
+- what is "flyway migration clean" - destroying the tables - you don't do
+  this in production but useful for development - explain service key
+  in the file
+- in the next lab (jdbc lab) - we do use gradle plugin
+
 ## References
 
+(schema migration)
+- [Evolutionary Database Design](https://martinfowler.com/articles/evodb.html)
 - [Migration strategies](https://github.com/pivotal-bill-kable/spring-cloud-flyway-migration-demo)
-- [Migration strategies and best practices](https://www.talend.com/resources/understanding-data-migration-strategies-best-practices/)
+
+(data migration)
+- [Data Migration strategies and best practices](https://www.talend.com/resources/understanding-data-migration-strategies-best-practices/)
 
 # Spring JdbcTemplate
 
 ## Talking points
 
 - (Bill K) create-service
+- (Charles)
+  - show create a file in a container instanace, restart the instance 
+    and the file is gone
+  - ps -aef in the container shows a lot smaller number of processes
+
+```
+vcap@a370edf1-a159-4ccd-445f-151f:~$ ps -aef
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 Sep15 ?        00:00:00 /tmp/garden-init
+vcap          14       0  0 Sep15 ?        00:00:00 /tmp/lifecycle/diego-sshd --allowedKeyExchanges= --address=0.0.0.0:2222 --allowUnauthenticatedClients=false --inheritDaemonEnv=true
+vcap          20       0  0 Sep15 ?        00:03:56 /home/vcap/app/.java-buildpack/open_jdk_jre/bin/java -agentpath:/home/vcap/app/.java-buildpack/open_jdk_jre/bin/jvmkill-1.16.0_RELE
+root          32       0  0 Sep15 ?        00:00:00 sh -c trap 'kill -9 0' TERM; /etc/cf-assets/envoy/envoy -c /etc/cf-assets/envoy_config/envoy.yaml --drain-time-s 900 --log-level cr
+root          98      32  0 Sep15 ?        00:11:49 /etc/cf-assets/envoy/envoy -c /etc/cf-assets/envoy_config/envoy.yaml --drain-time-s 900 --log-level critical
+root         140       0  0 Sep15 ?        00:00:09 /etc/cf-assets/healthcheck/healthcheck -port=8080 -timeout=1000ms -liveness-interval=30s
+vcap         179      14  0 16:23 pts/0    00:00:00 /bin/bash
+vcap         192      14  0 16:24 pts/1    00:00:00 /bin/bash
+vcap         204     192  0 16:24 pts/1    00:00:00 ps -aef
+```
+
+(Charles 10/01/2020)
+- shows the spring diagram of "injection container" (application context) 
+  shows shows beans controller, which needs timeentryrepository
+  as a collaborator or dependency, also datasource
+- spring boot - autoconfiguration of database, provides tomcat server
+- spring mvc, spring jdbc libraries
+
+- shows controller code, jdbctimeenterreposty side by side in intellij
+  and @Bean defintion
+- mentions how DataSource gets autoconfigured locally and in production (PCF)
+- run tests with production-like database, it runs reasonably fast, thousands
+  insert still runs in a few seconds
+- have seen many problems of using non-production database, dev/production parity
+- db2 has community edition
+- See step 7 for the build.gradle first and then take the step.
+
+- ?? Charles thinks that our test code of create method does not
+  check if the database is in fact updated and it should
+- ?? Bill - we don't need Eureka server to do container to container
+  networking
 
 ### Challenge questions
 
@@ -1184,25 +1382,21 @@ Empty set (0.05 sec)
     that represents MySQL? 
     (Answer: MySQL driver in the classpath and credentials)
 
--   So when we are running our pal-tracker app locally and in GitHub Actions 
-    with database, we have to provide database credentials (as 
-    environment variables in our lab but could be from property
-    file) but we did not have to do that when we are running
-    the same application in PCF.  How is it done?  
-        
 -   We know that when we are running pal-tracker app locally, Spring Boot
-    auto-configures a `DataSource` bean from the environment-variable provided
-    database credentials, which is then used to auto-configure `JdbcTemplate`
-    bean.  Now when we deploy the same application to PCF, 
+    auto-configures a `DataSource` bean from the environment-variable 
+    provided database credentials.  
+    Now when we deploy the same application to PCF, 
     somehow different `DataSource`
     bean gets auto-configured from database credentials from the VCAP_SERVICES.
-    How does PCF do this?
+    How does PCF do this?  This is what buildpack does.
     
     See [See the Auto-Reconfiguration section in this document](https://docs.run.pivotal.io/buildpacks/java/configuring-service-connections/spring-service-bindings.html#auto)
     
--   Suppose I have some VCAP_SERVICES environment variables that I need to read in my Spring Boot application, is there any helper utility? 
+-   Suppose I have some VCAP_SERVICES environment variables 
+    that I need to read in my Spring Boot application, is there any helper utility? 
 
-    (See the following for a clue https://stackoverflow.com/questions/50456365/how-to-inject-user-provided-vcap-services-in-spring-boot)
+    (See the following for a clue 
+    https://stackoverflow.com/questions/50456365/how-to-inject-user-provided-vcap-services-in-spring-boot)
     
 -   *What is Spring cloud connector for?
     (Answer: Spring Cloud Connectors provides a simple abstraction 
@@ -1223,6 +1417,14 @@ Empty set (0.05 sec)
 - The lab code shows DataSource bean is auto-configured by Spring Boot, meaning you don’t have to configure DataSource bean yourself. Hence the reason we can inject the auto-configured DataSource object into JdbcTimeEntryRepository through constructor injection. And we create JdbcTemplate object ourselves in that constructor.
 
 Now Spring Boot auto-configures JdbcTemplate bean as well so there is no need for us to create a new JdbcTemplate object.  So challenge exercise is to refactor the code to use auto-configured JdbcTemplate bean instead of manually creating it yourself.  Verify that it works by creating a new TimeEntry.
+
+## Spring Data JDBC presentations
+
+
+- [Domain-driven disign with relational database using Spring Data JDBC](https://www.youtube.com/watch?v=GOSW911Ox6s&ab_channel=SpringDeveloper)
+  - Talks about ORM complexities and they can be addressed by Spring Data JDBC
+  
+- [The new kid on the block: Spring Data JDBC] (https://www.youtube.com/watch?v=AnIouYdwxo0&ab_channel=SpringDeveloper)
 
 ## Misc
 
@@ -1396,6 +1598,18 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 -   No need to set up database credentials
 -   Correct DataSource bean automatically created 
     depending on where the application gets deployed
+    
+(Bill K)
+- If you are using ORM, you really need to know the internals 
+  for the apps that need high scalability, ...
+- You could easily write ORM apps with lots of unnessary queries
+- ??pagination - one reason why JPA is chosen
+- Spring Data JDBC is new kid in the block
+
+(Charles)
+- The point of the lab is not jdbc vs jpa
+- The point of the lab is to save the state into a backing service
+    
 
 # Actuator
 
@@ -1403,11 +1617,17 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
    
 - The META-INF/build-info.properties is under build/resources/main directory
 
-
-   
 ## Talking points
 
+- (Bill K) 
+- Actuator metrics is rarely used for cloud native app
+  - Probably use it when APM tools are not available
 - For /health value proposition, talk about the case "applicatio hang" - GC hang - CF does just port health check
+- What does Ford use for monitoring applications? 
+  - One student says her group uses actuator like custom tools
+  - Any APM tools? Sonarcube is mostly static code analysis tools
+    Dynatrace, New Relic, App Dynamic, etc - Ford use Dynatraces
+
 
 ## Trouble-shooting
 
@@ -1455,6 +1675,39 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 ## Challenge exercise
 
 - Use AOP to increment the counter
+
+## Wrap-up
+
+(Bill K)
+- show actuator endpoints using postman
+  - /actuator/beans - look into it and you will understand lots of spring internals
+  - take a look at the spring source code
+-dynatrace will give you better data than metrics
+-actuator endpoint does not persist the data
+-code smell - mixing controller code and performance monitoring code
+  - use AOP (outside of the scope of this course)
+  - we could get the same from the database (without writing java code)
+  - number of timeentry records
+ 
+- availability, scalability demo
+- probe
+- spring boot 2.2, Health Check screen, endpoint
+- simulate the failure, watch PCF is restarting
+- how can I get availablity?  use scaling, scale to 2 instances
+- 500 requests per second by now, multiply that by 10, we will
+  experience 
+  
+- ideally we want to make our containers to be small and large number of instances
+- so we use horizontal scaling, more efficient usage than vertical scaling
+
+- Bill use script to do auto-scaling
+
+(Charles)
+- use splunk to get the number of entries in the time-entries table
+- logs are youf first choice of diagnosing a problem
+
+
+
   
 # Scaling lab
 
@@ -1466,7 +1719,7 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 
 - app manager url [https://apps.sys.evans.pal.pivotal.io](https://apps.sys.evans.pal.pivotal.io)
 
-## Slack channel tis
+## Slack channel tips
 
 - [JMeter installation on Ubuntu](https://linuxhint.com/install_apache_jmeter_ubuntu/)
   
@@ -1481,6 +1734,32 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 - (Bill K) shows apps manager and shows auto-scaling feature
   using JMeter
   
+(Bill K)
+-   what do you mean by scaling?  we are talking about greenfield app
+-   what is vertical scaling? add more resources to a container
+-   what is horizontal scaling? add more containers, 
+    cheap to do it on modern platform
+    - Bill talked about diego cell memory size
+    - higher utilization of resources on cloud platform
+    - make instances as small as possible
+    - 2G per container constraint - write your app to fit 
+    - pcf quota applies to spaces
+    - capacity planning
+-  showed demo using 4 terminals and demoed horizontal scaling
+-  auto-scaler - use it until you get some experience on the app charactertistics
+    - it is not as smart as you
+    - you can create autoscale.yml for auto-scaling
+   
+-  cf configure-autoscaling pal-tracker <yaml file>
+-  watch autoscaling-events pal-tracker
+
+-  loadtest (node based app)
+-  auto-scaling is not instantaneous - it collects data and then act
+-  3 instances minimum per foundation, 1 instance is never a good idea
+   (if operator has to update security patch, it will be down)
+   foundations are not co-ordnadint
+   auto-scalling is not solving everything, it is not a magic
+   more tools you bring, you have something else to break
 
 # App Continnum
 
@@ -1614,19 +1893,19 @@ $postman&
 ## Challenge questions
   
 ```
-If you are responsible for a greenfield project, would 
-you start with Microservice architecture or monolith 
-architecture? Why?
-
-In the component architecture, what is the role of 
-component and what is the role of application? How 
-would you divide the required logic between the two?
-
-Why are we using a single repository for all 4 microservices?  
-Isn't it a violation of the first rule of 12 factor app? 
+(Component-based application architecture)
+- If you are responsible for a greenfield project, would 
+  you start with Microservice architecture or monolith 
+  architecture? Why?
+- In the component architecture, what is the role of 
+  component and what is the role of application? How 
+  would you divide the required logic between the two?
+- Why are we using a single repository for all 4 microservices?  
+  Isn't it a violation of the first rule of 12 factor app? 
   
-In the "pal-tracker-distributed", we use 4 different 
-databases, one for each application. 
+(Database related)  
+- In the "pal-tracker-distributed", we use 4 different 
+  databases, one for each application. 
 
   - Is it a recommended practice?  
     Should we have a single database instead?
@@ -1639,16 +1918,26 @@ databases, one for each application.
     (In 'pal-tracker-distributed", we don't have any duplicate data.)
   - Is distributed transaction possible in micro-service architecture?
 
-Application code should be insulated from data access logic? 
-How do we achieve that in the "pal-tracker-distributed"? 
+- Application code should be insulated from data access logic? 
+  How do we achieve that in the "pal-tracker-distributed"? 
+  
+(Monolith to Microservices - Database related)
+- What strategies can we take to break up tangled database schema
+  (maybe with foreign key relationship among themselves)
+  when migrating monolithic application to micro services? 
 
-Why are there variations of a domain class, for example, 
-why are there `TimeEntryForm`, `TimeEntryInfo`, `TimeEntryRecord`, 
-`TimeEntryFields` classes? Where are they used?
-
-When Timesheet server needs to talk to registration server via 
-REST call, where does the Timesheet server finds the address 
-of the registration server?
+(pal-tracker-distribtued app)
+- Why are there variations of a domain class, for example, 
+  why are there `TimeEntryForm`, `TimeEntryInfo`, `TimeEntryRecord`, 
+  `TimeEntryFields` classes? Where are they used?
+- When Timesheet server needs to talk to registration server via 
+  REST call, where does the Timesheet server finds the address 
+  of the registration server?
+- Why is ProjectClient code duplicated in backlog, timesheets, allocation
+  server apps?
+- Why do we have projects, accouts, users in a registration server?
+  (In other words, why we did not have separate server for each of domain
+  objects? Hint: See @Transactional in the RegistrationService class)
 
 ```
   
@@ -1967,7 +2256,7 @@ springCloudCommonsVersion = "2.0.0.RELEASE"
    https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
    ```
 
-## Container to Container networking
+## Container-to-Container networking
 
 - When container-to-container networking is enabled, the
   Eureka server will maintain the addesses of the service
@@ -1975,14 +2264,10 @@ springCloudCommonsVersion = "2.0.0.RELEASE"
   which the calling service can communicate directly
   with the destination service
   
-- *Is container to container networking enabled in evans?
-  Looks like it does not.
+- *Is container to container networking enabled in evans? It is now.
   
   ```
   < workspace/pal-tracker-distributed - master > cf add-network-policy tracker-allocations --destination-app tracker-registration --protocol tcp --port 8080-8090
-  Adding network policy to app tracker-allocations in org sashin.pivotal.io / space sandbox as sashin@pivotal.io...
-  provided scopes [cloud_controller.read password.write cloud_controller.write openid uaa.user] do not include allowed scopes [network.admin network.write]
-  FAILED
   ```
 
 - Add network policy
@@ -1994,6 +2279,10 @@ springCloudCommonsVersion = "2.0.0.RELEASE"
   ```
   cf add-network-policy tracker-allocations --destination-app tracker-registration --protocol tcp --port 8080-8090
   ```
+  
+
+  
+## References
   
 - [Configuring Cross Cloud Foundry Service Registy (route mode)](http://docs.pivotal.io/spring-cloud-services/1-4/common/service-registry/enabling-peer-replication.html)
 - [GoRouter does honor Ribbon load balancing algorithm](http://docs.pivotal.io/spring-cloud-services/1-4/common/service-registry/connectors.html#instance-specific-routing-in-ribbon)
@@ -2396,7 +2685,7 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
   ```
   
 
-## Challenge questions
+## Challenge questions (on config server lab)
 
 -   It is a good practice to save security-sensitive data such as
     passwords in the config server? If not, what can we do?
@@ -2428,6 +2717,10 @@ Pivotal EDU offerings
 - [Survey](https://www.surveymonkey.com/r/3GKNTN8?coid=pri)
 
 # Retro
+
+- Create a retro from https://retros.cfapps.io/
+
+https://retros.cfapps.io/retros/pal-ford-sep-2020
 
 ```
 Got it. My team is using parabol.co for our retros and I like it a lot more than the cfapps retro tool . Might be worth trying sometime!
