@@ -104,17 +104,27 @@ in teaching PAL CND, which includes
 
 # Git related
 
+## Normal flow of work in the lab 
+
+```
+git cherry-pick <xyzlab-start>  (pull in the test code in most labs)
+(do your lab work)
+git add .  (add any new code to be in the git version control)
+git commit -m "done with xyzlab" (commit the change)
+git push    (push the local change to the remote repo, which also triggers GitHub Action)      
+```
+
 ## Demo steps for a particular topic
 
 -   If you want to start "topic" lab from "topic-start", 
     follow the steps mentioned below 
     
 ```
--   git checkout master 
+-   git checkout master (if you are not in master branch)
 -   git reset --hard <topic-start>
--   change manifest files to reflect correct domain and route in manifest file like:
+-   (change manifest files to reflect correct domain and route in manifest file like:)
         - route: pal-tracker-sang-shin.apps.evans.pal.pivotal.io
--   Do the lab work
+-   (Do the lab work)
 -   git add-commit -m “my work done”
 -   git push origin master -f  (to force the remote master to sync with local master - do not to this in production! :-))
 ```
@@ -252,6 +262,24 @@ Pair rotation guide:
   - CTRL+ALT+Right (forward - might not work on Mac - you might have to set it yourself manually)
   - ALT+Insert (Generate - might not work on Mac - you might have to set it yourself manually) 
   - CTRL+SHIFT+' - to maximize/minimize tool window
+```
+
+- Keyboard shortcut keys for IntelliJ (Mac)
+```
+  - CMD+O (find class)
+  - CMD+SHIF+O (find file)
+  - ALT+Return (Quick fix)
+  - Double SHIFT (global search)
+  - CMD+SHIFT+Return (Complete current statement)
+  - F2, SHIFT+F2 (Go to next/previous error)
+  - CTRL+SHIFT+R (run the app/test)
+  - CTRL+R(rerun the app/test)
+  - CMD+ALT+V (extract return value into a local variable)
+  - CMD+SHIFT+T (go to target/test code)
+  - CMD+Left (navigate back)
+  - CMD+Right (navigate forward)
+  - CMD+N (Generate) 
+  - CMD+SHIFT+' (Mximize/minimize tool window)
 ```
 
 ## Misc. tips
@@ -1321,6 +1349,29 @@ Empty set (0.05 sec)
   in the file
 - in the next lab (jdbc lab) - we do use gradle plugin
 
+(Bill K - 10/6/20)
+- can you change migration to production database?  large scale database
+  - it will block significant amount of time, apps will not be available
+    significant amount time - stability
+  - flyway provides impedance mismatch - it provides flyway baseline??
+    - apply a single migration file (instead of hundreds)
+    - what happens if you have hundreds of migration files? how do you
+      get a sense of the schema's??
+  - performance index in production? it should be part of your migration
+    - you might want to have dba
+
+- how does github actions interact with migration work?
+- we don't do fly clean in the github action yaml file
+- how are we connecting to the database server? via ssh - we are actually
+  tunnelling
+- where database credentials coming from? using "cf service-key"
+- is having database credentials in the pipeline secure??
+- we would not use in production environment using ssh given that
+  ssh is highly likely to be disabled - 12 factor - administrative process
+  - run flyway on the cloud foundry
+- in fedex, they use database (oracle) outside of pcf
+    
+
 ## References
 
 (schema migration)
@@ -1594,6 +1645,7 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 
 ## Wrap-up talking points
 
+(Sang)
 -   Self-service
 -   No need to set up database credentials
 -   Correct DataSource bean automatically created 
@@ -1611,7 +1663,7 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 - The point of the lab is to save the state into a backing service
     
 
-# Actuator
+# Actuator (Health monitoring)
 
 ## Tips
    
@@ -1620,13 +1672,20 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 ## Talking points
 
 - (Bill K) 
+- what tyoes of monitoring tools do you use? How many of you support apps in prod env?
+  - fedex: jmx, api turn off and on, weblogic, now they use actuator
 - Actuator metrics is rarely used for cloud native app
-  - Probably use it when APM tools are not available
+  - Probably use it when APM (Application Performance Monitoring) 
+    tools are not available
+  - they app dynamics?
 - For /health value proposition, talk about the case "applicatio hang" - GC hang - CF does just port health check
 - What does Ford use for monitoring applications? 
   - One student says her group uses actuator like custom tools
   - Any APM tools? Sonarcube is mostly static code analysis tools
     Dynatrace, New Relic, App Dynamic, etc - Ford use Dynatraces
+- out code is not realistic, example is MAX_TIME_ENTRIES, we just
+  need a way of increasing the number of entries
+- keep browser open, keep cranking up code
 
 
 ## Trouble-shooting
@@ -1682,9 +1741,11 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 - show actuator endpoints using postman
   - /actuator/beans - look into it and you will understand lots of spring internals
   - take a look at the spring source code
--dynatrace will give you better data than metrics
--actuator endpoint does not persist the data
--code smell - mixing controller code and performance monitoring code
+- you probably do not expose mappings,beans,env in production,
+  they are mostly for development 
+- dynatrace (ford), app dynamics (fedex) will give you better data than metrics
+- actuator endpoint does not persist the data
+- code smell - mixing controller code and performance monitoring code
   - use AOP (outside of the scope of this course)
   - we could get the same from the database (without writing java code)
   - number of timeentry records
@@ -1701,14 +1762,30 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 - so we use horizontal scaling, more efficient usage than vertical scaling
 
 - Bill use script to do auto-scaling
+- financial organizations typically do "rotating their infrastructure"
+  as a security measure
+- don't abuse logging, also do not treat as transactional data
+
+- health-check-type, health-check-http-endpoint in the manifest file
+
+- demo, cf events pal-tracker, watch cf app pal-tracker, jmeter,  
+  simulate the failure, observe that
+  pcf restarts the app after liveness checks the failure
+  
+- how can we improve the availability of the lab? scale it up
+- vertical scaling - add resources, horizontal scaling - add processes
+- what is lenear scaling? being able to handle number of client 
+  requests linearly the through?  
+  can you do achieve linear scaling with vertical scaling? we might
+  be able to predict to an extent in the old days when using the 
+  machine, in the cloud, you cannot predict vertical scaling, cpu usage
+  is not accurate 
 
 (Charles)
-- use splunk to get the number of entries in the time-entries table
+- use splunk (ford, fedex) to get the number of entries in the time-entries table
 - logs are youf first choice of diagnosing a problem
 
 
-
-  
 # Scaling lab
 
 - Auto-scaling lab, in the Recent History, you will see something
@@ -1726,6 +1803,7 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 ## Wrap-up
 
 - See [Scaling rules](https://docs.run.pivotal.io/appsman-services/autoscaler/using-autoscaler.html#metric) for scaling rules detail
+- The following blog post is a good read on Cloud Foundry CPU resource management: https://www.cloudfoundry.org/blog/better-way-split-cake-cpu-entitlements/
 - See [PCF Autoscaler advisory for scaling Apps based on the CPU utilization](https://community.pivotal.io/s/article/PCF-Autoscaler-Advisory-for-Scaling-Apps-Based-on-the-CPU-utilization?language=en_US)
 - *When applying auto-scaling, what is "Percent of traffic to apply    
   95% or 99%"?
@@ -1769,6 +1847,11 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 - Use a single repository for multiple applications as long as possible
   - It is easy to move around domains between applications
   
+(Charles)
+- Feature groups
+  - allocaiton code has date format code
+  - timesheets code decides to use that date format code
+
 
 # Distributed System
 
@@ -1890,7 +1973,7 @@ $postman&
   find ./ -type f -exec sed -i -e 's/\$\{UNIQUE_IDENTIFIER\}\.\$\{DOMAIN\}/sang-shin.apps.evans.pal.pivotal.io/g' {} \;
   ```
   
-## Challenge questions
+## Challenge questions of "Distributed Systems" lab
   
 ```
 (Component-based application architecture)
@@ -1940,6 +2023,16 @@ $postman&
   objects? Hint: See @Transactional in the RegistrationService class)
 
 ```
+
+## References of Database refactoring
+
+- "Chapter 5: Splitting the Monolith" from "Building Microservices"
+  written by Sam Newman (O'Reilly)
+  https://smile.amazon.com/Building-Microservices-Designing-Fine-Grained-Systems/dp/1491950358/ref=sr_1_3?crid=O30N4C7P4G8&dchild=1&keywords=building+microservices&qid=1602278414&sprefix=building+mi%2Caps%2C155&sr=8-3
+- "Monolith to Microservices: Evolutionary Patterns to Transform Your Monolith"
+  https://smile.amazon.com/Monolith-Microservices-Evolutionary-Patterns-Transform/dp/1492047848/ref=sr_1_3?crid=3DNLL2GV8BVND&dchild=1&keywords=microservices+sam+newman&qid=1602278452&sprefix=microservices+sam%2Caps%2C159&sr=8-3
+- "Refactoring Databases"
+  https://smile.amazon.com/Refactoring-Databases-Evolutionary-paperback-Addison-Wesley/dp/0321774515/ref=sr_1_3?dchild=1&keywords=database+refactoring&qid=1602278543&sr=8-3
   
 ## Trouble-shooting
 
@@ -1997,7 +2090,7 @@ macmnsvc  69  mfe   20u  IPv6 0x607ea1e1983cb26d      0t0  TCP *:sunproxyadmin (
   fatal: cherry-pick failed  
   ```
   
-# Service Discovery
+# Service Discovery -----------------
 
 ## Talking points
 
@@ -2048,6 +2141,7 @@ macmnsvc  69  mfe   20u  IPv6 0x607ea1e1983cb26d      0t0  TCP *:sunproxyadmin (
 
 -   ??The terminology of spring cloud services in the code 
     needs to be explained
+    
 
 ## Tips
 
@@ -2492,6 +2586,33 @@ The OAuth 2.0 Framework describes overarching patterns for granting authorizatio
 
 Luckily, OpenID Connect or OIDC brings some sanity to the madness. It is an OAuth extension which adds and strictly defines an ID Token for returning user information.  Now when we log in with our Identity Provider, it can return specific fields that our applications can expect and handle. The important thing to remember is that OIDC is just a special, simplified case of OAuth, not a replacement. It uses the same terminology and concepts.
 ```
+
+## How to get started with security lab 
+
+```
+[Save your changes to another branch first}
+-   git checkout -b wip-branch
+-   git add .
+-   git commit -m “work in progress in my lab”
+-   git push origin wip-branch --tags
+
+[Then do the following}
+-   git checkout master 
+-   git reset --hard security-solution
+-   (change manifest files of all 4 applications to reflect 
+    correct domain and route in manifest file like:)
+        - route: pal-tracker-sang-shin.apps.evans.pal.pivotal.io
+
+[Create service discovery service]
+-   cf create-service p-service-registry standard tracker-service-registry
+
+[Do the security lab]
+-   (Do the lab work)
+-   git add-commit -m “end of security lab”
+-   git push origin master --force  (to force the remote master 
+          to sync with local master - do not to this in production! :-)) 
+```
+
 
 ## Demo steps
 
