@@ -83,8 +83,9 @@ in teaching PAL CND, which includes
 - A student can access their slack channel message by
   opening slack or go to `palexternal.slack.com` 
   
-- ?? Some students did not receive slack invitation email
+- Some students did not receive slack invitation email
   because company firewall blocks the email?
+  (Josh can manaully confirm on our end through Auth0)
   
 - In order to see the self-evaluation, please go to
   [https://registration.education.pivotal.io/admin/cohorts](https://registration.education.pivotal.io/admin/cohorts)
@@ -137,6 +138,7 @@ By the way, before you do the above step, if you need to save your current unfin
 -   git add .
 -   git commit -m “work in progress in my lab”
 -   git push origin wip-branch --tags
+-   git checkout master
 ```
 
 -   If you have created github repository with `README.md`, you
@@ -178,16 +180,14 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 - git cherry-pick <topic-solution-tag> and handle merge conflict
 ```
 
-# Pair Programming
-
-(Not relevant for LOL)
+# Pair Programming (Not relevant for LOL)
 
 - Communicate what you do to your partner - if you are typing or
   moving your mouse without talking, you are doing a disservice 
   to your pair partner
 - Use your mouse rather than using your finger
 
-# Pair rotation
+## Pair rotation
 
 (Not relevant for LOL)
 
@@ -238,6 +238,7 @@ Pair rotation guide:
 
 ```
 - Keyboard shortcut keys within VDI/Remote Desktop
+
   - ALT+F10 (maximizing window on and off)
   - ALT+Tab (move between windows)
   - ALT+F9 (minimize window)
@@ -265,6 +266,7 @@ Pair rotation guide:
 ```
 
 - Keyboard shortcut keys for IntelliJ (Mac)
+
 ```
   - CMD+O (find class)
   - CMD+SHIF+O (find file)
@@ -396,7 +398,7 @@ Pair rotation guide:
 
 ## Misc
   
-- ??What is `buildscript` closure for?
+- *What is `buildscript` closure for?
 
   ```
   The buildScript block determines which plugins, task classes, and  
@@ -502,7 +504,7 @@ cf help -a
 - Here we are talking about 'configuration' - external to the code
 - We mean "external configuration" here (as opposed to internal configration
   inside spring app)
-- Bill asked how Fedex how they separate external configuration
+- Bill asked how <company-name> how they separate external configuration
   such as database configuration?
   - vault server, spring cloud config server, cf set-env
 - Bill asked how environment variables work in modern apps?
@@ -539,7 +541,7 @@ cf help -a
 - What are the examples of PCF log types? (Google “PCF log types”)
 - Try to use “create-app-manifest” command to capture 
   the metadata of your running app into a file and try 
-  to use that file to deploy the application
+  to use that file to deploy the pal-tracker application again
 - If you remove "random-route: true" from your manifest.yml 
   file and then do "cf push", will it work or will it
   fail due to "The host is taken: pal-tracker" error? Why?
@@ -637,7 +639,7 @@ Great (concise yet to the point) presentation on 12 factors:  https://content.pi
   it reads value from properties
 - Naming convention of the welcome.message
 - How many instances of welcomecontroller get created?
-- Can you set the environment variable again after the application is rest
+- Can you set the environment variable again after the application is reset
 
 - cf ssh
   - see the number of processes (compared to normal linux processes)
@@ -664,14 +666,16 @@ vcap         179     169  0 18:49 pts/0    00:00:00 ps -ef
 ```
 
 - show /app directory (should reflect the contents of the boot jar file
-  - /app/BOOT-INF, /app/META_INF
+  - /app/BOOT-INF, /app/META_INF)
 - blue-colored ones are the ones under /app/BOOT_INF/lib that are added by buildpack
 - client certificate jar file - used by microservices to communicate each other
+  using mutual TLS
 
 - env |grep PORT
 - private address not public address - CF_INSTANCE_ADDR is private address
 - ?? What is the difference between CF_INSTANCE_ADDR vs CF_INSTANCE_INTERNAL_IP
-- if you have firewall, talk to platform operators who maintain the network provisioning
+- if you have firewall, talk to platform operators who maintain 
+  the network provisioning
 
 - cf logs - show prefixes of [APP/..]
 - STG
@@ -804,8 +808,8 @@ vcap         179     169  0 18:49 pts/0    00:00:00 ps -ef
 -   Can a route exist without an application associated with it? 
     (See “cf routes” and “cf create-route” commands.)
 -   What could be the use case of "cf create-route"?
--   When mapping or unmapping routes, do you have to "restart"
-    or "restage" an application?
+-   When you add a new route to an application using "map-route"
+    command, do you have to "restart" or "restage" an application?
 -   What is "cf" command to delete all routes that are not 
     associated with any apps?
     
@@ -825,10 +829,17 @@ vcap         179     169  0 18:49 pts/0    00:00:00 ps -ef
     - What about table change - don't delete field, don't delete tables
     
 (PCF and routing)
--   Can you describe which PCF components are responsible for
-    updating the routing table (that is being used by "GoRouter)
+-   Can you describe which PCF component (inside Diego Cell) 
+    in the following [picture](https://docs.cloudfoundry.org/concepts/diego/diego-architecture.html) responsible for
+    updating the routing table that is being used by "GoRouter"
     whenever a new instance is created
     or old instance gets destroyed?
+    
+## Challenge exercise
+
+-  Exercise blue-green deployment by creating "pal-tracker2" 
+   with WELCOME_MESSAGE of "Hello2 from the review environment"
+-  Use "cf push" command for the exercise (no need to use pipeline)
         
 ## Steps for blue-green deployment
 
@@ -841,6 +852,10 @@ vcap         179     169  0 18:49 pts/0    00:00:00 ps -ef
   (cf unmap-route pal-tracker-v1 apps.evans.pal.pivotal.io -n pal-tracker-r1)
 - Remove R2 from V2 - now V2 handles only R1
   (cf unmap-route pal-tracker-v2 apps.evans.pal.pivotal.io -n pal-tracker-r2)
+  
+## References
+
+- [Blue/Green Deployment Best Practices](https://blog.inedo.com/blue-green-deployment-best-practices)
       
 # Spring MVC with REST endpoint ------
 
@@ -870,6 +885,15 @@ vcap         179     169  0 18:49 pts/0    00:00:00 ps -ef
 
 Run the following commands under `pal-tracker` directory to
 get the InMemoryTimeEntryRepository related code.
+
+```
+In the "Spring MVC with REST Endpoints" lab, after you cherry-pick the "mvc-start" commit, execute the following to get the repository solution:
+
+git checkout tags/mvc-solution  \
+   src/main/java/io/pivotal/pal/tracker/TimeEntry.java  \
+   src/main/java/io/pivotal/pal/tracker/TimeEntryRepository.java  \
+   src/main/java/io/pivotal/pal/tracker/InMemoryTimeEntryRepository.java
+```   
 
 ```
 wget https://raw.githubusercontent.com/billkable/pal-tracker/cherry-pick-in-mem-repo/mvc-start-with-inmem-repo.sh
@@ -1035,7 +1059,7 @@ newly added files.
 -  What is slice testing in the context of Spring testing framework?
    What are the examples of slice testing?
 -  In “pal-tracker” project, which tests are unit tests? 
-   integrating tests or end-to-end tests (or pseudo end-to-end tests)?
+   integrating tests or pusedo end-to-end tests?
 -  Can you do “integration” or “pseudo end-to-end” testing as part 
    of CI/CD pipeline?
 -  From unit-testing standpoint, why constructor injection
@@ -1207,7 +1231,7 @@ $postman&
 - Creating a backing service
 
 (Charles)
-- Charles will do architecture diagram 
+- Charles will do architecture diagram where backing service is described
 - container is transient, ephumeral - will impact how you write code
 - shopping cart in memory is bad idea - use backing service
  
@@ -1287,7 +1311,8 @@ Empty set (0.05 sec)
 ## Challenge questions
 
 - Does database migration include data migration in addition to schema migration?
-- Migration should keep backward compatibility - don't delete column, add a column instead
+- Migration should keep backward compatibility - don't delete column,
+  add a column instead
 
 ## Wrap-up
 
@@ -1376,6 +1401,7 @@ Empty set (0.05 sec)
 
 (schema migration)
 - [Evolutionary Database Design](https://martinfowler.com/articles/evodb.html)
+- [Refactoring Databases: Evolutionary Databases Summary](https://databaserefactoring.com/SplitColumns.html)
 - [Migration strategies](https://github.com/pivotal-bill-kable/spring-cloud-flyway-migration-demo)
 
 (data migration)
