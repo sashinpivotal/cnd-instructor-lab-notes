@@ -1182,6 +1182,8 @@ Of course, if you like GUI REST client, you can use PostMan
 $sudo snap install postman
 $postman&
 ```
+(This is a new one from bill)
+- [Postman collection](https://github.com/billkable/cnd-postman-collections)
 
 - TDD presentation - https://www.youtube.com/watch?v=s9vt6UJiHg4
 
@@ -1201,7 +1203,7 @@ $postman&
   contains fields set with zero's), make sure you have
   getters in the TimeEntry class - 
   
-# Database Migration
+# Database Migration -------------------------
 
 ## Talking points
 
@@ -1234,6 +1236,19 @@ $postman&
 - Charles will do architecture diagram where backing service is described
 - container is transient, ephumeral - will impact how you write code
 - shopping cart in memory is bad idea - use backing service
+
+(Sang)
+- *We perform migration locally and in the pcf but we do not that
+  in the pipeline running in GitHub?  Because our code is still
+  using InMemoryTimeEntryRepository?
+  How about the JdbcTemplate lab?  Yes, the pipeline.tml in
+  the jdbc-start shows that the "build-and-publish" job includes
+  starting mysql "sudo service mysql start" and then performing
+  
+```
+   mysql -uroot -proot < databases/tracker/create_databases.sql
+   ./gradlew testMigrate
+```
  
 
 ## Tips
@@ -1395,6 +1410,25 @@ Empty set (0.05 sec)
   ssh is highly likely to be disabled - 12 factor - administrative process
   - run flyway on the cloud foundry
 - in fedex, they use database (oracle) outside of pcf
+- docker exect -it tracker-database sh
+
+- development time vs production time database migration
+  - production data (a couple of million data)
+  - work with DBA
+  - you might not use the same history in the dev - instead of flyway baseline
+
+(Sang)
+- Go over the key points in the Evolutionary database design
+  - All database artifacts are version controlled with application code
+  - All database changes are migrations (don't try to make changes
+    to the database directly)
+  - Everybody gets their own database instance (it is easy with
+    cloud platform like pcf)
+  - Developers continuosly integrate database changes (just like
+    continuously integrating code - incremental changes)
+  - Clealy separate all database access code - into a repository layer
+    (access to the database always has to go through the repository layer code)
+  - release frequently
     
 
 ## References
@@ -1407,7 +1441,7 @@ Empty set (0.05 sec)
 (data migration)
 - [Data Migration strategies and best practices](https://www.talend.com/resources/understanding-data-migration-strategies-best-practices/)
 
-# Spring JdbcTemplate
+# Spring JdbcTemplate ------------------------------
 
 ## Talking points
 
@@ -1457,7 +1491,6 @@ vcap         204     192  0 16:24 pts/1    00:00:00 ps -aef
 -   What are the two conditions that need to be met before
     Spring Boot's auto-configuration create DataSource bean
     that represents MySQL? 
-    (Answer: MySQL driver in the classpath and credentials)
 
 -   We know that when we are running pal-tracker app locally, Spring Boot
     auto-configures a `DataSource` bean from the environment-variable 
@@ -1465,9 +1498,11 @@ vcap         204     192  0 16:24 pts/1    00:00:00 ps -aef
     Now when we deploy the same application to PCF, 
     somehow different `DataSource`
     bean gets auto-configured from database credentials from the VCAP_SERVICES.
-    How does PCF do this?  This is what buildpack does.
-    
-    See [See the Auto-Reconfiguration section in this document](https://docs.run.pivotal.io/buildpacks/java/configuring-service-connections/spring-service-bindings.html#auto)
+    How does PCF do this?  
+    (Hint 1: Take a look at the log of "cf push" and see 
+    what additional things are added to the Droplet by the
+    buildpack.)
+    (Hint 2: See https://docs.run.pivotal.io/buildpacks/java/configuring-service-connections/spring-service-bindings.html#auto)
     
 -   Suppose I have some VCAP_SERVICES environment variables 
     that I need to read in my Spring Boot application, is there any helper utility? 
@@ -1489,12 +1524,23 @@ vcap         204     192  0 16:24 pts/1    00:00:00 ps -aef
     newer Java CFEnv project. We will continue to release 
     security-related updates but will not address enhancement requests.)
 
-## Challenge Exercise
+## Challenge Exercise of "JdbcTemplate" lab
 
-- The lab code shows DataSource bean is auto-configured by Spring Boot, meaning you don’t have to configure DataSource bean yourself. Hence the reason we can inject the auto-configured DataSource object into JdbcTimeEntryRepository through constructor injection. And we create JdbcTemplate object ourselves in that constructor.
+- The lab code shows DataSource bean is auto-configured by Spring Boot, 
+  meaning you don’t have to configure DataSource bean yourself. 
+  Hence the reason we can inject the auto-configured DataSource 
+  object into JdbcTimeEntryRepository through constructor injection. 
+  And we then create JdbcTemplate object ourselves in that constructor.
 
-Now Spring Boot auto-configures JdbcTemplate bean as well so there is no need for us to create a new JdbcTemplate object.  So challenge exercise is to refactor the code to use auto-configured JdbcTemplate bean instead of manually creating it yourself.  Verify that it works by creating a new TimeEntry.
-
+  Now Spring Boot auto-configures JdbcTemplate bean as well 
+  in our sample application since it finds "spring-boot-starter-jdbc"
+  in the classpath so there is no need for us to create a new JdbcTemplate object.  
+  So challenge exercise is to refactor the code to use 
+  auto-configured JdbcTemplate bean instead of manually creating 
+  it yourself.  Verify that it works by running the test.
+  (You will also have to modify "PalTrackerApplication" and
+  "JdbcTimeEntryRepositoryTest" classes.)
+  
 ## Spring Data JDBC presentations
 
 
@@ -1698,8 +1744,10 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 ## Talking points
 
 - (Bill K) 
-- what tyoes of monitoring tools do you use? How many of you support apps in prod env?
+- what types of monitoring tools do you use? How many of you support apps in prod env?
   - fedex: jmx, api turn off and on, weblogic, now they use actuator
+  - pm: loggregator of pcf, reactive alert, appdynamics (apm), enterprise operations
+- availability probe
 - Actuator metrics is rarely used for cloud native app
   - Probably use it when APM (Application Performance Monitoring) 
     tools are not available
@@ -1713,10 +1761,15 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
   need a way of increasing the number of entries
 - keep browser open, keep cranking up code
 
+- (Charles)
+- Talk about logging agent, loggregator
+- its not transactional, it is best delivery effort
+- cf logs --recent, cf program and xxxx establishes tunnel
+- gorouter does ssl termination
 
 ## Trouble-shooting
 
-- * HealthApiTest fails due the following reason even though 
+- *HealthApiTest fails due the following reason even though 
   accessing the endpoint from a browser works fine. Why?
   It was because I reversed the up() and down() logic.
 
@@ -1743,11 +1796,13 @@ If you don’t have docker installed on your machine, you can download and run p
 cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 ```
 
-## Challenge question
+## Challenge question and exercise of "Actuator" lab
 
-- What is code smell in the following code in the `TimeEntryController`?
+- Do you find any "code smell" in the following code in 
+  the `TimeEntryController`?
   (Does it follow Single Responsibility principle?) 
-  What could be the solution? Do implement it if you know how to.
+  How can you improve the code? (Heard of AOP?)
+  Do implement AOP if you know how.
 
   ```
   @GetMapping
@@ -1757,9 +1812,6 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
   }
   ```
       
-## Challenge exercise
-
-- Use AOP to increment the counter
 
 ## Wrap-up
 
@@ -1836,7 +1888,7 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 - How do you know how many instances to run?
   - why not 1 instance? availability
 - (Bill K) shows apps manager and shows auto-scaling feature
-  using JMeter
+  using JMeter now with load test 
   
 (Bill K)
 -   what do you mean by scaling?  we are talking about greenfield app
@@ -1895,7 +1947,6 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 
 -   Review component architecture
     
-
 -   Whenever a new `backlog`, `allocation`, `timesheet` needs to 
     be created, backlog, allocation, and timesheet application has 
     to know if a corresponding `Project` is already enabled or not. 
@@ -2010,7 +2061,7 @@ $postman&
   component and what is the role of application? How 
   would you divide the required logic between the two?
 - Why are we using a single repository for all 4 microservices?  
-  Isn't it a violation of the first rule of 12 factor app? 
+  Isn't it a violation of the first rule of 12 factor app guidelines? 
   
 (Database related)  
 - In the "pal-tracker-distributed", we use 4 different 
@@ -2018,6 +2069,7 @@ $postman&
 
   - Is it a recommended practice?  
     Should we have a single database instead?
+    What factors would you consider?
   - Is it possible to have database inconsistency among 
     the databases if there are multiple databases?  (For example, 
     a user is deleted in User database, how does other databases 
@@ -2772,6 +2824,7 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 
 -  [OAuth2 overview presentation](https://www.slideshare.net/SangShin1/spring4-security-oauth2?qid=2163e6e6-ae99-48b0-afcc-88380b8724d8&v=&b=&from_search=1)
 -  [OAuth2 in cloud native environment presentation (slides 7 to 37)](https://www.slideshare.net/WillTran1/enabling-cloud-native-security-with-oauth2-and-multitenant-uaa?qid=2c77ae8e-b2d5-4319-baad-1cd1eb8fec42&v=&b=&from_search=1)
+-  [OAuth and OpenID Connect](https://www.youtube.com/watch?v=996OiexHze0&ab_channel=OktaDev)
 
   
 # Config Server
@@ -2847,7 +2900,7 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 -   (From Charles LeRose)
 
     ```
-    As we head toward the end of this class, I’d like to repeat that the course material is available to you indefinitely (the web content with the labs, on the ‘courses’ site.)  You will also continue to have access to this Slack server.  (Be sure to remember you passwords for these.)  And I encourage you to join the #alumni channel here too.
+    As we head toward the end of this class, I’d like to repeat that the course material is available to you indefinitely (the web content with the labs, on the ‘courses’ site.)  You will also continue to have access to this Slack channel.  (Be sure to remember you passwords for these.)  And I encourage you to join the #alumni channel here too.
 ‘Evans’ will be torn down after the class ends, as will your remote desktops that we provided.
 Hopefully, you all have access to some sort of developer sandbox Cloud Foundry foundation.  If not, or if your sandbox lacks some of the services on ‘Evans’, you can use a Cloud Foundry foundation called Pivotal Web Services at  run.pivotal.io.  This is a for-pay service, but creating an account is free, and it comes with quite a bit of free service credit to get started.  There will be a few differences from Evans, such as the API endpoint, so keep your eye out for those.
     ```
