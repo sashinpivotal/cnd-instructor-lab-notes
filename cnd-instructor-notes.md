@@ -91,7 +91,8 @@ in teaching PAL CND, which includes
 - *I (Sang Shin) don't see the new slack channel 
   from palexternal.slack.com.  But the slack channel
   info is shown in the Groundkeeper's message - click
-  + sign and then browse channel
+  + sign and then browse channel - you have to use sashin@pivotal.io
+$$
 
 ## Course contents access
   
@@ -104,8 +105,8 @@ in teaching PAL CND, which includes
   ```
   Josh, I figured it out. I was on Fedex VPN which was preventing the signup. I tried on my personal laptop and it worked. I’m all good now.
  
-Regards,
-Dhatri V.
+  Regards,
+  Dhatri V.
   ```
   
   
@@ -145,13 +146,13 @@ git push    (push the local change to the remote repo, which also triggers GitHu
     follow the steps mentioned below 
     
 ```
--   git checkout master (if you are not in master branch)
+-   git checkout main (if you are not in main branch)
 -   git reset --hard <topic-start>
 -   (change manifest files to reflect correct domain and route in manifest file like:)
         - route: pal-tracker-sang-shin.apps.evans.pal.pivotal.io
 -   (Do the lab work)
 -   git add-commit -m “my work done”
--   git push origin master -f  (to force the remote master to sync with local master - do not to this in production! :-))
+-   git push origin main -f  (to force the remote main to sync with local main - do not to this in production! :-))
 ```
 
 ## Save "in progress" work in a personal branch
@@ -162,18 +163,18 @@ By the way, before you do the above step, if you need to save your current unfin
 -   git add .
 -   git commit -m “work in progress in my lab”
 -   git push origin wip-branch --tags
--   git checkout master
+-   git checkout main
 ```
 
 -   If you have created github repository with `README.md`, you
     will experience the following problem when you do 
-    `git push origin master --tags`.
-    An easy way out is `git push origin master -f --tags`
+    `git push origin main --tags`.
+    An easy way out is `git push origin main -f --tags`
 
 ```
-< workspace/movie-fun - master > git push
+< workspace/movie-fun - main > git push
 To https://github.com/sashinpivotal/movie-fun
- ! [rejected]        master -> master (non-fast-forward)
+ ! [rejected]        main -> main (non-fast-forward)
 error: failed to push some refs to 'https://github.com/sashinpivotal/movie-fun'
 hint: Updates were rejected because the tip of your current branch is behind
 hint: its remote counterpart. Integrate the remote changes (e.g.
@@ -185,7 +186,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
   `git pull` results in the following error:
   
   ```
-  < workspace/pal-tracker-distributed - master > git pull
+  < workspace/pal-tracker-distributed - main > git pull
   fatal: refusing to merge unrelated histories
   ```
   
@@ -199,7 +200,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
     your code (??? Is this correct?)
 
 ```
-- git checkout master
+- git checkout main
 - git cherry-pick abort
 - git cherry-pick <topic-solution-tag> and handle merge conflict
 ```
@@ -225,7 +226,7 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 @here This morning before we rotate pairs:
 1. The other pair partner should create a Github repository for `pal-tracker`
 2. git remote add other-origin <github repo url> 
-3. git push --tags -f  -u other-origin master
+3. git push --tags -f  -u other-origin main
 4. git remote remove other-origin
 ```
 
@@ -254,7 +255,6 @@ Pair rotation guide:
     - GitHub
     - Assignment Submission
 ```
-
 
 # VDI ---------------------------
 
@@ -286,7 +286,7 @@ Pair rotation guide:
   - CTRL+ALT+Left (back - might not work on Mac - you might have to set it yourself manually)
   - CTRL+ALT+Right (forward - might not work on Mac - you might have to set it yourself manually)
   - ALT+Insert (Generate - might not work on Mac - you might have to set it yourself manually) 
-  - CTRL+SHIFT+' - to maximize/minimize tool window
+  - CTRL+SHIFT+' - to maximize/minimize tool window (Generate - might not work on Mac - you might have to set it yourself manually) 
 ```
 
 ## Native keyboard shortcut keys
@@ -312,7 +312,7 @@ Pair rotation guide:
 
 ## Misc. tips
 
-- If you are using Firefox, you can bookmark the course 
+- If you are using Firefox, you can bookmark the course
   webpage by right clicking ...
   on the top-right corner and select bookmark
   and save it under "Bookmars toolbar"
@@ -322,7 +322,7 @@ Pair rotation guide:
   programming document" for other suggestions.)
 
   ```
-  pal_user@instructor-demo-sang-large:~/workspace/pal-tracker- distributed$ git push origin master -f
+  pal_user@instructor-demo-sang-large:~/workspace/pal-tracker- distributed$ git push origin main -f
   Username for 'https://github.com': sashinpivotal
   Password for 'https://sashinpivotal@github.com': 
   remote: Invalid username or password.
@@ -374,7 +374,7 @@ Pair rotation guide:
     by the current host
 
 # Assignment Submission --------------------
-   
+
 ## Talking points
 
 - Note that whenever student submit the lab result, 
@@ -392,7 +392,6 @@ Pair rotation guide:
 
 - What the purpose of using "gradle wrapper"?
 
-  
 # Building a Spring Boot App (lab #1) -------
 
 ## Talking points
@@ -417,7 +416,7 @@ Pair rotation guide:
 	   using `git remote add origin <URL>`
 	  
 - PCF related
-	- You are going to deploy the app to the PCF manually 
+	- You are going to deploy the app to the PCF manually
 	  in this lab 
 	  using `cf push` command:
 	  later on, you will
@@ -430,12 +429,11 @@ Pair rotation guide:
 - Steps to follow
   - Create a personal GitHub account (if you don't have one yet)
   - Create "pal-tracker" repository 
-  - Make sure you have unzipped the `pal-tracker.zip` 
+  - Make sure you have unzipped the `pal-tracker.zip`
     under `workspace` directory
   - Go to local `workspace/pal-tracker` directory
   - Execute `git remote add origin <url>`
-  - Execute `git push origin master --tags`
-
+  - Execute `git push origin main --tags`
 
 ## Misc
   
@@ -465,7 +463,6 @@ Pair rotation guide:
   is because the Gradle project was not refreshed (as mentioned
   in step 8)
   
-
 ## Deploy
   
 -  *Somehow, I get the following error when deploying to the PCF:
@@ -490,21 +487,25 @@ git lola
 find . -name \*.jar -print
 ```
 
-## Challenge questions/exercises of "Building a Spring Boot App" lab
+## Challenge questions of "Building a Spring Boot App" lab
 
 (Spring Boot related)
-- What are the main features of Spring Boot? 
+- What are the main features of Spring Boot?
 - What is a fat jar?  How does Spring Boot create one?
 - How does Spring Boot helps with dependency management?
-- What does `@SpringBootApplication` do? 
+- What does `@SpringBootApplication` do?
+
+(Spring related)
 - When do you use @Component annotation?  
 - When do you use @Autowired annotation?
+
+(Cloud native development)
 - What is 12 factor app?  (Google it)
-- One of the features of Spring Boot (actually through 
+- One of the features of Spring Boot (actually through
   the Spring Boot Maven/Gradle plugin) is to create a fat jar
-  that contains everything including Tomcat. 
+  that contains everything including Tomcat.
   Among the 12 factors, which factor is relevant to
-  creating and deploying the same fat jar over different 
+  creating and deploying the same fat jar over different
   deployment environment?
 
 (PCF related)
@@ -530,25 +531,23 @@ cf help -a
   - fat jar
   - new testing features
   
-	
 ## Challenge exercise
 
 -  Create a Person bean which has name and age fields
 -  Create CommandLineRunner that displays the name and age
    of the person when application gets started
-   
+
 ## Wrap-up (Charles)
 
 -  Draws architecral diagram to show all PCF components involved
 -  Environment variable is set tp JDK11, which will be used
    by buildpack to recreate droplet
 
-  
 # Configuring an App ------------
 
 ## Talking points (Bill K)
 
-- What is the problem of the previous codebase where we 
+- What is the problem of the previous codebase where we
   are returning hard-coded string?
 - Here we are talking about 'configuration' - external to the code
 - We mean "external configuration" here (as opposed to internal configration
@@ -573,7 +572,8 @@ cf help -a
 (Please do these challenge questions after you do the Extra)
 
 - Do we have to do “cf restage pal-tracker” when we set a 
-  new environment variable WELCOME_MESSAGE in PCF?
+  new environment variable WELCOME_MESSAGE in PCF? Or
+  Or would "cf restart pal-tracker" be sufficient?
 - What could be the use cases where you will have to do 
   “cf restage” (as opposed to “cf restart”)?
 - (Related question to the above) What are the differences 
@@ -590,7 +590,6 @@ cf help -a
   fail due to "The host is taken: pal-tracker" error? Why?
   What happens if you delete the pal-tracker application by
   "cf delete pal-tracker" first and then "cf push" again?
-
 
 ## Challenge exercises
 
@@ -613,7 +612,17 @@ cf help -a
 ## Slack channel tips
 
 ```
+
+Container vs VMs. What's the difference?
+https://docs.google.com/presentation/d/1tvXFgvV27bGYRVB3eqUIA8CcqdwjQc_HLt-0k-LrK0Y/view
+
 Great (concise yet to the point) presentation on 12 factors:  https://content.pivotal.io/slides/the-12-factors-for-building-cloud-native-software
+
+Configuration Drift
+http://kief.com/configuration-drift.html
+
+SnowflakeServer from Martin Fowler
+https://martinfowler.com/bliki/SnowflakeServer.html
 ```
 
 ```
@@ -684,6 +693,10 @@ What is the problem of this code?
 
 ## Wrap-up (Bill)
 
+- @Profile was introduced in the early version of Spring
+    for providing different configuration for different deployment environment
+- In his experience, there was code for production only and 
+    it was not tested and deployed to production, which caused a problem
 - In cloud native development, Enviromnet specific properties 
   should not be in the application.properties inside the jar file
   Instead, they should be provided as environment variables
@@ -704,7 +717,7 @@ What is the problem of this code?
     All logs go to standard output device
   
 ```
-< workspace/pal-tracker - master > cf ssh pal-tracker
+< workspace/pal-tracker - main > cf ssh pal-tracker
 vcap@6101881c-bff1-4da1-4497-2dbc:~$ ps -ef
 UID          PID    PPID  C STIME TTY          TIME CMD
 root           1       0  0 18:06 ?        00:00:00 /tmp/garden-init
@@ -796,7 +809,7 @@ windows         Windows Server
 - Define CD -
 - repeatable process
 
-- we don't want to hard-code configuration variables
+- we don't want to hard-coded configuration variables
 - try cf target to get the values of these configuration variables except the password
 - build your pipeline (and infrastructure) early in the project cycle 
 
@@ -819,23 +832,6 @@ windows         Windows Server
 
 ## Tips
 
-- Example Github Actions environment variables
-
-  ```
-  (when using PAL pcf endpoint)
-  CF_API_URL https://api.sys.evans.pal.pivotal.io
-  CF_ORG sashin.pivotal.io
-  CF_SPACE sandbox
-  CF_USERNAME sashin@pivotal.io
-  CF_PASSWORD xxxxxxxxxxx
-
-  (when using PWS pcf endpoint)
-  CF_API_URL https://api.run.pivotal.io
-  CF_ORG sashin-org
-  CF_SPACE development
-  CF_USERNAME sashin@pivotal.io
-  CF_PASSWORD xxxxxxxx
-  ```
     
 - In order to trigger Github Actions job without making code 
   change, you can
@@ -870,25 +866,29 @@ windows         Windows Server
 (Cloud native development)
 -   What is the factor (among the 12 factors) that is relevant to
     using a pipeline for deploying an application (instead of you
-    manually "cf push"'ing yourself?)
-    
+    manually "cf push'ing" yourself?
+
 (Routing)
 -   What makes up a route?  (It is made of [??]+ {??]).
 -   We know multiple routes can be assigned to an application.
     Now can a route be assigned to multiple applications?
     [Ref: https://docs.cloudfoundry.org/devguide/deploy-apps/routes-domains.html]
--   Can a route exist without an application associated with it? 
+-   Can a route exist without an application associated with it?
     (See “cf routes” and “cf create-route” commands.)
 -   What could be the use case of "cf create-route"?
 -   When you add a new route to an application using "map-route"
     command, do you have to "restart" or "restage" an application?
--   What is "cf" command to delete all routes that are not 
-    associated with any apps?
-    
+-   What is "cf" command to delete all routes that are not
+    associated with any apps?-   Can you describe which PCF component (inside Diego Cell) 
+    in the following [picture - scroll down a bit to see it](https://docs.cloudfoundry.org/concepts/diego/diego-architecture.html) responsible for
+    updating the routing table that is being used by "GoRouter"
+    whenever a new instance is created
+    or old instance gets destroyed?
+
 (Blue Green deployment mechanics)
 -   Anybody knows what “blue-green-deployment” is?
--   Speaking of “blue-green deployment”, anybody can think of conceptual 
-    steps you will take in order to achieve it in PCF environment?
+-   Speaking of “blue-green deployment”, anybody can think of conceptual
+    steps you would take in order to achieve it in PCF environment?
 -   How can we control the ratio of the traffic between V1.0.1 (blue) 
     vs. V1.0.2 (green) in PCF environment?
 -   There is a blue-green deployment cloud foundry plugin available to
@@ -899,19 +899,12 @@ windows         Windows Server
 -   Is blue-green deployment suitable for major feature change?
 -   What are the challenges for doing blue-green deployment?
   
-    
-(PCF and routing)
--   Can you describe which PCF component (inside Diego Cell) 
-    in the following [picture - scroll down a bit to see it](https://docs.cloudfoundry.org/concepts/diego/diego-architecture.html) responsible for
-    updating the routing table that is being used by "GoRouter"
-    whenever a new instance is created
-    or old instance gets destroyed?
-    
 ## Challenge exercise
 
 -  Exercise blue-green deployment by creating "pal-tracker2" 
    with WELCOME_MESSAGE of "Hello from the review environment2"
--  Use "cf push" command for the exercise (no need to use pipeline)
+-  For the sake of quick deployment, use "cf push" command instead of using
+   pipeline
         
 ## Steps for blue-green deployment
 
@@ -927,7 +920,17 @@ windows         Windows Server
   
 ## References
 
-- [Blue/Green Deployment Best Practices](https://blog.inedo.com/blue-green-deployment-best-practices)
+```
+Continuous Ingeration by Martin Fowler
+https://martinfowler.com/articles/continuousIntegration.html
+
+Continuous Delivery by Martin Fowler
+https://martinfowler.com/bliki/ContinuousDelivery.html
+```
+
+```
+[Blue/Green Deployment Best Practices](https://blog.inedo.com/blue-green-deployment-best-practices)
+```
       
 # Spring MVC with REST endpoint ------
 
@@ -985,7 +988,6 @@ And then click the io.pivotal.pal.tracker package to see
 newly added files.
 ```
 
-  
 ## InMemoryTimeRepositoryTest
 
 - How to set the `id` field of `TimeEntry` when it gets created 
@@ -1127,7 +1129,6 @@ newly added files.
 - *If you import the class within the IDE and then get compile errors,
   you will have to rebuild the class 
 
-  
 ## Challenge Questions of "REST" lab
 
 (Testing)
@@ -1796,7 +1797,7 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
    ```
    
    ```
-   @Override     public TimeEntry find(Long id) {         List<TimeEntry> query = jdbcTemplate.query(                 "SELECT id, project_id, user_id, date, hours FROM time_entries WHERE id = ?",                 mapper,                 new Object[]{id});         TimeEntry timeEntry = query == null || query.size()==0 ? null : query.get(0);         return timeEntry;      } ``` 
+   @Override    public TimeEntry find(Long id) {        List<TimeEntry> query = jdbcTemplate.query(                "SELECT id, project_id, user_id, date, hours FROM time_entries WHERE id = ?",                mapper,                new Object[]{id});        TimeEntry timeEntry = query == null || query.size()==0 ? null : query.get(0);        return timeEntry;    }``` 
    
    and the IDE will fix it.
    
@@ -2260,7 +2261,7 @@ $postman&
   You can try the following command on Mac
   
 ```
-< workspace/pal-tracker-distributed - master > sudo lsof -i tcp:8081
+< workspace/pal-tracker-distributed - main > sudo lsof -i tcp:8081
 Password:
 COMMAND  PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
 macmnsvc  69  mfe   20u  IPv6 0x607ea1e1983cb26d      0t0  TCP *:sunproxyadmin (LISTEN)  
@@ -2301,7 +2302,7 @@ macmnsvc  69  mfe   20u  IPv6 0x607ea1e1983cb26d      0t0  TCP *:sunproxyadmin (
   the codebase.txt file
 
   ```
-  < workspace/pal-tracker-distributed + master > git cherry-pick pipeline error: your local changes would be overwritten by cherry-pick.
+  < workspace/pal-tracker-distributed + main > git cherry-pick pipeline error: your local changes would be overwritten by cherry-pick.
   hint: commit your changes or stash them to proceed.
   fatal: cherry-pick failed  
   ```
@@ -2562,7 +2563,7 @@ springCloudCommonsVersion = "2.0.0.RELEASE"
 - *Is container to container networking enabled in evans? It is now.
   
   ```
-  < workspace/pal-tracker-distributed - master > cf add-network-policy tracker-allocations --destination-app tracker-registration --protocol tcp --port 8080-8090
+  < workspace/pal-tracker-distributed - main > cf add-network-policy tracker-allocations --destination-app tracker-registration --protocol tcp --port 8080-8090
   ```
 
 - Add network policy
@@ -2592,7 +2593,7 @@ springCloudCommonsVersion = "2.0.0.RELEASE"
 - *I get the following error when creating 
 
   ```
-  < workspace/pal-tracker-distributed - master > curl -i -XPOST -H"Content-Type:  application/json" allocations-pal-sang-shin.apps.evans.pal.pivotal.io/allocations/ - d"{\"projectId\": \"1\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\":  \"2015-05-18\"}"
+  < workspace/pal-tracker-distributed - main > curl -i -XPOST -H"Content-Type:  application/json" allocations-pal-sang-shin.apps.evans.pal.pivotal.io/allocations/ - d"{\"projectId\": \"1\", \"userId\": \"1\", \"firstDay\": \"2015-05-17\", \"lastDay\":  \"2015-05-18\"}"
   HTTP/1.1 500 Internal Server Error
 
   {"timestamp":1587121186241,"status":500,"error":"Internal Server Error","message":"No instances available for registration-pal-sang-shin.apps.evans.pal.pivotal.io","path":"/allocations/"}
@@ -2782,7 +2783,7 @@ Luckily, OpenID Connect or OIDC brings some sanity to the madness. It is an OAut
 -   git push origin wip-branch --tags
 
 [Then do the following}
--   git checkout master 
+-   git checkout main 
 -   git reset --hard security-solution
 -   (change manifest files of all 4 applications to reflect 
     correct domain and route in manifest file like:)
@@ -2794,8 +2795,8 @@ Luckily, OpenID Connect or OIDC brings some sanity to the madness. It is an OAut
 [Do the security lab]
 -   (Do the lab work)
 -   git add-commit -m “end of security lab”
--   git push origin master --force  (to force the remote master 
-          to sync with local master - do not to this in production! :-)) 
+-   git push origin main --force  (to force the remote main 
+          to sync with local main - do not to this in production! :-)) 
 ```
 
 
@@ -2813,7 +2814,7 @@ Luckily, OpenID Connect or OIDC brings some sanity to the madness. It is an OAut
   services tab.  Using boorun with --parallel works.)
       
 ```
- workspace/pal-tracker-distributed - master > curl localhost:8083 -H"Authorization: Bearer b78147e6-75f6-4a22-8498-26efe95d5dc6"
+ workspace/pal-tracker-distributed - main > curl localhost:8083 -H"Authorization: Bearer b78147e6-75f6-4a22-8498-26efe95d5dc6"
 <!doctype html><html lang="en"><head><title>HTTP Status 500 – Internal Server Error
 ```
 
@@ -2932,6 +2933,7 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 -  [OAuth2 overview presentation](https://www.slideshare.net/SangShin1/spring4-security-oauth2?qid=2163e6e6-ae99-48b0-afcc-88380b8724d8&v=&b=&from_search=1)
 -  [OAuth2 in cloud native environment presentation (slides 7 to 37)](https://www.slideshare.net/WillTran1/enabling-cloud-native-security-with-oauth2-and-multitenant-uaa?qid=2c77ae8e-b2d5-4319-baad-1cd1eb8fec42&v=&b=&from_search=1)
 -  [OAuth and OpenID Connect](https://www.youtube.com/watch?v=996OiexHze0&ab_channel=OktaDev)
+-  [Explain it to Me I'm 5: OAuth2 and OpenID](https://www.youtube.com/watch?v=5th6CSQTdpM&ab_channel=SpringDeveloper)
 
   
 # Config Server
@@ -2950,12 +2952,12 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 
     ```
     cf create-service ${CONFIG_SERVER_SERVICE_NAME} ${PLAN_NAME} tracker-config-server \
-    -c "{\"git\": {\"uri\": \"https://github.com/${YOUR_GITHUB_USERNAME}/tracker-config.git\", \"label\":  \"master\"}}"
+    -c "{\"git\": {\"uri\": \"https://github.com/${YOUR_GITHUB_USERNAME}/tracker-config.git\", \"label\":  \"main\"}}"
     ```
     
     ```
     cf create-service p-config-server standard tracker-config-server \
-    -c "{\"git\": {\"uri\": \"https://github.com/sashinpivotal/tracker-config.git\", \"label\": \"master\"}}"
+    -c "{\"git\": {\"uri\": \"https://github.com/sashinpivotal/tracker-config.git\", \"label\": \"main\"}}"
     ```
     
 -   After getting a token, send refresh post
