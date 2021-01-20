@@ -86,13 +86,13 @@ in teaching PAL CND, which includes
   
 - Some students did not receive slack invitation -
   they should receive it when we added them to the
-  slack channel
+  slack channel - they are added by groundkeeper
   
 - *I (Sang Shin) don't see the new slack channel 
   from palexternal.slack.com.  But the slack channel
   info is shown in the Groundkeeper's message - click
   + sign and then browse channel - you have to use sashin@pivotal.io
-$$
+
 
 ## Course contents access
   
@@ -111,9 +111,6 @@ $$
   
   
 ## Misc.
-  
-- In order to see the self-evaluation, please go to
-  [https://registration.education.pivotal.io/admin/cohorts](https://registration.education.pivotal.io/admin/cohorts)
   
   ```
   @here Do not worry about your pair setting up a github today.
@@ -140,12 +137,27 @@ git commit -m "done with xyzlab" (commit the change)
 git push    (push the local change to the remote repo, which also triggers GitHub Action)      
 ```
 
-## Demo steps for a particular topic
+## Save "in progress" work in a personal branch
 
--   If you want to start "topic" lab from "topic-start", 
-    follow the steps mentioned below 
-    
 ```
+If you need to save your current unfinished work into 
+“work in progress” branch and then start with next
+module, please do the following:
+
+-   git checkout -b wip-branch
+-   git add .
+-   git commit -m “work in progress in my lab”
+-   git push origin wip-branch --tags
+-   git checkout main
+-   git cherry-pick <current-topic-solution>
+```
+
+## Start with "topic-start" for a new lab
+
+```
+If you want to start "topic" lab from "topic-start", 
+follow the steps mentioned below 
+
 -   git checkout main (if you are not in main branch)
 -   git reset --hard <topic-start>
 -   (change manifest files to reflect correct domain and route in manifest file like:)
@@ -155,16 +167,7 @@ git push    (push the local change to the remote repo, which also triggers GitHu
 -   git push origin main -f  (to force the remote main to sync with local main - do not to this in production! :-))
 ```
 
-## Save "in progress" work in a personal branch
 
-```
-By the way, before you do the above step, if you need to save your current unfinished work into “work in progress” branch so that you can work on that on later time, you do the following:
--   git checkout -b wip-branch
--   git add .
--   git commit -m “work in progress in my lab”
--   git push origin wip-branch --tags
--   git checkout main
-```
 
 -   If you have created github repository with `README.md`, you
     will experience the following problem when you do 
@@ -263,15 +266,16 @@ Pair rotation guide:
 ```
 - Keyboard shortcut keys within VDI/Remote Desktop
 
-  - ALT+F10 (maximizing window on and off)
   - ALT+Tab (move between windows)
+  - CTRL+ALT+D (minimize all windows)
+  - ALT+F10 (maximizing window on and off)
   - ALT+F9 (minimize window)
   - SHIFT+CTRL+C (copying from termimal) 
   - SHIFT+CTRL+V (copying to the terminal)
   - CTRL+C (copying) 
   - CTRL+V (pasting)
 
-- Keyboard shortcut keys within the VDI provided IntelliJ
+- Keyboard shortcut keys within the VDI-provided IntelliJ
 
   - CTRL+N (find class)
   - CTRL+Shift+N (find file)
@@ -353,25 +357,7 @@ Pair rotation guide:
 - bash shell - you can check with echo "$SHELL"
 - you have to create ~/.bash_profile
 
-# Zoom related tips and tricks
 
-- The host role should be played by an instructor who has the
-  least amount of work on that day
-- The activities host plays include
-  - admit participants (this is very important)
-  - create breakout rooms
-  - assign "ask for help" request to other co-hosts
-    (unfortunately co-hosts do not receive "ask for help" notifications)
-  - occasionally "lower all hands" 
-  - occasionally "mute" everyone
-- The first time, you become the host, you should
-  - assign other instructors as co-host
-  - create a teacher's lounge - this can be done only before you open breakout rooms
-- If the host gets disconnected from the Zoom session, for
-  whatever reason, the host role will be automatically transfered to
-  another co-host
-  - host role has to be manually switched back to original host
-    by the current host
 
 # Assignment Submission --------------------
 
@@ -490,12 +476,15 @@ find . -name \*.jar -print
 ## Challenge questions of "Building a Spring Boot App" lab
 
 (Spring Boot related)
+- What is purpose of doing "./gradle wrapper"?
 - What are the main features of Spring Boot?
 - What is a fat jar?  How does Spring Boot create one?
 - How does Spring Boot helps with dependency management?
 - What does `@SpringBootApplication` do?
 
 (Spring related)
+- What is Dependency Injection? Why is it useful?
+- What is an Application context?
 - When do you use @Component annotation?  
 - When do you use @Autowired annotation?
 
@@ -542,11 +531,29 @@ cf help -a
 -  Draws architecral diagram to show all PCF components involved
 -  Environment variable is set tp JDK11, which will be used
    by buildpack to recreate droplet
+   
+# Presentation ---------------
+
+## Student questions
+
+- ??What is PKG for?
+  - (Bill) PKG deprecated, replaced by TKG
+  - It is K8s platform but does not provide cf experience
+
+- ??"Firewall/Load-balancer" vs "cf push/cf scale"
+
+What the slide is trying to say is that in the old days where bare metal (or VM-based) app server is added/removed for scalability or whatever reason, the firewall/load-balancer has to be manually reconfigured while in the PaaS like PCF, there is no manual configuration needed for dynamically added/destroyed app instances.
+
+However, PCF does not prevent organizations from using firewall/load-balancer along with PCF - in fact in a reasonably good size deployment site of PCF foundations, usage of firewall/load-balancer is common. But they are deployed in relation to the PCF foundations not related to app instances.
+
+- *Is environment variable values are part of droplet?
+
 
 # Configuring an App ------------
 
 ## Talking points (Bill K)
 
+- Bill used the learning outcomes as talking point guideline
 - What is the problem of the previous codebase where we
   are returning hard-coded string?
 - Here we are talking about 'configuration' - external to the code
@@ -559,7 +566,6 @@ cf help -a
 - In cloud native application, we use enviroment variables
 - Bill talked about motivation of 12 factors by Heroku
   - run applications in on any cloud environment
-- Bill used the learning outcomes as talking point guideline
 - In pal-tracker app, we can externalize the value of the message
 
 - Mention that you have to move to pal-tracker directory
@@ -571,11 +577,13 @@ cf help -a
 ## Challenge questions of "Configuring an App" lab
 (Please do these challenge questions after you do the Extra)
 
+(PCF related)
 - Do we have to do “cf restage pal-tracker” when we set a 
   new environment variable WELCOME_MESSAGE in PCF? Or
   Or would "cf restart pal-tracker" be sufficient?
-- What could be the use cases where you will have to do 
-  “cf restage” (as opposed to “cf restart”)?
+- What could be other use cases where you will have to do 
+  “cf restage” (as opposed to “cf restart”) other than
+  changing JBP_* environment variables?
 - (Related question to the above) What are the differences 
   among 3 different ways of deploying an application 
   on PCF - "pushing", "restaging", and "restarting"?
@@ -590,6 +598,14 @@ cf help -a
   fail due to "The host is taken: pal-tracker" error? Why?
   What happens if you delete the pal-tracker application by
   "cf delete pal-tracker" first and then "cf push" again?
+
+(Cloud native development)
+- We exercised following two different ways of setting environment variable 
+  of pal-tracker application.  Which practice would you recommend
+  and why? What is the factor among 12 factors that is relevant 
+  to this (besides factor 3)?
+  - (1) cf set-env
+  - (2) using manifest file
 
 ## Challenge exercises
 
@@ -612,7 +628,6 @@ cf help -a
 ## Slack channel tips
 
 ```
-
 Container vs VMs. What's the difference?
 https://docs.google.com/presentation/d/1tvXFgvV27bGYRVB3eqUIA8CcqdwjQc_HLt-0k-LrK0Y/view
 
@@ -733,15 +748,26 @@ vcap         179     169  0 18:49 pts/0    00:00:00 ps -ef
 - show /app directory (should reflect the contents of the boot jar file
   - /app/BOOT-INF, /app/META_INF)
 - blue-colored ones are the ones under /app/BOOT_INF/lib that are added by buildpack
+  - those are symbolic links to buildpack files
 - client certificate jar file - used by microservices to communicate each other
   using mutual TLS
 
 - env |grep PORT
 - containers are on their private network - network overlay??
 - private address not public address - CF_INSTANCE_ADDR is private address
-- ?? What is the difference between CF_INSTANCE_ADDR vs CF_INSTANCE_INTERNAL_IP
+- *What is the difference between CF_INSTANCE_ADDR vs CF_INSTANCE_INTERNAL_IP
+  See https://docs.run.pivotal.io/devguide/deploy-apps/environment-variable.html
+  - CF_INSTANCE_ADDR - The external IP address of the host running the app instance.
+  - CF_INSTANCE_INTERNAL_IP - The internal IP address of the container running the app instance
+- there is tls_proxy??
+- ??there is VCAP-platform-option credhub??
 - if you have firewall, talk to platform operators who maintain 
   the network provisioning
+- ??In fedex, they use 1G memory containers, which results in only 300M
+  heap space, which looks under-resourced
+- ??why the files are in exploded format rather than jar in 
+  the container - Bill says it is more effcient?
+-
 
 - *"cf stacks" What does linux file system mean?
   a stack is a pre-built file system, including an operating system, that can run apps
@@ -766,12 +792,19 @@ windows         Windows Server
 - You don't see port or application index in the output "cf env pal-tracker"
 - In pcf, you can use vault server without using config server
   
-# Deployment Pipelines --------------
+# Deployment Pipelines (and routing) ------
 
 ## Talking points (used by Mike G.)
-
+	
+- One of the key ingredients of successful modern appliation 
+  dev team is to be able to change code and then being
+  able to deploy the application to the production as often
+  and as soon as possible and as little effort as possible.
+  And this requires automating of everything that is involved
+  in the development and deployment process.  And this is
+  where CI/CD comes in.
 - We want to handle infrastructure stuff as soon as possible
-- Automate everything - checking code, CI/CD pipeline
+- Automate everything - updating code, testing, CI/CD pipeline
 
 - Why we do this lab before we write complete code 
    - deloyment is hard, we want minimum complication
@@ -791,7 +824,7 @@ windows         Windows Server
   
 - Environment set-up in the pipeline (in the Github Actions)
 
-- Why you do not want to do "cf push" yourself? 
+- Why you do NOT want to do "cf push" yourself? 
   (many org do not allow cf push)
   (jar creation issue - we want to create jar file just once
   and use it in multiple enviroments)
@@ -808,9 +841,6 @@ windows         Windows Server
   - its more than tools, it is a process - we need tools because we need automation
 - Define CD -
 - repeatable process
-
-- we don't want to hard-coded configuration variables
-- try cf target to get the values of these configuration variables except the password
 - build your pipeline (and infrastructure) early in the project cycle 
 
 (Charles)
@@ -821,6 +851,8 @@ windows         Windows Server
 
 ## Wrap-up
 
+- Talk about a problem of replacing the existing application:
+  cause downtime - we need blue-green deployment
 - Carl discusses "pipeline.yml" (too much is hidden) vs 
   "Bash script" (more control, easier to understand what goes on)
 
@@ -831,8 +863,7 @@ windows         Windows Server
 
 
 ## Tips
-
-    
+ 
 - In order to trigger Github Actions job without making code 
   change, you can
 
@@ -886,6 +917,7 @@ windows         Windows Server
     or old instance gets destroyed?
 
 (Blue Green deployment mechanics)
+-   When you reploy the pal-tracker, would there be any downtime?
 -   Anybody knows what “blue-green-deployment” is?
 -   Speaking of “blue-green deployment”, anybody can think of conceptual
     steps you would take in order to achieve it in PCF environment?
@@ -918,11 +950,28 @@ windows         Windows Server
 - Remove R2 from V2 - now V2 handles only R1
   (cf unmap-route pal-tracker-v2 apps.evans.pal.pivotal.io -n pal-tracker-r2)
   
+  
+## Student questions
+
+- cf set-env as part of pipeline
+- my job is in the queue of jenkins master and does not give me any feedback for 20 minutes - are they using jenkins 2
+- ??I like junit5 because it gives me a feature selectively running tests
+- fedex, it takes about 10 to 15 minutes to do integration testing, in some
+  cases 45 mintues to 60 minutes
+- Bill does not like manifest file because it does not support apply
+- Blue green deployment does not work because the CI is broken
+  (unreliable, many errors, ) we do release every 4 weeks?
+  Bill mentioned his experience of fixing the CI/CD pipeline
+  from ~xx hours to 1 hour
+  
 ## References
 
 ```
-Continuous Ingeration by Martin Fowler
+Continuous Ingeration by Martin Fowler best practices
 https://martinfowler.com/articles/continuousIntegration.html
+
+Continuous Integration Certification
+https://martinfowler.com/bliki/ContinuousIntegrationCertification.html
 
 Continuous Delivery by Martin Fowler
 https://martinfowler.com/bliki/ContinuousDelivery.html
@@ -930,6 +979,11 @@ https://martinfowler.com/bliki/ContinuousDelivery.html
 
 ```
 [Blue/Green Deployment Best Practices](https://blog.inedo.com/blue-green-deployment-best-practices)
+```
+
+```
+PCF Rolling update
+https://docs.pivotal.io/application-service/2-7/devguide/deploy-apps/rolling-deploy.html
 ```
       
 # Spring MVC with REST endpoint ------
@@ -945,21 +999,28 @@ https://martinfowler.com/bliki/ContinuousDelivery.html
 - Demo how to remove compile errors also show what to do
   when there are two compile 
   errors in a single line - you have to fix the one inside first
-     
-- Make sure TimeEntry constructor with the correct naming - 
-  otherwise you will have hard time reading test code
-  
-- The reason we have a TimeEntry constructor that does 
-  not set id is because
-  we want to simulate the repository behavior where id gets generated 
-  by the persistence layer
-  
-- You can create an interface from a class - refactor->extract
 
 - Show how to use IDE for app development
   - test code and target code side by side
   - do the development in TDD style
   - Use shortcut key combination for running tests
+
+## IntelliJ Tips for "REST" lab
+
+(Removing compile errors from TimeEntryControllerTest.java)
+- Use F2 key to move to the next compile error
+- Use ALT/Return to get quick fix tip
+- Position test code and target code side by side
+- Use tab keys to place "return null" in the target method
+
+(TDD style development)
+- Deal with a single test method (and target method) at a time
+
+(Development)
+- Study the test code and understand the dependency
+  relationship between TimeEntryController and TimeEntryRepository
+  - Take a look at setup() method
+  - In each test method, study how the dependency is used
 
 ## Instruction on how to get InMemoryTimeRepository
 
@@ -1138,7 +1199,7 @@ newly added files.
 -  What is slice testing in the context of Spring testing framework?
    What are the examples of slice testing?
 -  In “pal-tracker” project, which tests are unit tests? 
-   integrating tests or pusedo end-to-end tests?
+   integrating tests or pseudo end-to-end tests?
 -  Can you do “integration” or “pseudo end-to-end” testing as part 
    of CI/CD pipeline?
 -  From unit-testing standpoint, why constructor injection
@@ -1209,6 +1270,16 @@ newly added files.
 -  What are the examples of “Open for extension Closed  
    for modification” design principle in the 
    “pal-tracker” project?   
+   
+## Challenge exercise
+
+- For now, TimeEntryControllerTest is a unit test code, which does
+  not use Spring context (and for a good reason).  Now suppose you 
+  want to take advantage of Spring context - maybe you want to
+  read property files using Spring's @TestPropertySource,
+  for example -, how can you change the TimeEntryController.test?
+  (Create a new file called TimeEntryController2.test and 
+  `@WebMvcTest` and `MockMvc`)
   
 ## Lab tips
 
@@ -1228,14 +1299,6 @@ newly added files.
   value.  So if the mock object is not called, the correctness of
   the unit test is not guaranteed.  
   
-## Challenge exercise
-
-- For now, TimeEntryControllerTest is a unit test code, which does
-  not use Spring context (and for a good reason).  Now suppose you 
-  want to take advantage of Spring context - maybe you want to
-  read property files using Spring's @TestPropertySource,
-  for example -, how can you change the TimeEntryController.test?
-  (Create a new file called TimeEntryController2.test and `@WebMvcTest` and `MockMvc`)
   
 ## Slack channel tips
 
@@ -1276,11 +1339,7 @@ $postman&
 - *Brad went over the 12 factors - we covered 8 of
   12 factors so far
   
-## Trouble-shooting
 
-- If Json serialization does not work (TimeEntry from the client
-  contains fields set with zero's), make sure you have
-  getters in the TimeEntry class - 
   
 # Database Migration -------------------------
 
@@ -1533,7 +1592,7 @@ Empty set (0.05 sec)
   - release frequently
     
 
-## References
+## References of "Database Migration lab"
 
 (schema migration)
 - [Evolutionary Database Design](https://martinfowler.com/articles/evodb.html)
@@ -1667,31 +1726,6 @@ With auto-reconfiguration, Cloud Foundry creates the DataSource or connection fa
    "SPRING_DATASOURCE_URL": "jdbc:mysql://localhost:3306/tracker_dev?user=tracker&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false",
    ```
    
-- The `create(..)` method
-
-   ```
-    @Override
-    public TimeEntry create(TimeEntry timeEntry) {
-        KeyHolder generatedKeyHolder = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(connection -> {
-            PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO time_entries (project_id, user_id, date, hours) " +
-                            "VALUES (?, ?, ?, ?)",
-                    RETURN_GENERATED_KEYS
-            );
-
-            statement.setLong(1, timeEntry.getProjectId());
-            statement.setLong(2, timeEntry.getUserId());
-            statement.setDate(3, Date.valueOf(timeEntry.getDate()));
-            statement.setInt(4, timeEntry.getHours());
-
-            return statement;
-        }, generatedKeyHolder);
-
-        return find(generatedKeyHolder.getKey().longValue());
-    }
-   ```
 
 ## Tips
 
@@ -1780,26 +1814,6 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
     id "org.flywaydb.flyway" version "5.0.5"
    }
    ```
-
-1. *The following line gets red-colored. It was because
-   build.gradle is not refreshed.
-   
-
-   ```
-   import org.flywaydb.gradle.task.FlywayMigrateTask
-   ```
-   
-   Maybe this is IntelliJ issue? Bill suggested
-   to do 
-   
-   ```
-   ./gradlew clean build
-   ```
-   
-   ```
-   @Override    public TimeEntry find(Long id) {        List<TimeEntry> query = jdbcTemplate.query(                "SELECT id, project_id, user_id, date, hours FROM time_entries WHERE id = ?",                mapper,                new Object[]{id});        TimeEntry timeEntry = query == null || query.size()==0 ? null : query.get(0);        return timeEntry;    }``` 
-   
-   and the IDE will fix it.
    
 
 - *What is the reason we have the following code in the test?
@@ -1821,9 +1835,12 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
   ```
    
 
-## Wrap-up talking points
+## Wrap-up talking points "JdbcTemplate lab"
 
 (Sang)
+-   *When you do the demo, make sure you run Gradle bootRun
+ 	 not within the IDE.  Or use CTRl+SHIFT+R (or CTRL+R - no more 8080 port issue)
+ 	 
 -   Self-service - you don't have to use old service-ticket
     based system in which you have to send a service request
     tickte to DBA team for getting database credentials
@@ -1864,6 +1881,7 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 ## Talking points
 
 - (Bill K) 
+- The point of the lab is not actuator but observability of an application
 - what types of monitoring tools do you use? How many of you support apps in prod env?
   - fedex: jmx, api turn off and on, weblogic, now they use actuator
   - pm: loggregator of pcf, reactive alert, appdynamics (apm), enterprise operations
@@ -1871,7 +1889,6 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 - Actuator metrics is rarely used for cloud native app
   - Probably use it when APM (Application Performance Monitoring) 
     tools are not available
-  - they appdynamics?
 - For /health value proposition, talk about the case 
   "applicatio hang" - GC hang - CF does just health check on port - probably not 
   good enough
@@ -1889,12 +1906,12 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 - Even though actuator logger's endpoint let you change the logging
   level
   - app instances in the cloud are disposable
-  - it will change just a single instance
+  - it will change just a single instance unless you use spring clous bus
 
 
 ## Trouble-shooting
 
-- *what is templated below? It means it has a variable to be set
+- *what is templated below? It means it has a variable to be set or not
 
 ```
 "_links": {
@@ -1918,7 +1935,6 @@ can be obtained from https://github.com/sashinpivotal/prometheus-grafana
 If you don’t have docker installed on your machine, you can download and run prometheus and grafana individually from https://prometheus.io/download/ and https://grafana.com/grafana/download.  And you can use the same configuration files from the above website.
 ```
 
-- Show how to create a dashboard using the new counter that was created
 
 ## Tips
 
@@ -1938,12 +1954,39 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
   they are mostly for development 
 - dynatrace (ford), appdynamics (fedex) will give you better data than metrics
 - actuator endpoint does not persist the data
+- ./actuator/beans - show cgLib of the timeEntryController??
+- adding your custom metrics is rare??
+- spring admin server??
+- ./actuator/env - could be useful where configuration come from
+  multiple sources this could be useful
+- ./actuator/info - you could add git plugin as well to get version info
+  - mandatory if you are running legacy app where you do not have
+    automation tool 
+- show app manager - use developer tool for info endpoint - security
+  oauth2 from app manager to endpoint??
+- don't set environment variable via app manager - configuration drift
+- healthcheck within app manager
 
 - you might get the merge conflict if you do cherry pick
 - you are mostly configure and observe - operator role
  
 - availability, scalability demo
-- probe
+- probe - 2 kinds of probes - k8s has 4 or 5 probes
+- example of liveness - threads are all used up even though it is up
+- liveness probes are not enabled by default in spring boot
+  - except in k8s, it will enable it by default
+  - db in HealthCheck in app manager
+  - DBHealthIndicator - show the query statement
+  - If connection pool is used up, db will be changed to down state
+- transient failure - db is slowing down, 1 minute duration
+  - you might end up "dog pile" - in football, 
+  - see the Special section - don't use temporary trasient failure
+    of backing services
+    
+- don't use health endpoint as pcf http-based health-check??
+  - use liveness probe for pcf http-based health-check
+- spring boot app start-up time is 2-3 seconds, if it uses
+  discovery service, it might double digit seconds
 - spring boot 2.2, Health Check screen, endpoint
 - simulate the failure, watch PCF is restarting
 - how can I get availablity?  use scaling, scale to 2 instances
@@ -1977,8 +2020,26 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 - use splunk (ford, fedex) to get the number of entries in the time-entries table
 - logs are youf first choice of diagnosing a problem
 
+(Bill)
+- show /logs directory of an instance after cf ssh pal-tracker
+- 12 factor - XI Logs - send logs to standard out
+  - cf logs pal-tracker ../cloudfoundry/health
+  - RTR/2 - 2 signifies 3rd instance of gorouter instance,
+  - same as [APP/PROC/WEB/2] 2 means the 3rd instance of the pal-tracker
+  - [CELL/1] OUT Container became unhealthy
+  - GoRouter has to be highly available
+- pcf does not store logs, has to rely on 3rd party log system
+  - splunk
+- make sure you don't do trace like logging in production system
+  - will impact the performance of the platform
+  - changing logging level in app manager - Bill recommends not to use it
+    - you do it and you walk away
+    - splunk charges 10 times 
+    - use new relic tracing feature
+    - changing logging level during runtime is power tools and
+      you have to be aca
 
-# Scaling lab
+# Scaling lab ----------------
 
 - Auto-scaling lab, in the Recent History, you will see something
 
@@ -1988,6 +2049,74 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 
 - You don't need app manager in the latest change
 - app manager url [https://apps.sys.evans.pal.pivotal.io](https://apps.sys.evans.pal.pivotal.io)
+
+(Intro: Bill)
+- no code
+- stack represents OS that runs in the cell
+  - VM can run either linux or windows - cannot run them at the same time
+  - memory and disk quota are limits
+  - memory-calculator - you don't have to use java options
+  - show how to optimize resource consumption - memory, disk, timeout
+    - cells in the body come and go, insances come and go - we don't
+      really care
+  - we do some exploratory testing in this lab
+  - we do not use app manager in this lab - but you 
+    can do the same in app manager
+    
+  - load testing we do here is very native, since we accessing
+    only a single endpoint
+  - set enviroment variables and then copy and paste
+  - tht goal is to make our container size as small as possible
+    - vm is limited in resource size
+    - vm is set with 32G in our foundation
+    - in our foundation, each container is maximum 2G
+    - the number of container 16 since 32/2?  But in reality,
+      you will get around 10 since there are other things running
+      on the vm
+  
+  - then experience failures due to availability issue
+    - increase availability by spinning more instances
+    - scalability is not availability (redundances - replica in k8s)
+    - in pcf we don't have replicas  - it has instances
+    - platform operator will replace vm - unplanned maintenance
+      - spin 3 instances instead of 1 (this is availability?)?
+    - what about a case where an instance can handle only x number of 
+      requests (this is scalability??)
+      
+    - user sessions in web app, 20 year pattern - same instance handles 
+      the requests from the same user - but we cannot do this in pcf
+      because gorouter will do round-robin
+      - green field projects - it should not be a problem 
+        spring session project
+        
+   - auto-scaler is a bonus project so skip it if you don't have time
+
+## Command
+
+```
+docker run -i -t --rm -e DURATION=300 -e NUM_USERS=10 -e REQUESTS_PER_SECOND=5 -e URL=http://pal-tracker-sang-shin.apps.evans.pal.pivotal.io  pivotaleducation/loadtest
+```
+
+or
+
+```
+export UNIQUE_IDENTIFIER=sang-shin
+export DOMAIN=apps.evans.pal.pivotal.io
+docker run -i -t --rm -e DURATION=300 -e NUM_USERS=10 -e REQUESTS_PER_SECOND=5 -e URL=http://pal-tracker-${UNIQUE_IDENTIFIER}.${DOMAIN}  pivotaleducation/loadtest 
+```
+
+```
+2. In the cf app Watch window, monitor the amount of cpu, memory and disk resources taken for the test.
+
+     state     since                  cpu     memory         disk         details
+#0   running   2021-01-14T18:50:48Z   10.6%   174.1M of 1G   164M of 1G
+```
+
+ - ?? Does the following to set the failure of a single instance
+
+ ```
+ curl -v -XPOST -H "Content-Length:0"  http://${APP_URL}/actuator/palTrackerFailure
+ ```
 
 ## Slack channel tips
 
@@ -2039,6 +2168,22 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
    network reconfiguration could cause unplanned failure
 -  part of cloud native application to make appliation small if possible
    then you can scale out
+   
+-  why choose throughput over latency/cpu in our auto-scaling lab??
+   why not use cpu?
+   - it has get metrics from somewhere? 3 layers of abstraction,
+     which is not reliable - at the container level - same at virtual
+     machine level
+   - latency - not a good indicator for blocking app 
+     - your app might wait for database access or response from other services
+   - throughput is predictable - much more reliable
+-  autoscaling takes time to respond - 20 to 30 seconds 
+   - it is not instatneous - it is like cruise control - it is not
+     meant to react to sudden chagnes
+   - use it when application behavior is well known??
+   - read the article from reddit, read Release It book
+   
+-  rabbitmq queue is a good rule when ordering is not required?
 
 -  don't use resource-based auto-scaling because you are running
    container over vm - 3 levels of abstraction - you cannot 
@@ -2054,6 +2199,10 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
    for mostly housekeeping stuff, 1G is too high
    these figures are per instance
    - also space and organization also have quota
+
+-  ?? Bill showed some demo of showing off a special request header
+   Telling the go router to route to a specific instance.
+   
 
 # App Continnum
 
@@ -2081,6 +2230,7 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
     endpoint is something you configure in the manifest.yml file 
     of the registration server
 -   Demo how to use httpie or postMan
+-   (Bill) ??he does not want to use the term Microservices
 
 ## Code review
 
@@ -2323,16 +2473,14 @@ macmnsvc  69  mfe   20u  IPv6 0x607ea1e1983cb26d      0t0  TCP *:sunproxyadmin (
   - eureka server can be used as a monitoring tool (health check)
     
 - (Bill)
-  - Spring cloud release train - Horton, Greenweech, ..
-  - Technical debt because when the version of the tile changes,
-    the applications need to be changed
-  - How to resolve patch version - go to maven repo and find out
 
+
+
+    
+(Bill, 12/11/2020)
 -   This lab has a lot of moving parts: service discovery/registration,
     client side load-balancing, spring cloud dependencies, end-to-end 
     testing.
-    
-(Bill, 12/11/2020)
 -  GoRouter plays a role of service registry in the form of
    DNS server and it does load-balancing
 -  Issues of using gorouter
@@ -2347,25 +2495,23 @@ macmnsvc  69  mfe   20u  IPv6 0x607ea1e1983cb26d      0t0  TCP *:sunproxyadmin (
 	    
 	-   Discovery server can also play the role of making sure
 	    unresponsive servers are removed from the list
-	    
-	-   Use service discovery picture (the lab document does not have
-	    a link so I might have to draw one)
-
--   Dependency management (using Spring cloud dependency slides)
-    - [Neil's slide](https://docs.google.com/presentation/d/1sY6mz_SRfRO-KFonJDjfEujgTFNmDkddit5l090PEZM/edit?ts=5d5a5860#slide=id.p) is a good one
-    - Draw picture of SCS tile SCS client library
-
--   Client side Load balancer diagram
+	
+- Client side Load balancer diagram
 	-  Relationship between service discovery and client 
     	side load balancer
    -  RestTemplate annotated with @LoadBalanced annotation
       will talk to discovery server and retrieves the
       list of addresses and then perform client-side
-      load-balanced
+      load-balanced    
 
--   ??The terminology of spring cloud services in the code 
-    needs to be explained
-    
+-   Dependency management (using Spring cloud dependency slides)
+    - [Neil's slide](https://docs.google.com/presentation/d/1sY6mz_SRfRO-KFonJDjfEujgTFNmDkddit5l090PEZM/edit?ts=5d5a5860#slide=id.p) is a good one
+    - Draw picture of SCS tile SCS client library
+      - Spring cloud release train - Horton, Greenweech, ..
+    - Technical debt because when the version of the tile changes,
+    the applications need to be changed
+    - How to resolve patch version - go to maven repo and find out
+
 
 ## Tips
 
