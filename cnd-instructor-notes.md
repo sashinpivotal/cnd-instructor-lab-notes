@@ -199,13 +199,23 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
   git pull --allow-unrelated-histories
   ```
 
--   If you want to go to a solution project while maintaining
-    your code (??? Is this correct?)
+-   Bill's suggestion on letting students to start with a new module
 
 ```
-- git checkout main
-- git cherry-pick abort
-- git cherry-pick <topic-solution-tag> and handle merge conflict
+# Fast Forwarding to Solution
+## Create a work-in-progress branch for your lab
+git status # view your changes
+git add <you changes>
+git checkout wip-<lab>
+git commit -m'<some commit message>'
+git push origin wip-<lab> # if you want to save it in your remote
+git checkout main
+## fast forward to solution
+### if you don't know solution tag find it after your start tag
+### via `git lola`.
+git cherry-pick <lab solution tag> 
+### merge any conflicts, stage, and `git cherry-pick --continue`
+git push origin main
 ```
 
 # Pair Programming (Not relevant for LOL)---
@@ -955,7 +965,12 @@ windows         Windows Server
 
 - cf set-env as part of pipeline
 - my job is in the queue of jenkins master and does not give me any feedback for 20 minutes - are they using jenkins 2
-- ??I like junit5 because it gives me a feature selectively running tests
+- *I like junit5 because it gives me a feature selectively running tests
+
+```
+I think Paul mentioned they were using tags and filters to help configure what tests run in which stage of their CD pipeline: https://junit.org/junit5/docs/current/user-guide/#writing-tests-tagging-and-filtering
+```
+
 - fedex, it takes about 10 to 15 minutes to do integration testing, in some
   cases 45 mintues to 60 minutes
 - Bill does not like manifest file because it does not support apply
@@ -1196,10 +1211,10 @@ newly added files.
 -  What are the differences between unit testing and integration 
    testing? Between integration testing and end-to-end testing?
    What are their trade-off's?
--  What is slice testing in the context of Spring testing framework?
-   What are the examples of slice testing?
 -  In “pal-tracker” project, which tests are unit tests? 
    integrating tests or pseudo end-to-end tests?
+-  What is slice testing in the context of Spring testing framework?
+   What are the examples of slice testing?
 -  Can you do “integration” or “pseudo end-to-end” testing as part 
    of CI/CD pipeline?
 -  From unit-testing standpoint, why constructor injection
@@ -1207,7 +1222,8 @@ newly added files.
 -  What is the difference between stubbing and mocking? 
    When do you want use stubbing over mocking and vice-versa?
 -  What are the down-sides of using test doubles such as
-   stubbing or mocking?
+   stubbing or mocking especially when the code of dependency
+   classes change frequently?
    
 (Testing strategies)
 -  If you have classes with dependency relationship as following
@@ -1236,6 +1252,23 @@ newly added files.
                 
 -  What about a class that depends on backing services such 
    as databases? How will you perform the integration testing?
+   
+   ```
+               ______
+               | A  |
+               ------
+                 |
+                 /\      
+                /  \
+            -----  -----
+            | B |  | C |
+            -----  -----
+              |
+              /
+            -----       
+            | D | ----> [ Database ]
+            -----
+   ```  
    
 (Spring testing)   
 -  What are differences between `RestTemplate` vs `TestRestTemplate`?
@@ -1367,7 +1400,6 @@ $postman&
 (Bill)
 - What is the process of adding a column to the table?
   (answer) Ford is using DB2
-
 - Creating a backing service
 
 (Charles)
@@ -1461,7 +1493,7 @@ mysql> select * from time_entries;
 Empty set (0.05 sec)
 ```
 
-## Challenge questions
+## Challenge questions of "migration lab"
 
 - Does database migration include data migration in addition to schema migration?
 - Migration should keep backward compatibility - don't delete column,
@@ -1590,6 +1622,12 @@ Empty set (0.05 sec)
   - Clealy separate all database access code - into a repository layer
     (access to the database always has to go through the repository layer code)
   - release frequently
+
+## Student questions
+
+- ??Martin flower suggests each developer should have his/her own database.
+  But for external database such as Oracle or DB2, how can we 
+  provide separate database?
     
 
 ## References of "Database Migration lab"
@@ -1646,6 +1684,10 @@ vcap         204     192  0 16:24 pts/1    00:00:00 ps -aef
   check if the database is in fact updated and it should
 - ?? Bill - we don't need Eureka server to do container to container
   networking
+  
+(Sang)
+- Make sure after changing build.gradle, refresh IntellJ or 
+  close and open the project
 
 ### Challenge questions of "JdbcTemplate lab"
 (Please do Extra in the lab document first before tackling these challege questions)
@@ -1707,12 +1749,28 @@ With auto-reconfiguration, Cloud Foundry creates the DataSource or connection fa
   (You will also have to modify "PalTrackerApplication" and
   "JdbcTimeEntryRepositoryTest" classes.)
   
+## Student questions
+  
+- How can you support multiple databases in Spring Boot app?
+  Will it auto-configure two DataSource beans?
+  
+- ??Microanaut framework?
+  
 ## Spring Data JDBC presentations
 
 - [Domain-driven design with relational database using Spring Data JDBC](https://www.youtube.com/watch?v=GOSW911Ox6s&ab_channel=SpringDeveloper)
-  - Talks about ORM complexities and they can be addressed by Spring Data JDBC
+
+- [Spring Data JDBC](https://spring.io/projects/spring-data-jdbc)
   
 - [The new kid on the block: Spring Data JDBC] (https://www.youtube.com/watch?v=AnIouYdwxo0&ab_channel=SpringDeveloper)
+
+- Complexity of JPA/Hybernate
+  - Talks about ORM complexities and they can be addressed by Spring Data JDBC
+  - Lazy loading vs Eager loading, 
+    work fine in development but in production where there
+    are lots of rows things start break down
+  - Persisting and Deleting - persistent context
+  - Optimistic locking complexity
 
 ## Misc
 
@@ -1950,8 +2008,11 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 - show actuator endpoints using postman
   - /actuator/beans - look into it and you will understand lots of spring internals
   - take a look at the spring source code
+  - ???cglib for the TimeEnteryController, what about other beans?
 - you probably do not expose mappings,beans,env in production,
-  they are mostly for development 
+  they are mostly for development - however, you could configure
+  your firewall so that only the internal traffic within the firewall
+  maybe only admin roles can access them
 - dynatrace (ford), appdynamics (fedex) will give you better data than metrics
 - actuator endpoint does not persist the data
 - ./actuator/beans - show cgLib of the timeEntryController??
@@ -1961,32 +2022,33 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
   multiple sources this could be useful
 - ./actuator/info - you could add git plugin as well to get version info
   - mandatory if you are running legacy app where you do not have
-    automation tool 
+    automation tool?? 
 - show app manager - use developer tool for info endpoint - security
   oauth2 from app manager to endpoint??
-- don't set environment variable via app manager - configuration drift
+- don't set environment variable via app manager - could cause configuration drift
 - healthcheck within app manager
 
 - you might get the merge conflict if you do cherry pick
 - you are mostly configure and observe - operator role
  
 - availability, scalability demo
-- probe - 2 kinds of probes - k8s has 4 or 5 probes
-- example of liveness - threads are all used up even though it is up
+- probe - 2 kinds of probes - k8s has 4 or 5 probes??
+- example of liveness - threads are all used up even though it is "up" 
+  on its tcp port
 - liveness probes are not enabled by default in spring boot
   - except in k8s, it will enable it by default
   - db in HealthCheck in app manager
-  - DBHealthIndicator - show the query statement
+  - DBHealthIndicator - show the query statement??
   - If connection pool is used up, db will be changed to down state
 - transient failure - db is slowing down, 1 minute duration
-  - you might end up "dog pile" - in football, 
+  - you might end up "dog pile"?? - in football, 
   - see the Special section - don't use temporary trasient failure
     of backing services
     
-- don't use health endpoint as pcf http-based health-check??
-  - use liveness probe for pcf http-based health-check
+- *don't use vanila boot health endpoint as pcf http-based health-check
+  - instead use liveness probe for pcf http-based health-check
 - spring boot app start-up time is 2-3 seconds, if it uses
-  discovery service, it might double digit seconds
+  discovery service, it might double digit seconds if it uses ??config server
 - spring boot 2.2, Health Check screen, endpoint
 - simulate the failure, watch PCF is restarting
 - how can I get availablity?  use scaling, scale to 2 instances
@@ -2003,7 +2065,8 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 
 - health-check-type, health-check-http-endpoint in the manifest file
 
-- demo, cf events pal-tracker, watch cf app pal-tracker, jmeter,  
+- we have this as a lab, 
+  cf events pal-tracker, watch cf app pal-tracker, jmeter,  
   simulate the failure, observe that
   pcf restarts the app after liveness checks the failure
   
@@ -2023,21 +2086,27 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 (Bill)
 - show /logs directory of an instance after cf ssh pal-tracker
 - 12 factor - XI Logs - send logs to standard out
-  - cf logs pal-tracker ../cloudfoundry/health
+  - cf logs pal-tracker ../cloudfoundry/health??
   - RTR/2 - 2 signifies 3rd instance of gorouter instance,
   - same as [APP/PROC/WEB/2] 2 means the 3rd instance of the pal-tracker
   - [CELL/1] OUT Container became unhealthy
   - GoRouter has to be highly available
 - pcf does not store logs, has to rely on 3rd party log system
   - splunk
-- make sure you don't do trace like logging in production system
+- make sure you don't do "trace-level" logging in production system
   - will impact the performance of the platform
   - changing logging level in app manager - Bill recommends not to use it
-    - you do it and you walk away
-    - splunk charges 10 times 
+    - you do it and you forget and walk away
+    - splunk charges 10 times more expensive
     - use new relic tracing feature
     - changing logging level during runtime is power tools and
-      you have to be aca
+      you have to be careful in using it
+      
+## Student questions
+
+- ??Somehow I don't see how pcf health endpoint enabled - we did not
+  enabled for pcf while we did locally - we will cover it during
+  wrap-up
 
 # Scaling lab ----------------
 
@@ -2047,11 +2116,12 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
   Scaled up from 2 to 3 instances. Current HTTP Latency of 35.92ms is above upper threshold of 3.00ms.
   ```
 
-- You don't need app manager in the latest change
+- You don't need app manager in the latest version of the lab
+  since Bill provided scripts
 - app manager url [https://apps.sys.evans.pal.pivotal.io](https://apps.sys.evans.pal.pivotal.io)
 
 (Intro: Bill)
-- no code
+- no code in this lab
 - stack represents OS that runs in the cell
   - VM can run either linux or windows - cannot run them at the same time
   - memory and disk quota are limits
@@ -2065,8 +2135,9 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
     
   - load testing we do here is very native, since we accessing
     only a single endpoint
-  - set enviroment variables and then copy and paste
-  - tht goal is to make our container size as small as possible
+  - set enviroment variables and then copy and paste instruction
+    from the lab document
+  - the goal of this lab is to make our container size as small as possible
     - vm is limited in resource size
     - vm is set with 32G in our foundation
     - in our foundation, each container is maximum 2G
@@ -2079,15 +2150,16 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
     - scalability is not availability (redundances - replica in k8s)
     - in pcf we don't have replicas  - it has instances
     - platform operator will replace vm - unplanned maintenance
-      - spin 3 instances instead of 1 (this is availability?)?
+      - spin 3 instances instead of 1 (this is availability)
     - what about a case where an instance can handle only x number of 
-      requests (this is scalability??)
+      requests (this is scalability)
       
-    - user sessions in web app, 20 year pattern - same instance handles 
+    - user sessions used in web app, this is 20 year pattern 
+      same instance handles 
       the requests from the same user - but we cannot do this in pcf
-      because gorouter will do round-robin
+      because gorouter will do round-robin load balancing
       - green field projects - it should not be a problem 
-        spring session project
+        use spring session project
         
    - auto-scaler is a bonus project so skip it if you don't have time
 
@@ -2097,7 +2169,7 @@ cf set-env pal-tracker MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE "*"
 docker run -i -t --rm -e DURATION=300 -e NUM_USERS=10 -e REQUESTS_PER_SECOND=5 -e URL=http://pal-tracker-sang-shin.apps.evans.pal.pivotal.io  pivotaleducation/loadtest
 ```
 
-or
+or set environment variables as following
 
 ```
 export UNIQUE_IDENTIFIER=sang-shin
@@ -2112,7 +2184,7 @@ docker run -i -t --rm -e DURATION=300 -e NUM_USERS=10 -e REQUESTS_PER_SECOND=5 -
 #0   running   2021-01-14T18:50:48Z   10.6%   174.1M of 1G   164M of 1G
 ```
 
- - ?? Does the following to set the failure of a single instance
+ - *Does the following to set the failure of a single instance
 
  ```
  curl -v -XPOST -H "Content-Length:0"  http://${APP_URL}/actuator/palTrackerFailure
@@ -2145,7 +2217,6 @@ docker run -i -t --rm -e DURATION=300 -e NUM_USERS=10 -e REQUESTS_PER_SECOND=5 -
     - 2G per container constraint - write your app to fit 
     - pcf quota applies to spaces
     - capacity planning
--  showed demo using 4 terminals and demoed horizontal scaling
 -  auto-scaler - use it until you get some experience on the app charactertistics
     - it is not as smart as you
     - you can create autoscale.yml for auto-scaling
@@ -2218,6 +2289,25 @@ docker run -i -t --rm -e DURATION=300 -e NUM_USERS=10 -e REQUESTS_PER_SECOND=5 -
   - allocaiton code has date format code
   - timesheets code decides to use that date format code
 
+```
+Fallacies of networking computing: https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing
+```
+
+```
+Dealing with consistency in microservices: https://microservices.io/patterns/data/saga.html
+```
+
+```
+Native images:
+-   GraalVM
+    - Limitations: https://github.com/oracle/graal/blob/master/substratevm/Limitations.md
+- GraalVM integration for boot:
+    - https://blog.indrek.io/articles/running-spring-boot-apps-as-graalvm-native-images/
+    - https://github.com/spring-projects-experimental/spring-native/releases/tag/0.8.3
+    - https://repo.spring.io/milestone/org/springframework/experimental/spring-graalvm-native-docs/0.8.3/spring-graalvm-native-docs-0.8.3.zip!/reference/index.html
+- Micronaut (Spring competitor): https://micronaut.io/
+```
+
 
 # Distributed System
 
@@ -2231,6 +2321,51 @@ docker run -i -t --rm -e DURATION=300 -e NUM_USERS=10 -e REQUESTS_PER_SECOND=5 -
     of the registration server
 -   Demo how to use httpie or postMan
 -   (Bill) ??he does not want to use the term Microservices
+
+-	??? What was the reason we do pull in the pipeline
+
+## Code review suggestions 
+
+(Review component structure)
+- How each component is built - check build.gradle of each component
+- What is the domain model of each component (bounded context)?
+  (Refer to "graph.dot.png" and the "pal-tracker-distributed" application 
+  architecture diagram posted to the slack)
+- Are there any circular dependencies among components?
+- How do you define the build order of the components?
+- Why are there variations of a domain class, for example, 
+  why are there `TimeEntryForm`, `TimeEntryInfo`, `TimeEntryRecord`, 
+  `TimeEntryFields` classes? Where are they used?
+
+(Review Microservices architecture)
+- How each application is built - check build.gradle and server.gradle
+- Check configuration of each application (refer to graph.dot.png)
+  - where do you configure your beans in each application?
+  - how does it specify component-scanning base packages?
+
+(Interaction of Micro-services)
+- How does each component expose its functionality? Does it
+  has a controller?
+- What is the calling relationship among 4 micro-services?
+  (Refer to the "pal-tracker-distributed" application 
+  architecture diagram posted to the slack)
+- When "allocation-server" needs to call "registration-server"
+  using RestTemplate, where does it find the address of the latter?
+- What is the class in each of the calling applications
+  ("allocation-server", "backlog-server", "timesheets-server")
+  that captures interaction logic with callee application?
+  (Refer to the "pal-tracker-distributed" application 
+  architecture diagram posted to the slack)
+- Why is ProjectClient code duplicated in backlog, timesheets, allocation
+  server apps?
+- Why do we have projects, accouts, users in a registration server?
+  (In other words, why we did not have separate server for each of domain
+  objects?)
+  
+(Testing)
+- How does each component get tested?
+- How does each application get tested?
+- How are interactions among the microservices tested?
 
 ## Code review
 
@@ -2367,28 +2502,61 @@ $postman&
   (maybe with foreign key relationship among themselves)
   when migrating monolithic application to micro services? 
   
-(Event-driven architecture)
+(Event-driven architecture and/or non-blocking call)
 - What would be the use cases where even-driven architecture
-  is prefered?
+  is preferred?
 - Would it make sense to use event-driven architecture
   in the current form of pal-tracker-distributed app?  
   (In other words, would it make sense
   to make the invocation of the registration server 
   from other 3 servers event-driven?)
+- What about non-blocking call?
 
-(pal-tracker-distribtued app)
-- Why are there variations of a domain class, for example, 
-  why are there `TimeEntryForm`, `TimeEntryInfo`, `TimeEntryRecord`, 
-  `TimeEntryFields` classes? Where are they used?
-- When Timesheet server needs to talk to registration server via 
-  REST call, where does the Timesheet server finds the address 
-  of the registration server?
-- Why is ProjectClient code duplicated in backlog, timesheets, allocation
-  server apps?
-- Why do we have projects, accouts, users in a registration server?
-  (In other words, why we did not have separate server for each of domain
-  objects? Hint: See @Transactional in the RegistrationService class)
+```
 
+- Some answers to the above questions
+
+```
+(Single repository for all apps)
+- it's tradeoff - pros
+  - easier to change domain models especially when bounded contexts
+    are still in fluctuation
+  - easier to deploy since they are all deployed together
+- cons
+  - making a small change might triger the complete build process
+- recommendation
+  - stay with a single repository model until the size of the
+    project requires different apps being maintained and 
+    deployed by different team
+  - wait until bounded contexts are well-established
+(App vs component role)
+- App
+  - Spring boot wrapper
+  - Enabling spring features such as @EnableTransaction
+  - logical place for configuration including component scanning
+  - setting properties
+- Component
+  - Capture most business logic
+  - make it as POJO as possible, independence from spring framework
+(Database)
+- In general, the benefit of microservices is maximized when each
+  service has its own database
+- The worst case scenario is when micro services are directly
+  sharing a single database - they all talk to directly to the
+  database
+- Many patterns to address these, but a couple of relatively
+  easy options could be through some abstractions
+  - one abstraction could be using separate views for separate apps
+  - abstracting the access to the database in the form of
+    another service (performance implication)
+(Transaction)
+- In distributed applications, achieving 100% of ACID properties
+  or 100% consistency would be hard. 
+  However, for many applications, eventual consistency could
+  be good enough. 
+  In the scheme of eventual consistenty, 100% of consistency
+  at a single point in time is not possible, but eventually
+  they will be consistent.
 ```
 
 ## References of Database refactoring
@@ -2396,10 +2564,18 @@ $postman&
 - "Chapter 5: Splitting the Monolith" from "Building Microservices"
   written by Sam Newman (O'Reilly)
   https://smile.amazon.com/Building-Microservices-Designing-Fine-Grained-Systems/dp/1491950358/ref=sr_1_3?crid=O30N4C7P4G8&dchild=1&keywords=building+microservices&qid=1602278414&sprefix=building+mi%2Caps%2C155&sr=8-3
+  
 - "Monolith to Microservices: Evolutionary Patterns to Transform Your Monolith"
   https://smile.amazon.com/Monolith-Microservices-Evolutionary-Patterns-Transform/dp/1492047848/ref=sr_1_3?crid=3DNLL2GV8BVND&dchild=1&keywords=microservices+sam+newman&qid=1602278452&sprefix=microservices+sam%2Caps%2C159&sr=8-3
+  
 - "Refactoring Databases"
   https://smile.amazon.com/Refactoring-Databases-Evolutionary-paperback-Addison-Wesley/dp/0321774515/ref=sr_1_3?dchild=1&keywords=database+refactoring&qid=1602278543&sr=8-3
+  
+  
+## Misc
+
+- [REST API testing strategies](https://www.sisense.com/blog/rest-api-testing-strategy-what-exactly-should-you-test/)
+  
   
 ## Trouble-shooting
 
@@ -2472,10 +2648,6 @@ macmnsvc  69  mfe   20u  IPv6 0x607ea1e1983cb26d      0t0  TCP *:sunproxyadmin (
   - eureka server still gives you client-side load-balancing, 
   - eureka server can be used as a monitoring tool (health check)
     
-- (Bill)
-
-
-
     
 (Bill, 12/11/2020)
 -   This lab has a lot of moving parts: service discovery/registration,
@@ -3151,6 +3323,23 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
     single repository for multiple environments?
 
 # Ending the course
+
+```
+A few words regarding Course materials after the training:
+
+- The course materails in the http://courses.education.pivotal.io will
+  be available at the minimum for a few months from today
+  (The ePub from MyLearn will be available in "indefinite" basis)
+- The "evans" PCF foundation will be destroyed after the class
+- The Remote desktop will be also destroyed after the class
+  (Make sure you push your changes to your Github before leaving the class.)
+- The slack channel will be available after the training. It
+  will be "archived" meaning you will be able to read but
+  will not be able to post
+- Bill and myself can be reached via email after the training
+  if you have any questions on course materials
+```
+
 
 -   (From Charles LeRose)
 
