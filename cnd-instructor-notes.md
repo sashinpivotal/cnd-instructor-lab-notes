@@ -130,9 +130,21 @@ in teaching PAL CND, which includes
 ## Normal flow of work in the lab
 
 ```
+(Save your current changes to a branch)
+-   git checkout -b wip-branch
+-   git add .
+-   git commit -m "work in progress in my lab"
+-   git push origin wip-branch --tags
+-   git checkout main
+(Fast-forward to jdbc-solution)
+-   git cherry-pick migration-solution (if you are not done yet on migration lab)
+-   git cherry-pick jdbc-solution
+```
+
+```
 git cherry-pick <xyzlab-start>  (pull in the test code in most labs)
 (do your lab work)
-git add .  (add any new code to be in the git version control)
+git add -p  (add any new code to be in the git version control)
 git commit -m "done with xyzlab" (commit the change)
 git push    (push the local change to the remote repo, which also triggers GitHub Action)
 ```
@@ -149,7 +161,7 @@ module, please do the following:
 -   git commit -m “work in progress in my lab”
 -   git push origin wip-branch --tags
 -   git checkout main
--   git cherry-pick <current-topic-solution>
+-   git cherry-pick jdbc-solution
 ```
 
 ## Start with "topic-start" for a new lab
@@ -279,15 +291,14 @@ On topic of remote pairing (Ray brought up Monday AM), this is a nice read, tool
 
 ## Linux keyboard shortcuts within VDI
 
-```
 - Keyboard shortcut keys within VDI/Remote Desktop
 
   - ALT+Tab (move between windows)
   - CTRL+ALT+D (minimize all windows)
   - ALT+F10 (maximizing window on and off)
   - ALT+F9 (minimize window)
-  - SHIFT+CTRL+C (copying from termimal)
-  - SHIFT+CTRL+V (copying to the terminal)
+  - SHIFT+CTRL+C (copying from termimal).  <-------
+  - SHIFT+CTRL+V (copying to the terminal) <-------
   - CTRL+C (copying)
   - CTRL+V (pasting)
 
@@ -297,7 +308,6 @@ On topic of remote pairing (Ray brought up Monday AM), this is a nice read, tool
   - CTRL+Shift+N (find file)
   - ALT+Return (Quick fix)
   - Double SHIFT (global search)
-
 
   - F2, SHIFT+F2 (Go to next/previous error)
   - CTRL+SHIFT+F12 (maximize editor window)
@@ -311,7 +321,7 @@ On topic of remote pairing (Ray brought up Monday AM), this is a nice read, tool
   - CTRL+ALT+Right (forward - might not work on Mac - you might have to set it yourself manually)
   - ALT+Insert (Generate - might not work on Mac - you might have to set it yourself manually)
   - CTRL+SHIFT+' - to maximize/minimize tool window (Generate - might not work on Mac - you might have to set it yourself manually)
-```
+
 
 ## Native keyboard shortcut keys
 
@@ -358,6 +368,10 @@ On topic of remote pairing (Ray brought up Monday AM), this is a nice read, tool
   ```
   If you enabled two-factor authentication in your Github account you  won't be able to push via HTTPS using your accounts password. Instead  you need to generate a personal access token. This can be done in the  application settings of your Github account. Using this token as your  password should allow you to push to your remote repository via  HTTPS. Use your username as usual.
   ```
+  
+- [How to create and use GitHub personal access token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
+  - For scope selection, choose repo and workflow
+
 
 - In the VDI provided Firefox browser, you can bookmark
   it but you have
@@ -501,7 +515,7 @@ find . -name \*.jar -print
 (Spring Boot related)
 - What is purpose of doing "./gradle wrapper"?
 - What are the main features of Spring Boot?
-- What is a fat jar?  How does Spring Boot create one?
+- What is a fat jar?  What does it include? How does Spring Boot create one?
 - How does Spring Boot helps with dependency management?
 - What does `@SpringBootApplication` do?
 
@@ -563,7 +577,7 @@ cf help -a
   - (Bill) PKG deprecated, replaced by TKG
   - It is K8s platform but does not provide cf experience
 
-- ??"Firewall/Load-balancer" vs "cf push/cf scale"
+- *"Firewall/Load-balancer" vs "cf push/cf scale"
 
 What the slide is trying to say is that in the old days where bare metal (or VM-based) app server is added/removed for scalability or whatever reason, the firewall/load-balancer has to be manually reconfigured while in the PaaS like PCF, there is no manual configuration needed for dynamically added/destroyed app instances.
 
@@ -584,10 +598,13 @@ However, PCF does not prevent organizations from using firewall/load-balancer al
   are returning hard-coded string?
 - Here we are talking about 'configuration' - external to the code
 - We mean "external configuration" here (as opposed to internal configration
-  inside spring app)
+  inside spring app like configurating spring beans)
 - Bill asked <company-name> how they separate external configuration
   such as database configuration?
   - vault server, spring cloud config server, cf set-env
+  - ford is using config server
+  - config server is useful but it there is tradeoff and understanging
+    these tradeoff is important
 - Bill asked how environment variables work in modern apps?
 - In cloud native application, we use enviroment variables
 - Bill talked about motivation of 12 factors by Heroku
@@ -596,12 +613,18 @@ However, PCF does not prevent organizations from using firewall/load-balancer al
 
 - Mention that you have to move to pal-tracker directory
 - Talk about "git cherry-pick", we give failing tests
-- This is the first lab we give failing tests
 
+```
+https://www.atlassian.com/git/tutorials/cherry-pick
+- git cherry-pick is a powerful command that enables arbitrary Git commits to be picked by reference and appended to the current working HEAD. 
+- Cherry picking is the act of picking a commit from a branch and applying it to another. git cherry-pick can be useful for undoing changes. For example, say a commit is accidently made to the wrong branch. You can switch to the correct branch and cherry-pick the commit to where it should belong.
+```
+
+- This is the first lab we give failing tests
 - manifest is a declarative way of deploying an application on PCF
 
 ## Challenge questions of "Configuring an App" lab
-(Please do these challenge questions after you do the Extra)
+(Please do these challenge questions after you do the "Extra" part of the lab)
 
 (PCF related)
 - Do we have to do “cf restage pal-tracker” when we set a
@@ -624,7 +647,23 @@ However, PCF does not prevent organizations from using firewall/load-balancer al
   fail due to "The host is taken: pal-tracker" error? Why?
   What happens if you delete the pal-tracker application by
   "cf delete pal-tracker" first and then "cf push" again?
-
+  
+(Configuration related)
+- One of the most common configuration values you need to set
+  is database configuration.  For example, you might want
+  to use different database configuration for different
+  environments such as development, staging, and production.
+  Now among the multiple choices you have below, which
+  one would you choose and why?
+  - Using @Profile with @Configuration to create different 
+    DataSource beans
+  - Using Spring Boot application property files such as 
+    application_dev.properties, application_staging.properties 
+    to set the different values for the "spring.datasource.url"
+    property
+  - Use environment variables - Feed different values to
+    SPRING_DATASOURCE_URL environment variables
+  
 ## Challenge exercises
 
 - Currently we have testing code for `WelcomeController` that does
@@ -643,22 +682,42 @@ However, PCF does not prevent organizations from using firewall/load-balancer al
   WebControllerMockMvcTest code to mock the service, Write the
   WelcomeServiceTest code to test WelcomeService.
 
-## Slack channel tips
+## Reference materials regarding configuration
+
+(12 factors related)
+
+- Great (concise yet to the point) presentation on 12 factors:  
+  https://content.pivotal.io/slides/the-12-factors-for-building-cloud-native-software
+
+- Beyond 12 factoor app
+  https://www.cdta.org/sites/default/files/awards/beyond_the_12-factor_app_pivotal.pdf
+
+(Configuration related)
+
+- Configuration Drift
+  http://kief.com/configuration-drift.html
+
+- SnowflakeServer from Martin Fowler
+  https://martinfowler.com/bliki/SnowflakeServer.html
+
+
+```
+(Spring related reference materials)
+
+- Spring Boot external configuration
+  https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-external-config
+
+- Spring Boot relaxed binding
+  https://spring.io/blog/2018/03/28/property-binding-in-spring-boot-2-0
+
+Spring resources
+https://spring.io/guides
+https://www.baeldung.com/start-here
+```
 
 ```
 Container vs VMs. What's the difference?
-https://docs.google.com/presentation/d/1tvXFgvV27bGYRVB3eqUIA8CcqdwjQc_HLt-0k-LrK0Y/view
-
-Great (concise yet to the point) presentation on 12 factors:  https://content.pivotal.io/slides/the-12-factors-for-building-cloud-native-software
-
-Beyond 12 factoor app
-https://www.cdta.org/sites/default/files/awards/beyond_the_12-factor_app_pivotal.pdf
-
-Configuration Drift
-http://kief.com/configuration-drift.html
-
-SnowflakeServer from Martin Fowler
-https://martinfowler.com/bliki/SnowflakeServer.html
+https://www.youtube.com/watch?v=cjXI-yxqGTI&t=23s&ab_channel=IBMCloud
 ```
 
 ```
@@ -666,10 +725,15 @@ PCF app manifest attrubute reference
 https://docs.cloudfoundry.org/devguide/deploy-apps/manifest-attributes.html
 ```
 
+
 ## Trouble-shootings
 
-- The document does not include instruction to remove compile
+- Some people experience [refusing to allow an OAuth Appl to create or update workflow…without ‘workflow’ scope](https://stackoverflow.com/questions/64059610/how-to-resolve-refusing-to-allow-an-oauth-app-to-create-or-update-workflow-on)
+
+- *The document does not include instruction to remove compile
   errors on `EnvController` before it says to run the app
+  (Actually bootRun just compiles src/main/java and does not
+  care compile errors in the src/main/test)
 
 - *The following code will fail because Spring looks for
   a bean that is a type of String but it is not there.
@@ -716,9 +780,6 @@ What is the problem of this code?
 
 ## Wrap-up
 
-- Why using environment variables is preferred over using property
-  files?  For example, setting database credentials for different
-  environments(dev, testing, staging, production, etc)?
 - We covered several factors so far. What are those?
   - factor 1 - one codebase many deploys
   - factor 2 - explicit declaration of dependencies using Gradle build file
@@ -731,18 +792,37 @@ What is the problem of this code?
 
 - @Profile was introduced in the early version of Spring
     for providing different configuration for different deployment environment
-- In his experience, there was code for production only and
+  - In his experience, there was code for production only and
     it was not tested and deployed to production, which caused a problem
+    when he was using @Profile
 - In cloud native development, Enviromnet specific properties
   should not be in the application.properties inside the jar file
   Instead, they should be provided as environment variables
 - How @Value("${welcome.message}") is set - by using annotation processor,
   it reads value from properties
 - Naming convention of the welcome.message
+  - welcome_message
+  - WELCOME_MESSAGE
 - How many instances of welcomecontroller get created?
 - Can you set the environment variable again after the application is reset?
+- container vs virtual machine
+  - container overhead is small in the range of mili seconds
+  - spring boot takes time to get started - in the range of 10 seconds
+- shows 4 windows - where changing environement variable to 
+  pal-tracker application does not get reflected to 
+  a new instance (via cf scale) until the app is restarted and
+  restaged - this is by design to avoid "configuration drift"
+- configuration drift in the context of multiple instances
+  - some instances config changed while others are not 
+- In production env, developers are not allowed to do "cf push"
+  maybe only allowed with "cf apps" command
 
 - cf ssh
+  - cf space-ssh-allowed, cf enable-ssh
+  - application process inside a container
+  - vcap@xxx. vcap is username, xxx is unique host name
+  - container is protected by default, linux isolation, I cannot see other container's process
+  - garden-init is part of container runtime
   - see the number of processes (compared to normal linux processes)
   - do "ls -al" and see how small number of folders
   - show java command that is created by java buildpack
@@ -751,6 +831,7 @@ What is the problem of this code?
   - show staging_info command
   - what is is logs directory for?  it is dummay directory.
     All logs go to standard output device
+
 
 ```
 < workspace/pal-tracker - main > cf ssh pal-tracker
@@ -766,10 +847,17 @@ vcap         169      14  0 18:49 pts/0    00:00:00 /bin/bash
 vcap         179     169  0 18:49 pts/0    00:00:00 ps -ef
 ```
 
+- health check - we will cover in health monitoring module
+- ps -ef |grep java
+- staging_info.yaml??
 - show /app directory (should reflect the contents of the boot jar file
-  - /app/BOOT-INF, /app/META_INF)
+  - /app/BOOT-INF (dependencies - transitive dependencies, classes), 
+  - /app/META_INF)
+  - /app/.java-buildpack directory contains extra stuff buildpack adds
+- buildpack explodes the directory 
 - blue-colored ones are the ones under /app/BOOT_INF/lib that are added by buildpack
   - those are symbolic links to buildpack files
+  - buildpack inject extra stuff
 - client certificate jar file - used by microservices to communicate each other
   using mutual TLS
 
@@ -781,6 +869,12 @@ vcap         179     169  0 18:49 pts/0    00:00:00 ps -ef
   - CF_INSTANCE_ADDR - The external IP address of the host running the app instance.
   - CF_INSTANCE_INTERNAL_IP - The internal IP address of the container running the app instance
 - there is tls_proxy??
+- 12 factor - port binding
+  - in modern cloud native app use open protocol, use well known port
+- do cf set-env WELCOME_MESSAGE 'hello2' and show 
+  increase to 2 instances and then perform curl
+  - prevent configyration drift
+  - what is the problem "cf restart" - downtime
 
 ```
 CF_INSTANCE_PORTS=[{"external":61008,"internal":8080,"external_tls_proxy":61010,"internal_tls_proxy":61001},{"external":61009,"internal":2222,"external_tls_proxy":61011,"internal_tls_proxy":61002}]
@@ -827,15 +921,18 @@ windows         Windows Server
 ## Talking points (used by Mike G.)
 
 - One of the key ingredients of successful modern application
-  dev team is to be able to change code and then being
-  able to deploy the application to the production as often
+  dev team is being able to change code and then 
+  to deploy the application to the production or staging env as often
   and as soon as possible and as little effort as possible.
   And this requires automating of everything that is involved
   in the development and deployment process.  And this is
   where CI/CD comes in.
-- Automate everything - updating code, testing, CI/CD pipeline
-- We want to handle infrastructure stuff as soon as possible
-
+- Automate everything once code is changed
+  - merge with code from other developers
+  - integration testing
+  - creating and versioning a deploy'able package
+  - applying external configuration
+  - deploying the app
 - Why we do this lab before we write complete code
    - deployment is hard, we want minimum complication
    - get deployment process taken care of in the earlier stage
@@ -844,6 +941,10 @@ windows         Windows Server
 
 - Github Actions
    - concept is important, we don't care which CI tool you use
+   - Do the demo of setting the environment variables and 
+     (maybe set 4 of them early and the add the 5th one
+      and show the output GitHub actions or show the
+      result from pal-tracker-distrubuted app)
 
 - What CD mean to you?
    - deployment to production should be a business decision
@@ -861,34 +962,34 @@ windows         Windows Server
 
 (Bill K)
 - Automate deployment of our apps
-- GitHub actions
+- We are using GitHub actions in this lab, but the concepts we learn
+  should be applicable to other CI/CD tools such as Jenkins or Concourse
 - Define CI - why do we automate?
   - how long does it take to get the feedback? check in the code -- get feedback
   - 3 minutes or 4 minutes in Fedex - compare to without CI - it might take days
   - we want developers to move quicky by having fast feedback
   - its more than tools, it is a process - we need tools because we need automation
 - Define CD -
-- repeatable process
+- repeatable process - being able to deploy the application
+  on multiple deployment environment, QA, staging
 - build your pipeline (and infrastructure) early in the project cycle
+- Our pipeline example is somewhat naive and does not reflect production-quality
+  implementation - it is to explain the CI/CD concept with minimum complexity
+- CI and CD serve two different purposes
 
 (Charles)
 - How cf push from this diagram
 - Explain pipeline.yml
 - Each build takes a few minutes - a bit tediousness
 - build has to be fast - 10 minute build is max you should tolerate
-
-## Wrap-up
+- CI vs CD:
+  - CI - check in the code and make sure the integration works
+  - CD - deploy to the PCF
 
 - Talk about a problem of replacing the existing application:
   cause downtime - we need blue-green deployment
 - Carl discusses "pipeline.yml" (too much is hidden) vs
   "Bash script" (more control, easier to understand what goes on)
-
-## Wrap-up (Charles)
-
-- CI - check in the code and make sure the integration works
-- CD - deploy to the PCF
-
 
 ## Tips
 
@@ -902,7 +1003,7 @@ windows         Windows Server
 
   Or you can select failed action and select "Redo all jobs"
 
-## GitHub Actions
+## GitHub Actions Tips
 
 - *I could not locate settings under my repository
   It was because I was looking at the wrong pal-tracker
@@ -911,9 +1012,6 @@ windows         Windows Server
   ```
   https://github.com/sashinpivotal/pal-tracker
   ```
-
-## Trouble-shooting
-
 
 ## Extra lab exercise
 
@@ -981,21 +1079,31 @@ windows         Windows Server
 
 ## Student questions
 
-- cf set-env as part of pipeline
-- my job is in the queue of jenkins master and does not give me any feedback for 20 minutes - are they using jenkins 2
+- cf set-env as part of pipeline (this is important)
+- my job is in the queue of jenkins master and does not give me any 
+  feedback for 20 minutes - are they using jenkins 2
 - *I like junit5 because it gives me a feature selectively running tests
 
 ```
-I think Paul mentioned they were using tags and filters to help configure what tests run in which stage of their CD pipeline: https://junit.org/junit5/docs/current/user-guide/#writing-tests-tagging-and-filtering
+I think Paul mentioned they were using tags and filters to help configure 
+what tests run in which stage of their 
+CD pipeline: 
+https://junit.org/junit5/docs/current/user-guide/#writing-tests-tagging-and-filtering
 ```
 
 - fedex, it takes about 10 to 15 minutes to do integration testing, in some
   cases 45 mintues to 60 minutes
-- Bill does not like manifest file because it does not support apply
+- One Ford student says it takes ~90 minutes to do all integration testing
+  covering different regions, etc
+- Bill does not like manifest file because it does not support "apply"
+  as in the case of k8s
 - Blue green deployment does not work because the CI is broken
   (unreliable, many errors, ) we do release every 4 weeks?
   Bill mentioned his experience of fixing the CI/CD pipeline
   from ~xx hours to 1 hour
+- create two pipelines for optimizing the response time, one for
+  quick merge conflict and unit testing result and another one
+  for integration testing that takes longer
 
 ## References
 
@@ -1023,10 +1131,6 @@ https://docs.pivotal.io/application-service/2-7/devguide/deploy-apps/rolling-dep
 
 ## Talking points
 
-- Let Charles talk about "dependency containe" (application context),
-  in which he talks about controller->repository->datasource
-  dependency relationship.
-
 - Don't change the test code in this lab - that is the contract
 
 - Demo how to remove compile errors also show what to do
@@ -1034,9 +1138,11 @@ https://docs.pivotal.io/application-service/2-7/devguide/deploy-apps/rolling-dep
   errors in a single line - you have to fix the one inside first
 
 - Show how to use IDE for app development
-  - test code and target code side by side
+  - test code and target code side by side using IDE
   - do the development in TDD style
   - Use shortcut key combination for running tests
+
+- Show how to add a bean
 
 ## IntelliJ Tips for "REST" lab
 
@@ -1052,8 +1158,12 @@ https://docs.pivotal.io/application-service/2-7/devguide/deploy-apps/rolling-dep
 (Development)
 - Study the test code and understand the dependency
   relationship between TimeEntryController and TimeEntryRepository
-  - Take a look at setup() method
+  - Take a look at setup() method - you should recognize that
+    TimeEntryRepository object is a dependency to the TimeEntryController
+    So add code in the TimeEntryController to inject that 
+    dependency
   - In each test method, study how the dependency is used
+  - In each test method, also show how Mockito mock framework is used
 
 ## Instruction on how to get InMemoryTimeRepository
 
@@ -1082,7 +1192,7 @@ And then click the io.pivotal.pal.tracker package to see
 newly added files.
 ```
 
-## InMemoryTimeRepositoryTest
+## InMemoryTimeRepositoryTest (We no longer do this)
 
 - How to set the `id` field of `TimeEntry` when it gets created
   without `id` argument?
@@ -1195,8 +1305,8 @@ newly added files.
     public void setUp() {
         timeEntryRepository = mock(TimeEntryRepository.class);
         controller = new TimeEntryController(timeEntryRepository);
-        MockHttpServletRequest request = new MockHttpServletRequest();
-        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+        MockHttpServletRequest request = new MockHttpServletRequest();  //<-- new line
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));  //<-- new line
     }
   ```
 
@@ -1223,15 +1333,18 @@ newly added files.
 - *If you import the class within the IDE and then get compile errors,
   you will have to rebuild the class
 
-## Challenge Questions of "REST" lab
+## Challenge Questions of "REST" lab 
 
 (Testing)
--  What are the differences between unit testing and integration
-   testing? Between integration testing and end-to-end testing?
+-  What are the differences between "unit testing" and "integration
+   testing"? Between "integration testing" and "end-to-end testing"?
    What are their trade-off's?
+   (There are other types of testing: UI testing, load testing,
+   performance testing, etc.  Here we are mostly focused on
+   functional testing.)
 -  In “pal-tracker” project, which tests are unit tests?
-   integrating tests or pseudo end-to-end tests?
--  What is slice testing in the context of Spring testing framework?
+   integrating tests or "pseudo" end-to-end tests?
+-  What is "slice testing" in the context of Spring testing framework?
    What are the examples of slice testing?
 -  Can you do “integration” or “pseudo end-to-end” testing as part
    of CI/CD pipeline?
@@ -1294,6 +1407,7 @@ newly added files.
    `@ContextConfiguration` for your integration testing
    that involves Spring application context (so that your
    test code have access of Spring beans)?
+-  What is the relationship between `@SpringBootTest` and `@SpringBootConfiguration`?
 -  Speaking of the testing of controller code, there are three
    different options you can use as following: What are the
    trade-off's of each testing scheme?
@@ -1310,6 +1424,11 @@ newly added files.
    has `verify` method?
 
 (Spring)
+-  How do you handle exceptions that occur in the underlying 
+   layers such as service layer or repository layer?  
+   (In our "pal-tracker" sample app, we do have only 
+   controller layer and repository layer and the repository 
+   layer returns just null and does not generate an exception.)
 -  What happens to the in-memory data when the application
    instances come and go?
 -  What is the another way of creating `InMemoryTimeEntryRepository`
@@ -1331,6 +1450,13 @@ newly added files.
   for example -, how can you change the TimeEntryController.test?
   (Create a new file called TimeEntryController2.test and
   `@WebMvcTest` and `MockMvc`)
+ 
+- Another Challenge for the Spring MVC with REST Endpoints lab:  
+  Replace your Annotated Controllers implementation with the 
+  Functional Endpoints approach: https://docs.spring.io/spring-framework/docs/current/reference/html/web.html#webmvc-fn
+  
+- Play around Spring Boot slice testing example
+  https://github.com/sashinpivotal/spring-boot-tdd.git
 
 ## Lab tips
 
@@ -1389,7 +1515,6 @@ $postman&
 
 - *Brad went over the 12 factors - we covered 8 of
   12 factors so far
-
 
 
 # Database Migration -------------------------
@@ -1598,6 +1723,16 @@ Empty set (0.05 sec)
       get a sense of the schema's??
   - performance index in production? it should be part of your migration
     - you might want to have dba
+- environment parity between dev and production
+  - data
+  - resource
+- companies typically has a process of changing schema
+  - use old db server, do ETL first
+  - test with new db server, and switch
+  - billions of data situation might not work 
+  - use OpenClose principle
+    - add column 
+- you cannot change the migration file and run it again - checksum mismatch
 
 - how does github actions interact with migration work?
 - we don't do fly clean in the github action yaml file
@@ -1773,7 +1908,7 @@ With auto-reconfiguration, Cloud Foundry creates the DataSource or connection fa
 git cherry-pick jdbc-start
 git cherry-pick jdbc-solution
 git cherry-pick --abort
-git cherry-pick --continue (after git add .) - will commit for you
+git cherry-pick --continue (after git add -p) - will commit for you
 ```
 
 ## Student questions
@@ -1784,7 +1919,7 @@ git cherry-pick --continue (after git add .) - will commit for you
 - Where do you maintain password?  Youdon't want to have password
   clear text in the VCap services - use vault or creduhub - during runtithe passworkd
 
-  will be retrived from the valut
+  will be retrived from the vault
 
 - ??Microanaut framework?
 
@@ -1908,7 +2043,7 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 
 - *What is the reason we have the following code in the test?
   The purpose of this code is to clean up the `time-entries` table
-  each time API testing is performed. Otherwise,
+  each test method is invoked. Otherwise,
   the api test will fail with duplicate entry.
 
   ```
@@ -1943,6 +2078,14 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 
 -   Correct DataSource bean automatically created
     depending on where the application gets deployed
+    
+-   Regarding extra
+    
+```
+Just to recap:  a running pal-tracker application does not source VCAP_* directly from the CCDB.  It does so from the container session.
+
+Regarding the VCAP_SERVICES updates, a restart or restage is still required, so follows the same rules as other environment variables.
+```
 
 (Bill K)
 - If you are using ORM, you really need to know the internals
@@ -2001,6 +2144,9 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 
 ## Trouble-shooting
 
+- If the number of instances are not increasing, make sure the cf auto-scale
+  plugin is installed.
+
 - *what is templated below? It means it has a variable to be set or not
 
 ```
@@ -2014,7 +2160,6 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 "templated": false
 },
 ```
-
 
 ## Prometheus and Grafana
 
@@ -2229,6 +2374,7 @@ docker run -i -t --rm -e DURATION=300 -e NUM_USERS=10 -e REQUESTS_PER_SECOND=5 -
 ## Wrap-up
 
 - See [Scaling rules](https://docs.run.pivotal.io/appsman-services/autoscaler/using-autoscaler.html#metric) for scaling rules detail
+- See [Autoscaler decision timing](https://docs.pivotal.io/application-service/2-10/appsman-services/autoscaler/about-app-autoscaler.html)
 - The following blog post is a good read on Cloud Foundry CPU resource management: https://www.cloudfoundry.org/blog/better-way-split-cake-cpu-entitlements/
 - See [PCF Autoscaler advisory for scaling Apps based on the CPU utilization](https://community.pivotal.io/s/article/PCF-Autoscaler-Advisory-for-Scaling-Apps-Based-on-the-CPU-utilization?language=en_US)
 - *When applying auto-scaling, what is "Percent of traffic to apply
@@ -2471,6 +2617,15 @@ Native images:
 
 ## Tips
 
+- To clean up the pal-tracker resource to conserve resources in evans
+
+```
+cf delete pal-tracker -f -r
+cf delete-service-key tracker-database flyway-migration-key -f 
+cf delete-service-key tracker-database cf-mysql -f 
+cf delete-service tracker-database -f
+```
+
 ```
 curl -v -XPOST -H"Content-Type: application/json" localhost:8081/allocations -d"{\"projectId\": 1, \"userId\": 1, \"firstDay\": \"2015-05-17\", \"lastDay\": \"2015-05-18\"}"
 
@@ -2492,7 +2647,7 @@ curl -v -XPOST -H"Content-Type: application/json" localhost:8081/allocations -d"
 - Installation and running of postman
 
 ```
-$sudo snap install postman
+$sudo snap install postman (or snap install --candidate postman)
 $postman&
 ```
 
@@ -2538,6 +2693,12 @@ $postman&
 - What strategies can we take to break up tangled database schema
   (maybe with foreign key relationship among themselves)
   when migrating monolithic application to micro services?
+  
+(Interaction between services)
+-  What does "API First" mean to you?
+   (Read "API First" section of https://www.cdta.org/sites/default/files/awards/beyond_the_12-factor_app_pivotal.pdf)
+-  How do you develop "API First" services?
+   (Read https://tanzu.vmware.com/developer/guides/microservices/api-first-development/)
 
 (Event-driven architecture and/or non-blocking call)
 - What would be the use cases where even-driven architecture
@@ -2597,6 +2758,9 @@ $postman&
 ```
 
 ## References of Database refactoring
+
+- MonolithFirst by Martin Fowler
+  https://www.martinfowler.com/bliki/MonolithFirst.html
 
 - "Chapter 5: Splitting the Monolith" from "Building Microservices"
   written by Sam Newman (O'Reilly)
@@ -3133,7 +3297,7 @@ Luckily, OpenID Connect or OIDC brings some sanity to the madness. It is an OAut
 ```
 [Save your changes to another branch first}
 -   git checkout -b wip-branch
--   git add .
+-   git add -p (Don't use git add .)
 -   git commit -m “work in progress in my lab”
 -   git push origin wip-branch --tags
 
