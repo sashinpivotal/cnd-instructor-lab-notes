@@ -12,87 +12,13 @@ in teaching PAL CND, which includes
 - Trouble-shooting tips
 
 
-# Before the cohort
-
-- We can send the following message before cohort gets started
-  with email subject `PAL for Developer class - a few things to communicate`
-  
-  ```
-  Hello,
-  
-  My name is <Instructor name>. I am one of the several 
-  instructors from VMware of this PAL course. A few
-  things to communicate before we start.
-      
-  - Please make sure you can access the course 
-    contents from the following site. If this is
-    your first time taking a course from Pivotal,
-    you will have to "sign up" first.
-  
-      http://courses.education.pivotal.io 
-  
-  - I assume everyone received slack channel message from
-    PAL-Cloud-OPS team which provides individual 
-    PCF (PAS/TAS) credentials like following:
-  
-    Hi <Your name>, welcome to <Company>. The below 
-    information will be useful throughout the course to 
-    access materials and infrastructure. View discussion 
-    about your course in #<slack-channel>.
-  
-       Cohort ID: <Cohort ID>
-       PCF Foundation API:  api.sys.evans.pal.pivotal.io
-       PCF Org: <your own PCF org>
-       PCF Username: <your own email address>
-       PCF Password: <your own PCF password>
-     
-    (The above credentials can be also accessible from
-    http://courses.education.pivotal.io - there is link
-    by the PAL Developer course entry)
-  
-    Once everyone is onboard, all our technology-related 
-    communication will be through our #liveon-apr-2020-cnd-4 
-    slack channel during the course. (Zoom chat will be used 
-    only occasionally for logistics related issues.)
-  
-    BTW, if this is your first time accessing Slack channel, 
-    please create an account via http://palexternal.slack.com
-    using your email address.
-    
-  - Create a personal GitHub account if you don't have one.
-    (Using company GitHub is not recommended.)
-
-  - We are going to use IntelliJ (Community version) and
-    Gradle in our labs.  If you are new to these, please feel
-    free to explore the basic usage of them before coming
-    to the class.
-   
-  - Finally, please make sure you can access the Remote Desktop 
-    instance using the provided URL and password. All our lab 
-    work will be done through the remote desktop.  See if
-    you can open IntelliJ and terminal window.
-      
-  If you have any questions, please feel free to respond
-  to this email at any time.
-  
-  ```
 
 # Getting started (logistics)
 
 ## Slack
 
-- A student can access their slack channel message by
-  opening slack or go to `palexternal.slack.com` 
-  
-- Some students did not receive slack invitation -
-  they should receive it when we added them to the
-  slack channel
-  
-- *I (Sang Shin) don't see the new slack channel 
-  from palexternal.slack.com.  But the slack channel
-  info is shown in the Groundkeeper's message - click
-  + sign and then browse channel - you have to use sashin@pivotal.io
-$$
+- We now create Slack channel first and then invite students
+  manually
 
 ## Course contents access
   
@@ -170,6 +96,8 @@ By the way, before you do the above step, if you need to save your current unfin
     will experience the following problem when you do 
     `git push origin main --tags`.
     An easy way out is `git push origin main -f --tags`
+    (Or ask students to delete/recreate the repository
+    without creating README.md file)
 
 ```
 < workspace/movie-fun - main > git push
@@ -190,7 +118,8 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
   fatal: refusing to merge unrelated histories
   ```
   
-  You can do the following to move forward.
+  You can do the following to move forward. 
+  (Or ask students to delete/recreate pal-tracker repo)
   
   ```
   git pull --allow-unrelated-histories
@@ -258,20 +187,20 @@ Pair rotation guide:
 
 # VDI ---------------------------
 
-## Linux keyboard shortcuts within VDI
+## Linux keyboard shortcuts within the VDI
 
 ```
-- Keyboard shortcut keys within VDI/Remote Desktop
+**Keyboard shortcut keys within VDI/Remote Desktop**
 
-  - ALT+F10 (maximizing window on and off)
   - ALT+Tab (move between windows)
+  - ALT+F10 (maximizing window on and off)
   - ALT+F9 (minimize window)
-  - SHIFT+CTRL+C (copying from termimal) 
+  - SHIFT+CTRL+C (copying from terminal) 
   - SHIFT+CTRL+V (copying to the terminal)
   - CTRL+C (copying) 
   - CTRL+V (pasting)
 
-- Keyboard shortcut keys within the VDI provided IntelliJ
+**Keyboard shortcut keys within the VDI provided IntelliJ**
 
   - CTRL+N (find class)
   - CTRL+Shift+N (find file)
@@ -281,12 +210,19 @@ Pair rotation guide:
   - F2, SHIFT+F2 (Go to next/previous error)
   - CTRL+SHIFT+F10 (run the app/test)
   - SHIFT+F10(rerun the app/test)
+  - CTRL+SHIFT+F12 (Maximize editor window)
   - CTRL+ALT+V (extract return value into a local variable)
   - CTRL+SHIFT+T (go to target/test code)
-  - CTRL+ALT+Left (back - might not work on Mac - you might have to set it yourself manually)
-  - CTRL+ALT+Right (forward - might not work on Mac - you might have to set it yourself manually)
-  - ALT+Insert (Generate - might not work on Mac - you might have to set it yourself manually) 
-  - CTRL+SHIFT+' - to maximize/minimize tool window (Generate - might not work on Mac - you might have to set it yourself manually) 
+  - CTRL+ALT+Left (back - might not work on Mac: 
+                   you might have to set it yourself manually)
+  - CTRL+ALT+Right (forward - might not work on Mac:
+                   you might have to set it yourself manually)
+  - ALT+Insert (Generate - might not work on Mac:
+                you might have to set it yourself manually) 
+  - CTRL+SHIFT+' (Maximize/minimize tool window: 
+                you might have to set it yourself manually) 
+                
+- If VDI does not respond to your keyboard stroke, please try ALT+Tab or ALT+Enter to unlock it
 ```
 
 ## Native keyboard shortcut keys
@@ -316,25 +252,7 @@ Pair rotation guide:
   webpage by right clicking ...
   on the top-right corner and select bookmark
   and save it under "Bookmars toolbar"
-  
-- *If you enabled two-factor authentication, you will experience
-  the following. Easiest fix is to disable it.  (See "Pair
-  programming document" for other suggestions.)
-
-  ```
-  pal_user@instructor-demo-sang-large:~/workspace/pal-tracker- distributed$ git push origin main -f
-  Username for 'https://github.com': sashinpivotal
-  Password for 'https://sashinpivotal@github.com': 
-  remote: Invalid username or password.
-  fatal: Authentication failed for 'https://github.com/sashinpivotal/ pal-tracker-distributed/'
-  ```
-  
-  It is because as mentioned [here](https://stackoverflow.com/questions/17659206/git-push-results-in-authentication-failed)
-  
-  ```
-  If you enabled two-factor authentication in your Github account you  won't be able to push via HTTPS using your accounts password. Instead  you need to generate a personal access token. This can be done in the  application settings of your Github account. Using this token as your  password should allow you to push to your remote repository via  HTTPS. Use your username as usual.
-  ```
-  
+    
 - In the VDI provided Firefox browser, you can bookmark 
   it but you have 
   to select "show bookmark bar" to see it
@@ -395,18 +313,17 @@ Pair rotation guide:
 # Building a Spring Boot App (lab #1) -------
 
 ## Talking points
-
-- Spring related
-	- Talk about dependency injection - what it is and why
-	- But we do not use dependency injection in this lab
 	
 - lab project
     - Typically you are going to create Spring Boot project
-      from Spring initializr such as start.spring.io site.
-      But here you are going to create the prohect from
-      scratch creating built script and then adding
-      directory structure yourself
-     
+      from Spring initializr such as start.spring.io.
+      But here you are going to create the project from
+      scratch 
+      - You are going to create build script 
+      - You are going to create directory structure as well
+    
+- We provide starting codebase
+           
 	 - Mention that the `pal-tracker` directory is 
 	   under `workspace` directory
 	  
@@ -434,6 +351,30 @@ Pair rotation guide:
   - Go to local `workspace/pal-tracker` directory
   - Execute `git remote add origin <url>`
   - Execute `git push origin main --tags`
+
+## GitHub  
+
+- *If you enabled two-factor authentication, you will experience
+  the following. 
+
+  ```
+  pal_user@instructor-demo-sang-large:~/workspace/pal-tracker- distributed$ git push origin main -f
+  Username for 'https://github.com': sashinpivotal
+  Password for 'https://sashinpivotal@github.com': 
+  remote: Invalid username or password.
+  fatal: Authentication failed for 'https://github.com/sashinpivotal/ pal-tracker-distributed/'
+  ```
+  
+  It is because as mentioned [here](https://stackoverflow.com/questions/17659206/git-push-results-in-authentication-failed)
+  
+  ```
+  If you enabled two-factor authentication in your Github account you won't be able to push via HTTPS using your accounts password. Instead  you need to generate a personal access token. This can be done in the  application settings of your Github account. Using this token as your  password should allow you to push to your remote repository via  HTTPS. Use your username as usual.
+  1. Go to your profile -> Settings-> Developer Settings -> Personal Access Token -> Select repo+workflow
+  2. When you do perform "git push origin main", use personal access token instead of password
+  ```
+  
+- [Protocols to choose from when cloning:](https://gist.github.com/grawity/4392747)  
+  
 
 ## Misc
   
@@ -537,11 +478,16 @@ cf help -a
 -  Create CommandLineRunner that displays the name and age
    of the person when application gets started
 
-## Wrap-up (Charles)
+## Wrap-up (Sang)
 
--  Draws architecral diagram to show all PCF components involved
--  Environment variable is set tp JDK11, which will be used
-   by buildpack to recreate droplet
+-  Go over build.gradle
+-  Go over PalApplication.java
+-  Go over WelcomeController.java
+
+-  *What is `io.spring.dependency-management` plugin for?
+   It is A Gradle plugin that provides Maven-like dependency management functionality
+   https://plugins.gradle.org/plugin/io.spring.dependency-management
+
 
 # Configuring an App ------------
 
@@ -612,6 +558,8 @@ cf help -a
 ## Slack channel tips
 
 ```
+
+Reference materials on Configuration:
 
 Container vs VMs. What's the difference?
 https://docs.google.com/presentation/d/1tvXFgvV27bGYRVB3eqUIA8CcqdwjQc_HLt-0k-LrK0Y/view
@@ -819,10 +767,6 @@ windows         Windows Server
 - Each build takes a few minutes - a bit tediousness
 - build has to be fast - 10 minute build is max you should tolerate
 
-## Wrap-up
-
-- Carl discusses "pipeline.yml" (too much is hidden) vs 
-  "Bash script" (more control, easier to understand what goes on)
 
 ## Wrap-up (Charles)
 
@@ -843,6 +787,22 @@ windows         Windows Server
   
   Or you can select failed action and select "Redo all jobs"
   
+- In order to add a linefeed to the end of curl, do
+
+```
+echo -w "\n" > ~/.curlrc
+```
+
+-  Semantic versioning
+
+```
+Given a version number MAJOR.MINOR.PATCH, increment the:
+
+MAJOR version when you make incompatible API changes, backward compatibility is not guaranteed
+MINOR version when you add functionality in a backwards compatible manner, and
+PATCH version when you make backwards compatible bug fixes.
+```
+  
 ## GitHub Actions
 
 - *I could not locate settings under my repository
@@ -852,6 +812,10 @@ windows         Windows Server
   ```
   https://github.com/sashinpivotal/pal-tracker
   ```
+
+- [Differences between environment secrets vs repository secrets]
+  (https://stackoverflow.com/questions/65957197/difference-between-githubs-environment-and-repository-secrets)
+  
   
 ## Trouble-shooting
       
@@ -936,7 +900,7 @@ https://martinfowler.com/bliki/ContinuousDelivery.html
 
 ## Talking points
 
-- Let Charles talk about "dependency containe" (application context),
+- Let Charles talk about "dependency container" (application context),
   in which he talks about controller->repository->datasource 
   dependency relationship.
 
@@ -1131,7 +1095,7 @@ newly added files.
 
 ## Challenge Questions of "REST" lab
 
-(Testing)
+**(Testing)**
 -  What are the differences between unit testing and integration 
    testing? Between integration testing and end-to-end testing?
    What are their trade-off's?
@@ -1148,7 +1112,7 @@ newly added files.
 -  What are the down-sides of using test doubles such as
    stubbing or mocking?
    
-(Testing strategies)
+**(Testing strategies)**
 -  If you have classes with dependency relationship as following
    (Class A has dependencies class B and C and class B 
    has a dependency D, in other words, class A and B has 
@@ -1176,7 +1140,7 @@ newly added files.
 -  What about a class that depends on backing services such 
    as databases? How will you perform the integration testing?
    
-(Spring testing)   
+**(Spring testing)**  
 -  What are differences between `RestTemplate` vs `TestRestTemplate`?
 -  When do you want to use `@SpringBootTest` vs 
    `@ContextConfiguration` for your integration testing 
@@ -1191,20 +1155,20 @@ newly added files.
      `@SpringBootTest(webEnvironment = RANDOM_PORT)` and
      `TestRestTemplate`
    
-(pal-tracker codebase)
+**(pal-tracker codebase)**
 -  Why `TimeEntryControllerTest` code needs mocking while 
    `InMemoryTimeEntryRepositoryTesting` code doesn’t?
 -  What is the reason controller `TimeEntryControllerTest` code 
    has `verify` method?
    
-(Spring)  
+**(Spring)** 
 -  What happens to the in-memory data when the application 
    instances come and go?
 -  What is the another way of creating `InMemoryTimeEntryRepository` 
    bean other than using `@Bean` in the configuration class? 
    What would be pros and cons of each approach?
    
-(Design principles)
+**(Design principles)**
 -  What does SOLID (design principles) stand for?
 -  What are the examples of “Open for extension Closed  
    for modification” design principle in the 
@@ -1265,6 +1229,14 @@ $postman&
 - [Postman collection](https://github.com/billkable/cnd-postman-collections)
 
 - TDD presentation - https://www.youtube.com/watch?v=s9vt6UJiHg4
+
+## Reference materials
+
+- [Understanding API-First development](https://tanzu.vmware.com/developer/guides/microservices/api-first-development/)
+
+- [Modernization with Consumer Driven Contracts](https://tanzu.vmware.com/developer/guides/microservices/consumer-driven-contracts/)
+
+- [Spring Cloud Contract](https://spring.io/projects/spring-cloud-contract)
 
 ## Wrap-up discusson
 
@@ -1533,8 +1505,7 @@ Empty set (0.05 sec)
   - release frequently
     
 
-## References
-
+## Reference materials of Migration
 (schema migration)
 - [Evolutionary Database Design](https://martinfowler.com/articles/evodb.html)
 - [Refactoring Databases: Evolutionary Databases Summary](https://databaserefactoring.com/SplitColumns.html)
@@ -1654,6 +1625,9 @@ With auto-reconfiguration, Cloud Foundry creates the DataSource or connection fa
   - Talks about ORM complexities and they can be addressed by Spring Data JDBC
   
 - [The new kid on the block: Spring Data JDBC] (https://www.youtube.com/watch?v=AnIouYdwxo0&ab_channel=SpringDeveloper)
+
+- [Stop using JPA/Hibernate](https://www.stemlaur.com/blog/2021/03/30/tech-hibern-hate/)
+
 
 ## Misc
 
@@ -2241,15 +2215,32 @@ $postman&
 
 ```
 
-## References of Database refactoring
+## Reference materials on Microservices
 
-- "Chapter 5: Splitting the Monolith" from "Building Microservices"
-  written by Sam Newman (O'Reilly)
-  https://smile.amazon.com/Building-Microservices-Designing-Fine-Grained-Systems/dp/1491950358/ref=sr_1_3?crid=O30N4C7P4G8&dchild=1&keywords=building+microservices&qid=1602278414&sprefix=building+mi%2Caps%2C155&sr=8-3
-- "Monolith to Microservices: Evolutionary Patterns to Transform Your Monolith"
-  https://smile.amazon.com/Monolith-Microservices-Evolutionary-Patterns-Transform/dp/1492047848/ref=sr_1_3?crid=3DNLL2GV8BVND&dchild=1&keywords=microservices+sam+newman&qid=1602278452&sprefix=microservices+sam%2Caps%2C159&sr=8-3
-- "Refactoring Databases"
-  https://smile.amazon.com/Refactoring-Databases-Evolutionary-paperback-Addison-Wesley/dp/0321774515/ref=sr_1_3?dchild=1&keywords=database+refactoring&qid=1602278543&sr=8-3
+- [MonolithFirst](https://martinfowler.com/bliki/MonolithFirst.html)
+- [Don’t start with a monolith](https://martinfowler.com/articles/dont-start-monolith.html)
+- [Microservice Prerequisites](https://martinfowler.com/bliki/MicroservicePrerequisites.html)
+
+## Reference materials on Database refactoring
+
+- [Chapter 5: Splitting the Monolith" from "Building Microservices"
+  written by Sam Newman (O'Reilly)]
+ (https://smile.amazon.com/Building-Microservices-Designing-Fine-Grained-Systems/dp/1491950358/ref=sr_1_3?crid=O30N4C7P4G8&dchild=1&keywords=building+microservices&qid=1602278414&sprefix=building+mi%2Caps%2C155&sr=8-3)
+  
+- [Monolith to Microservices: Evolutionary Patterns to Transform Your Monolith]
+  (https://smile.amazon.com/Monolith-Microservices-Evolutionary-Patterns-Transform/dp/1492047848/ref=sr_1_3?crid=3DNLL2GV8BVND&dchild=1&keywords=microservices+sam+newman&qid=1602278452&sprefix=microservices+sam%2Caps%2C159&sr=8-3)
+  
+- [Refactoring Databases](https://smile.amazon.com/Refactoring-Databases-Evolutionary-paperback-Addison-Wesley/dp/0321774515/ref=sr_1_3?dchild=1&keywords=database+refactoring&qid=1602278543&sr=8-3)
+
+## Reference materials on distributed transaction
+
+- [Microservices Pattern: Saga](https://microservices.io/patterns/data/saga.html)
+
+## Reference matrials on Microservices workflow
+
+- [Choreography vs Orchestration in serverless microservices](https://www.youtube.com/watch?v=rDSWHNdYx6E&ab_channel=AngelbeatRonGerber)
+- [Google Cloud Workflow](https://cloud.google.com/workflows)
+
   
 ## Trouble-shooting
 
@@ -2581,7 +2572,9 @@ springCloudCommonsVersion = "2.0.0.RELEASE"
 ## References
   
 - [Configuring Cross Cloud Foundry Service Registy (route mode)](http://docs.pivotal.io/spring-cloud-services/1-4/common/service-registry/enabling-peer-replication.html)
+
 - [GoRouter does honor Ribbon load balancing algorithm](http://docs.pivotal.io/spring-cloud-services/1-4/common/service-registry/connectors.html#instance-specific-routing-in-ribbon)
+
 - [Configuring PCF Container-to-Container Networking, Service Registry and Client Load Balancing (SpringOne 2017)](https://www.youtube.com/watch?v=1WJhFhBr-0Q)
 
 ## Client side load balancing
@@ -2931,7 +2924,9 @@ But why  doesn’t IntelliJ honor the setting “Delegate IDE build/run to gradl
 ### Useful presentations on OAuth2
 
 -  [OAuth2 overview presentation](https://www.slideshare.net/SangShin1/spring4-security-oauth2?qid=2163e6e6-ae99-48b0-afcc-88380b8724d8&v=&b=&from_search=1)
+
 -  [OAuth2 in cloud native environment presentation (slides 7 to 37)](https://www.slideshare.net/WillTran1/enabling-cloud-native-security-with-oauth2-and-multitenant-uaa?qid=2c77ae8e-b2d5-4319-baad-1cd1eb8fec42&v=&b=&from_search=1)
+
 -  [OAuth and OpenID Connect](https://www.youtube.com/watch?v=996OiexHze0&ab_channel=OktaDev)
 -  [Explain it to Me I'm 5: OAuth2 and OpenID](https://www.youtube.com/watch?v=5th6CSQTdpM&ab_channel=SpringDeveloper)
 
@@ -3035,3 +3030,138 @@ https://retros.cfapps.io/retros/pal-ford-sep-2020
 Got it. My team is using parabol.co for our retros and I like it a lot more than the cfapps retro tool . Might be worth trying sometime!
 ```
 
+# Pre-class email
+
+```
+Hello, folks
+ 
+This is Sang Shin from VMware.  My colleague, Bill Kable, and myself
+are two instructors for the next week’s class.
+
+A few things to let you know before the pre-class meeting today.
+(We will go over all these during the pre-class meeting – 
+Slides for the pre-class meeting is attached for your reference.)
+ 
+1. Please find VDI link that is assigned to each of you. 
+   (Please make sure to click the one that is assigned to you.)
+   The username/password is same for everyone and it is
+   ubuntu/keepitsimple.
+ 
+  https://swati-maruthiram-349803956.vdi.pal.pivotal.io/
+  https://thomas-turcovsky-349803956.vdi.pal.pivotal.io/
+  https://corbin-troup-349803956.vdi.pal.pivotal.io/
+  https://benjamin-yuhas-349803956.vdi.pal.pivotal.io/
+  https://paul-kilpatrick-349803956.vdi.pal.pivotal.io/
+  https://jeff-horst-349803956.vdi.pal.pivotal.io/
+  https://benjamin-zehnpfennig-349803956.vdi.pal.pivotal.io/
+  https://travis-guzzetta-349803956.vdi.pal.pivotal.io/
+  https://ericmeyer-349803956.vdi.pal.pivotal.io/
+  https://ryan-galliher-349803956.vdi.pal.pivotal.io/
+  https://abhinav-agarwal-349803956.vdi.pal.pivotal.io/
+  https://todd-prince-349803956.vdi.pal.pivotal.io/
+  https://mahesh-sait-349803956.vdi.pal.pivotal.io/
+  https://paulos-haylu-349803956.vdi.pal.pivotal.io/
+  https://anil-venkatappagari-349803956.vdi.pal.pivotal.io/             
+                
+2. Please find PCF (TAS) credential assigned to each of you.
+   You will need just username, password, and API endpoint 
+   when you log in to PCF(TAS). 
+   The API endpoint is the same for everyone and it is
+   api.sys.evans.pal.pivotal.io
+
+Swati Maruthi Ram, email=swati.maruthiram@fedex.com, password=vuyet2r6, username=swati-maruthiram-fedex
+Tommy Turcovsky, email=thomas.turcovsky@fedex.com, password=q6u83ejg, username=thomas-turcovsky-fedex
+Corbin Troup, email=corbin.troup@fedex.com, password=9vq8jbnd, username=corbin-troup-fedex
+Benjamin Yuhas, email=benjamin.yuhas@fedex.com, password=5p6crdkb, username=benjamin-yuhas-fedex
+Paul Kilpatrick, email=paul.kilpatrick@fedex.com, password=f8ppb99u, username=paul-kilpatrick-fedex
+Jeff Horst, email=jeff.horst@fedex.com, password=pmesr658, username=jeff-horst-fedex
+Ben Zehnpfennig, email=benjamin.zehnpfennig@fedex.com, password=u5s76gy2, username=benjamin-zehnpfennig-fedex
+Travis Guzzetta, email=travis.guzzetta@fedex.com, password=fn3bqcu3, username=travis-guzzetta-fedex
+Eric Meyer, email=ericmeyer@fedex.com, password=sufs6x8d, username=ericmeyer-fedex
+Ryan Galliher, email=ryan.galliher@fedex.com, password=g7ddkscs, username=ryan-galliher-fedex
+Abhinav Agarwal, email=abhinav.agarwal@fedex.com, password=c8hymnyh, username=abhinav-agarwal-fedex
+Todd Prince, email=todd.prince@fedex.com, password=evnfmbuh, username=todd-prince-fedex
+Mahesh Gopinatha Sait, email=mahesh.sait@fedex.com, password=skfqmygp, username=mahesh-sait-fedex
+Paulos Haylu, email=paulos.haylu@fedex.com, password=svm26hst, username=paulos-haylu-fedex
+Anil Venkatappagari, email=anil.venkatappagari@fedex.com, password=x2chnve3, username=anil-venkatappagari-fedex
+ 
+3. Each of you were invited to join the class Slack channel 
+   (“fedex-lol-april-2021-cnd” under “palexternal.slack.com”).  
+   Please accept it.
+
+4. The Zoom link for today’s pre-class meeting and 
+   next week’s class (same link) is the following:
+ 
+   https://vmware.zoom.us/j/98439626771?pwd=Wk1QbllKeEcyZ0hOM0lMSE9hQSt0UT09
+
+5. If you have any questions before the class, please don’t hesitate to contact me or Bill through either class Slack channel mentioned above or email (sashin@vmware.com, bkable@vmware.com).
+
+Thanks.  See you soon.
+ 
+-Sang & Bill
+```
+
+# Before the cohort
+
+- We can send the following message before cohort gets started
+  with email subject `PAL for Developer class - a few things to communicate`
+  
+  ```
+  Hello,
+  
+  My name is <Instructor name>. I am one of the several 
+  instructors from VMware of this PAL course. A few
+  things to communicate before we start.
+      
+  - Please make sure you can access the course 
+    contents from the following site. If this is
+    your first time taking a course from Pivotal,
+    you will have to "sign up" first.
+  
+      http://courses.education.pivotal.io 
+  
+  - I assume everyone received slack channel message from
+    PAL-Cloud-OPS team which provides individual 
+    PCF (PAS/TAS) credentials like following:
+  
+    Hi <Your name>, welcome to <Company>. The below 
+    information will be useful throughout the course to 
+    access materials and infrastructure. View discussion 
+    about your course in #<slack-channel>.
+  
+       Cohort ID: <Cohort ID>
+       PCF Foundation API:  api.sys.evans.pal.pivotal.io
+       PCF Org: <your own PCF org>
+       PCF Username: <your own email address>
+       PCF Password: <your own PCF password>
+     
+    (The above credentials can be also accessible from
+    http://courses.education.pivotal.io - there is link
+    by the PAL Developer course entry)
+  
+    Once everyone is onboard, all our technology-related 
+    communication will be through our #liveon-apr-2020-cnd-4 
+    slack channel during the course. (Zoom chat will be used 
+    only occasionally for logistics related issues.)
+  
+    BTW, if this is your first time accessing Slack channel, 
+    please create an account via http://palexternal.slack.com
+    using your email address.
+    
+  - Create a personal GitHub account if you don't have one.
+    (Using company GitHub is not recommended.)
+
+  - We are going to use IntelliJ (Community version) and
+    Gradle in our labs.  If you are new to these, please feel
+    free to explore the basic usage of them before coming
+    to the class.
+   
+  - Finally, please make sure you can access the Remote Desktop 
+    instance using the provided URL and password. All our lab 
+    work will be done through the remote desktop.  See if
+    you can open IntelliJ and terminal window.
+      
+  If you have any questions, please feel free to respond
+  to this email at any time.
+  
+  ```
